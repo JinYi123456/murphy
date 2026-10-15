@@ -29,6 +29,8 @@ export interface InterventionEffect {
   walkdown?: boolean;
   /** plant configuration patch, e.g. bring the proof test inside its interval */
   plant?: Partial<PlantConfig>;
+  /** isolations this control removes because the device no longer shares a permit */
+  clearIsolated?: string[];
   /** freeboard policy: start level fraction of the danger threshold */
   startLevelFrac?: number;
   /** extra seconds per shift this costs the crew */
@@ -140,8 +142,10 @@ export const INTERVENTIONS: Intervention[] = [
     describe: 'A hard-wired high-high switch that stops the pump on its own, on a measurement that is independent of the control system.',
     selector: { conditions: ['timing_critical', 'fatigue', 'mistrust'], kinds: ['monitor', 'actuate'], maxSteps: 2 },
     effect: {
-      plant: { protection: { independent: true, pis: true } },
-      startLevelFrac: undefined,
+      plant: { protection: { independent: true, pis: true, autoTrip: true } },
+      // an independent hard-wired trip runs on its own conduit, so a permit
+      // taken out on the transmitter loop no longer reaches it
+      clearIsolated: ['PIS'],
       annualCostEur: 19000,
       addedSeconds: 0,
     },
@@ -290,6 +294,10 @@ export function applyIntervention(base: DraftProcedure, int: Intervention): Draf
   const plant: PlantConfig = { ...base.plant, ...(int.effect.plant ?? {}), protection: { ...base.plant.protection, ...(int.effect.plant?.protection ?? {}) } };
   if (int.effect.startLevelFrac !== undefined) plant.freeboardPct = int.effect.startLevelFrac;
   if (int.effect.walkdown) plant.preIsolated = [];
+  if (int.effect.clearIsolated) {
+    const clear = int.effect.clearIsolated;
+    plant.preIsolated = (plant.preIsolated ?? []).filter((x) => !clear.includes(x));
+  }
 
   const persona: PersonaTraits = int.effect.insertVerification
     ? { ...base.persona, concurrency: base.persona.concurrency, teamReadiness: Math.min(1, base.persona.teamReadiness + 0.35) }

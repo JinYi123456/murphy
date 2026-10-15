@@ -34,9 +34,9 @@ function round(ctr: number[], key: number[]): number[] {
   const [hi1, lo1] = mul32x32(M1, ctr[2]);
   return [
     (hi0 ^ ctr[1] ^ key[0]) >>> 0,
-    lo0 >>> 0,
+    (lo0 ^ ctr[3]) >>> 0,
     (hi1 ^ ctr[0] ^ key[1]) >>> 0,
-    lo1 >>> 0,
+    (lo1 ^ ctr[1]) >>> 0,
   ];
 }
 

@@ -12,8 +12,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "golden": "tsx scripts/make-golden.ts",
-    "audit": "tsx scripts/audit.ts"
+    "golden": "tsx scripts/golden.ts",
+    "audit": "tsx scripts/audit.ts",
+    "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {
     "next": "^15.5.4",

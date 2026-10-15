@@ -148,10 +148,11 @@ export const furnaceTwin: TwinDef = {
     const gas = d[k + 3] * (1 - stop);
     const damper = d[k + 1];
 
-    // unburnt gas: leaking or admitted valve with no flame and no air movement
-    const coldAdmission = gas * (1 - pilot) * (1 - fan);
-    const leaking = d[k + 4] * (1 - gas);
-    s[o + 2] = s[o + 2] + (coldAdmission + leaking) * d[k + 10] * dt;
+    // unburnt gas: admitted but not burning - no flame, or no combustion air -
+    // plus whatever a gas valve that is shut is still passing
+    const burning = gas * pilot * fan;
+    const unburntFlow = (gas * (1 - burning) + d[k + 4] * (1 - gas)) * d[k + 10];
+    s[o + 2] = s[o + 2] + unburntFlow * dt;
     if (fan === 1 && damper === 1) {
       const removed = p.purgeRate * dt * (gas === 0 ? 1 : 0.2);
       s[o + 2] = s[o + 2] - removed;
@@ -196,7 +197,7 @@ export const furnaceTwin: TwinDef = {
     const rampActual = s[o + 16];
     const excess = rampActual > limit ? (rampActual - limit) / limit : 0;
     if (excess > 0 && s[o + 3] > p.moistureDry * 0.5) {
-      s[o + 4] = s[o + 4] + excess * p.damageK * dt;
+      s[o + 4] = Math.min(1.5, s[o + 4] + excess * p.damageK * dt);
     }
     if (s[o + 4] >= 1 && s[o + 13] === 0) {
       s[o + 13] = 1;
@@ -227,7 +228,8 @@ export const furnaceTwin: TwinDef = {
 
   indication(s, o, d, k, name) {
     if (name === 'zoneT') return s[o + 0] + d[k + 8];
-    return s[o + furnaceTwin.varIndex(name)];
+    const i = furnaceTwin.varIndex(name);
+    return i >= 0 ? s[o + i] : 0;
   },
 
   magnitudes(s, o) {

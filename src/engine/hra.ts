@@ -346,14 +346,19 @@ export function computeHep(input: HepInput): HepResult {
 
   if (input.method === 'heart') {
     // HEART scales each error producing condition by its assumed probabilistic
-    // impact on the task (APOA) and caps the result at 1, as RR679 instructs
+    // impact on the task (APOA) and caps the result at 1, as RR679 instructs.
+    // The maximum factor of an individual condition is taken from the published
+    // 1.2 - 30 band rather than a single global value, because treating every
+    // condition as a x30 one is how a method ends up reporting 100%.
     const max = input.epcMax ?? HEART_EPC_MAX;
     let f = 1;
     for (let i = 0; i < input.psfs.length; i++) {
-      const apoa = APOA_BY_LEVEL[Math.min(4, Math.max(1, Math.round(input.psfs[i].severity)))];
-      const epMult = (max - 1) * apoa + 1;
+      const st = input.psfs[i];
+      const own = Math.min(max, Math.max(1.2, SPAR_PSFs[st.psf].levels[st.levelIndex].action));
+      const apoa = APOA_BY_LEVEL[Math.min(4, Math.max(1, Math.round(st.severity)))];
+      const epMult = (own - 1) * apoa + 1;
       f *= epMult;
-      rows[i] = { ...rows[i], level: `EPC at APOA ${apoa.toFixed(2)}`, mult: epMult };
+      rows[i] = { ...rows[i], level: `EPC max ${own} at APOA ${apoa.toFixed(2)}`, mult: epMult };
     }
     p = Math.min(1, nominal * f);
     c = f;

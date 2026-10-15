@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+
+/*
+ * MURPHY visual language: flight recorder, not dashboard.
+ *
+ * The whole interface is one instrument face. Colour carries meaning and never
+ * decoration - amber is the recorded process, vermillion is a hazard that
+ * actually happened, phosphor green is a barrier that held, and cold cyan is a
+ * machine action as opposed to a human one. Everything that moves is either
+ * showing time passing or showing a deviation travel; nothing animates for
+ * ambience alone, and the whole motion layer switches off under prefers-reduced
+ * -motion.
+ */
+
+@theme {
+  --color-void: #07080a;
+  --color-graphite: #0e1115;
+  --color-panel: #14181f;
+  --color-rule: #232a34;
+  --color-ash: #8a95a3;
+  --color-bone: #e8e4dc;
+  --color-amber: #ffb03a;
+  --color-amber-dim: #7a5417;
+  --color-vermillion: #ff4a2f;
+  --color-vermillion-dim: #7a2416;
+  --color-phosphor: #3ee08f;
+  --color-cyan: #4fd8ff;
+  --color-violet: #a37bff;
+
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+}
+
+:root {
+  --grain: 0.045;
+  --sweep: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--color-panel), var(--color-graphite));
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+}
+
+.label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+
+.readout {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.rule-dot {
+  background-image: repeating-linear-gradient(90deg, var(--color-rule) 0 2px, transparent 2px 6px);
+  height: 1px;
+}
+
+/* the recorded line: a deviation travelling down the procedure */
+@keyframes travel {
+  from { offset-distance: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  to { offset-distance: 100%; opacity: 0.2; }
+}
+
+@keyframes pulse-hazard {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 74, 47, 0.55); }
+  50% { box-shadow: 0 0 0 7px rgba(255, 74, 47, 0); }
+}
+
+@keyframes tape-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+@keyframes sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(340%); }
+}
+
+.hazard-pulse { animation: pulse-hazard 1.6s ease-out infinite; }
+.sweep { animation: sweep calc(2.4s / var(--sweep)) linear infinite; }
+.tape { animation: tape-scroll 26s linear infinite; }
+
+button, [role="button"] {
+  cursor: crosshair;
+}
+
+.scrub {
+  appearance: none;
+  height: 3px;
+  background: var(--color-rule);
+  border-radius: 0;
+}
+.scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 4px;
+  height: 22px;
+  background: var(--color-amber);
+  cursor: grab;
+}
+.scrub:active::-webkit-slider-thumb { background: var(--color-vermillion); }
+
+.sop-text {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: #d8d3c8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hazard-pulse, .sweep, .tape, [class*="animate-"] {
+    animation: none !important;
+  }
+  * { transition-duration: 0.01ms !important; }
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-void);
+}
+
+/* print: the change order is a document that gets signed */
+@media print {
+  body { background: #fff; color: #000; }
+  body::after { display: none; }
+  .no-print { display: none !important; }
+  .print-sheet { border: none !important; background: #fff !important; }
+}

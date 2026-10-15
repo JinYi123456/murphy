@@ -53,7 +53,7 @@ const VARS = [
 ];
 const DISCS = [
   'V1', 'V2', 'V3', 'V4', 'PUMP', 'LAH', 'PIS', 'RACK', 'STOP', 'PISFAIL', 'gaugeBias', 'flowScale',
-  'V3LEAK', 'BUND_HEADROOM', 'BOND_OK', 'HAMMER', 'HOSE_SPILL',
+  'V3LEAK', 'BUND_HEADROOM', 'BOND_OK', 'HAMMER', 'HOSE_SPILL', 'AUTO_TRIP',
 ];
 
 const P: TwinParams = {
@@ -145,6 +145,7 @@ export const tankTwin: TwinDef = {
     d[k + 14] = 1; // BOND_OK: vehicle earthed
     d[k + 15] = 0; // HAMMER: line hammered at shutdown, weeping couplings
     d[k + 16] = 0; // HOSE_SPILL: coupling broken before the line drained
+    d[k + 17] = cfg.protection['autoTrip'] === true ? 1 : 0; // independent hard-wired stop the procedure cannot leave isolated
     s[o + 18] = 0;
     if (cfg.preIsolated.includes('V4')) d[k + 3] = 0;
     if (cfg.protection['pis'] === false) d[k + 6] = 0;
@@ -230,14 +231,15 @@ export const tankTwin: TwinDef = {
 
     if (s[o + 0] >= p.hAh && s[o + 13] === 0) {
       s[o + 13] = 1;
-      const acts = d[k + 6] * (1 - d[k + 9]);
-      if (acts === 1) d[k + 8] = 1;
+      const acts = d[k + 6] * (1 - d[k + 9]) + d[k + 17];
+      if (acts >= 1) d[k + 8] = 1;
     }
   },
 
   indication(s, o, d, k, name) {
     if (name === 'level') return s[o + 0] + d[k + 10];
-    return s[o + tankTwin.varIndex(name)];
+    const i = tankTwin.varIndex(name);
+    return i >= 0 ? s[o + i] : 0;
   },
 
   magnitudes(s, o, d, k) {
