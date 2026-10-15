@@ -130,6 +130,49 @@ DEFAULT_GTT = {
     "recover": "C",
 }
 
+# Conditions the wording of a generic task type already contains. RR679 requires
+# the analyst not to charge the same feature twice: type B is 0.26 *because* the
+# job is being done without written procedures, so a "procedures inadequate" EPC
+# on top of it is the same defect counted a second time and multiplied. Only the
+# overlaps the published wording names outright are listed.
+GTT_EMBEDDED = {
+    "A": ("CX", "E-T"),
+    "B": ("PRU",),
+    "C": ("CX",),
+    "D": ("CX", "E-T"),
+    "E": ("HCI",),
+    "F": ("PRU",),
+    "G": ("CX", "E-T", "HCI", "PRU"),
+    "H": (),
+    "M": ("HCI",),
+}
+
+
+def resolve_gtt(kind: str, gtt: str | None) -> str:
+    return gtt if gtt else DEFAULT_GTT[kind]
+
+
+def heart_epc(level, severity, kind: str, gtt: str | None, epc_max: float = HEART_EPC_MAX):
+    """Which PSF columns are genuine error producing conditions, and how hard.
+
+    Returns (own, apoa, counts). A column counts only when the condition is
+    actually present, its published level is worse than unity, and the generic
+    task type has not already priced it in.
+    """
+    device = level.device
+    g = resolve_gtt(kind, gtt)
+    embedded = torch.tensor(
+        [1 if p in GTT_EMBEDDED.get(g, ()) else 0 for p in PSF_ORDER],
+        dtype=torch.bool, device=device,
+    )
+    strength = gather_mult(level, diagnosis=is_diagnosis(kind))
+    own = torch.clamp(strength, min=1.2, max=epc_max)
+    apoa_idx = torch.round(severity).to(torch.int64).clamp(min=0, max=len(APOA_BY_LEVEL) - 1)
+    apoa = torch.tensor(APOA_BY_LEVEL, dtype=torch.float64, device=device)[apoa_idx]
+    counts = (severity >= 1) & (strength > 1) & (~embedded).expand_as(strength)
+    return own, apoa, counts
+
+
 MAX_NEGATIVE_PSFS = 3
 
 PROTECTION_FOD = {
@@ -498,18 +541,18 @@ def compute_hep(
     unachievable = (FAILS.to(device)[psf_rows, idx] == 1).any(dim=1) if method == "sparh" else None
 
     if method == "heart":
-        # HEART scales each condition by its own maximum factor, taken from the
-        # published 1.2 - 30 band, times its assumed probabilistic impact on the
-        # task (APOA). Treating every condition as a x30 one is how a method ends
-        # up reporting 100%.
-        apoa_idx = torch.clamp(torch.round(severity).to(torch.int64), min=1, max=4)
-        apoa_table = torch.tensor(APOA_BY_LEVEL, dtype=torch.float64, device=device)
-        apoa = apoa_table[apoa_idx]
-        own = torch.clamp(gather_mult(level, diagnosis=False), min=1.2, max=epc_max)
-        f = torch.ones(batch, dtype=torch.float64, device=device)
-        for k in range(N_PSFS):
-            f = f * ((own[:, k] - 1) * apoa[:, k] + 1)
-        p = torch.clamp(nominal * f, max=1.0)
+        # HEART scales each error producing condition by its own maximum factor,
+        # taken from the published 1.2 - 30 band, times its assumed probabilistic
+        # impact on the task (APOA). Treating every condition as a x30 one is how
+        # a method ends up reporting 100%.
+        own, apoa, counts = heart_epc(level, severity, kind, gtt, epc_max)
+        ep = torch.where(counts, (own - 1) * apoa + 1, torch.ones_like(own))
+        f = ep.prod(dim=1)
+        # RR679 caps at unity, which is not a probability of 1 but the method
+        # saying the task is unachievable as shaped; the ceiling is reported at
+        # the same 0.98 the other two methods use and the raw product stays
+        # visible in the multiplier column.
+        p = torch.clamp(nominal * f, max=0.98)
         c = f
         adjusted = torch.zeros(batch, dtype=torch.bool, device=device)
     else:
@@ -578,21 +621,43 @@ def js_number(x: float) -> str:
     return repr(float(x))
 
 
-def level_labels(level: torch.Tensor, method: str, severity: torch.Tensor, epc_max: float = HEART_EPC_MAX) -> list[list[str]]:
-    """`PSF:level name:multiplier` per scenario, for the fixture's audit trail."""
+def level_labels(
+    level: torch.Tensor, method: str, severity: torch.Tensor,
+    kind: str = "actuate", gtt: str | None = None, epc_max: float = HEART_EPC_MAX,
+) -> list[list[str]]:
+    """`PSF:level name:multiplier` per scenario, for the fixture's audit trail.
+
+    The heart branch has to reproduce the reference string for string: a row that
+    is not an error producing condition keeps its level name and a factor of 1,
+    and a suppressed one says which task type already priced it in.
+    """
     mult = gather_mult(level, diagnosis=False)
     cpu = level.cpu()
     sev = severity.cpu()
     out: list[list[str]] = []
     if method == "heart":
-        mults = mult.cpu().tolist()
-        for b in range(cpu.shape[0]):
+        own_t, apoa_t, counts = heart_epc(level, severity, kind, gtt, epc_max)
+        own_c = own_t.cpu().tolist()
+        apoa_c = apoa_t.cpu().tolist()
+        cnt_c = counts.cpu().tolist()
+        names = cpu.tolist()
+        g = resolve_gtt(kind, gtt)
+        strength = gather_mult(level, diagnosis=is_diagnosis(kind)).cpu().tolist()
+        for b in range(len(names)):
             row = []
             for k in range(N_PSFS):
-                own = min(epc_max, max(1.2, mults[b][k]))
-                apoa = APOA_BY_LEVEL[min(4, max(1, int(round(float(sev[b, k])))))]
+                name = SPAR_PSFS[PSF_ORDER[k]][min(names[b][k], len(SPAR_PSFS[PSF_ORDER[k]]) - 1)][0]
+                if not cnt_c[b][k]:
+                    if sev[b][k] >= 1 and strength[b][k] > 1:
+                        row.append(
+                            f"{PSF_ORDER[k]}:{name} - already inside generic task type {g}, not charged again:1"
+                        )
+                    else:
+                        row.append(f"{PSF_ORDER[k]}:{name}:1")
+                    continue
                 row.append(
-                    f"{PSF_ORDER[k]}:EPC max {js_number(own)} at APOA {apoa:.2f}:{js_number((own - 1) * apoa + 1)}"
+                    f"{PSF_ORDER[k]}:{name} as EPC, max {own_c[b][k]:.1f} at APOA {apoa_c[b][k]:.2f}"
+                    f":{js_number((own_c[b][k] - 1) * apoa_c[b][k] + 1)}"
                 )
             out.append(row)
         return out

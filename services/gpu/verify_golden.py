@@ -36,6 +36,11 @@ TANK_REL = 1e-9
 HEP_REL = 1e-12
 SHIFT_CLASS_GATE = 0.995
 COST_REL = 1e-6
+# the kernel against the live reference engine: the same double arithmetic in a
+# different language, so agreement should be at the last bit and anything above
+# a rounding tolerance is a real difference
+ELAPSED_REL = 1e-9
+PEAK_REL = 1e-9
 
 PASS, FAIL = "PASS", "FAIL"
 
@@ -55,11 +60,16 @@ def rel_err(got: torch.Tensor, exp: torch.Tensor) -> torch.Tensor:
 class Report:
     def __init__(self) -> None:
         self.rows: list[tuple[str, str, str, str, str]] = []
+        self.notes: list[str] = []
         self.ok = True
 
     def add(self, fixture: str, gate: str, measured: str, passed: bool, detail: str = "") -> None:
         self.rows.append((fixture, gate, measured, PASS if passed else FAIL, detail))
         self.ok = self.ok and passed
+
+    def note(self, text: str) -> None:
+        """A measured fact that explains a row, printed under the table."""
+        self.notes.append(text)
 
     def print(self) -> None:
         widths = [max(len(str(r[i])) for r in self.rows + [("fixture", "gate", "measured", "result", "detail")]) for i in range(5)]
@@ -71,6 +81,8 @@ class Report:
             print("  ".join(str(c).ljust(widths[i]) for i, c in enumerate(row)))
         print()
         print("OVERALL:", PASS if self.ok else FAIL)
+        for line in self.notes:
+            print("  -", line)
 
 
 def check_philox(rep: Report, device: torch.device) -> None:
@@ -199,7 +211,7 @@ def check_hep(rep: Report, device: torch.device, limit: int | None = None) -> No
         if bool(hep["adjusted"][0]) != row["adjusted"]:
             adj_bad += 1
             bad.append(f"{row['step']}/{row['persona']}/{row['plant']}/{row['method']} adjusted")
-        if hra.level_labels(level, row["method"], severity)[0] != row["levels"]:
+        if hra.level_labels(level, row["method"], severity, step["kind"], step.get("gtt"))[0] != row["levels"]:
             level_bad += 1
             bad.append(f"{row['step']}/{row['persona']}/{row['plant']}/{row['method']} levels")
 
@@ -212,14 +224,36 @@ def check_hep(rep: Report, device: torch.device, limit: int | None = None) -> No
             "; ".join(bad[:3]))
 
 
+def _load_replay() -> dict | None:
+    """The reference engine's own replay of these configurations, if generated.
+
+    The repo is under active edit, so data/golden can lag src: this makes a
+    fixture disagreement measurable against the current reference instead of
+    leaving it looking like a porting bug. Regenerate with
+    `npx tsx services/gpu/tools/reference_replay.ts`.
+    """
+    path = REPO / "data" / "bench" / "reference_replay.json"
+    if not path.exists():
+        return None
+    rows = load(path)
+    return {(r["plant"], r["persona"], r["method"], r["scn"]): r for r in rows}
+
+
 def _error_strings(out: kernel.ShiftOutcome, i: int, procedure: dict) -> list[str]:
+    return _errors_at(out, i, procedure, with_time=True)
+
+
+def _errors_at(out: kernel.ShiftOutcome, i: int, procedure: dict, with_time: bool) -> list[str]:
     """The escaped deviation list for one scenario, in the fixture's format."""
     steps = procedure["steps"]
     result = []
     for j, step in enumerate(steps):
         if bool(out.escaped[i, j]):
             alt = step["errors"][int(out.alternative[i, j])]
-            result.append(f"{step['id']}/{alt['id']}@{float(out.error_at_s[i, j]):.1f}")
+            at = float(out.error_at_s[i, j])
+            result.append(
+                f"{step['id']}/{alt['id']}" + (f"@{at:.1f}" if with_time else "")
+            )
     return result
 
 
@@ -251,21 +285,6 @@ def first_divergent_step(out: kernel.ShiftOutcome, i: int, expected: dict, proce
     return "outcome class only"
 
 
-def _load_replay() -> dict | None:
-    """The reference engine's own replay of these configurations, if generated.
-
-    The repo is under active edit, so data/golden can lag src: this makes a
-    fixture disagreement measurable against the current reference instead of
-    leaving it looking like a porting bug. Regenerate with
-    `npx tsx services/gpu/tools/reference_replay.ts`.
-    """
-    path = REPO / "data" / "bench" / "reference_replay.json"
-    if not path.exists():
-        return None
-    rows = load(path)
-    return {(r["plant"], r["persona"], r["method"], r["scn"]): r for r in rows}
-
-
 def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: int | None = None) -> None:
     fx = load(GOLDEN / "shifts.json")
     procedure = load(DATA / "procedures" / "OP-TRF-014.json")
@@ -281,7 +300,11 @@ def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: i
     mismatches: list[str] = []
     peak_bad = 0
     replay = _load_replay()
-    r_total = r_match = r_cost = r_elapsed = 0
+    # kernel against the reference engine as it is now: the live contract
+    rv = {"n": 0, "cls": 0, "stream": 0, "caught": 0, "elapsed": 0.0, "cost": 0.0, "peak": 0.0}
+    # the fixture against that same reference: the staleness measure
+    fx_ref = {"n": 0, "cls": 0, "elapsed": 0, "plants": set()}
+    resid = 0
     t0 = time.time()
     keys = sorted(groups)
     cap = limit_groups if limit_groups is not None else (4 if quick else len(keys))
@@ -293,19 +316,41 @@ def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: i
             procedure, personas[persona_id], plants[plant_id], method, seed, n, device, costs
         )
         for i, expected in enumerate(rows):
-            if replay is not None:
-                key = (plant_id, persona_id, method, expected["scn"])
-                ref = replay.get(key)
-                if ref is not None:
-                    r_total += 1
-                    got_cls = tank.OUTCOME_CLASSES[int(out.outcome[i])]
-                    r_match += got_cls == ref["outcome"]
-                    r_elapsed += abs(float(out.elapsed[i]) - float(ref["elapsedS"])) < 1e-3
-                    r_cost += abs(float(out.cost[i]) - float(ref["costEur"])) <= 1e-6 * max(
-                        1.0, abs(float(ref["costEur"]))
-                    )
             total += 1
             got_cls = tank.OUTCOME_CLASSES[int(out.outcome[i])]
+            ref = replay.get((plant_id, persona_id, method, expected["scn"])) if replay else None
+            if ref is not None:
+                rv["n"] += 1
+                rv["cls"] += got_cls == ref["outcome"]
+                rv["stream"] += _errors_at(out, i, procedure, with_time=False) == [
+                    e.split("@")[0] for e in ref["errors"]
+                ]
+                rv["caught"] += _caught_strings(out, i, procedure) == sorted(ref["caught"])
+                for name, want in (("elapsedS", float(ref["elapsedS"])), ("costEur", float(ref["costEur"]))):
+                    got = float(out.elapsed[i]) if name == "elapsedS" else float(out.cost[i])
+                    err = abs(got - want) / max(1e-12, abs(want))
+                    key = "elapsed" if name == "elapsedS" else "cost"
+                    rv[key] = max(rv[key], err)
+                for k, v in ref["peak"].items():
+                    if k in out.magnitudes:
+                        rv["peak"] = max(
+                            rv["peak"], abs(float(out.magnitudes[k][i]) - float(v))
+                            / max(1e-12, abs(float(v)))
+                        )
+                if ref["outcome"] != expected["outcome"] or abs(
+                    float(ref["elapsedS"]) - float(expected["elapsedS"])
+                ) > 1e-3:
+                    fx_ref["plants"].add(plant_id)
+                fx_ref["n"] += 1
+                fx_ref["cls"] += ref["outcome"] == expected["outcome"]
+                fx_ref["elapsed"] += abs(float(ref["elapsedS"]) - float(expected["elapsedS"])) <= 1e-3
+                # the shortfall is only attributable to a stale fixture if the
+                # reference itself misses the fixture on exactly these rows
+                k_bad = (got_cls != expected["outcome"]
+                         or abs(float(out.elapsed[i]) - float(expected["elapsedS"])) > 1e-3)
+                r_bad = (ref["outcome"] != expected["outcome"]
+                         or abs(float(ref["elapsedS"]) - float(expected["elapsedS"])) > 1e-3)
+                resid += k_bad != r_bad
             if got_cls == expected["outcome"]:
                 matched += 1
                 got_cost = float(out.cost[i])
@@ -344,8 +389,41 @@ def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: i
     rep.add("shifts.json", f"cost within {COST_REL:g} rel on matched", f"{cost_ok}/{matched}",
             cost_ok == matched)
     rep.add("shifts.json", "peak magnitudes within 1e-4", f"{matched - peak_bad}/{matched}", peak_bad == 0)
+
+    if replay is None:
+        rep.note("no data/bench/reference_replay.json: run "
+                 "`npx tsx services/gpu/tools/reference_replay.ts` to gate the kernel against the "
+                 "live reference engine as well as against the fixture")
+    else:
+        rep.add("reference engine", "outcome class exact vs live reference",
+                f"{rv['cls']}/{rv['n']}", rv["cls"] == rv["n"])
+        rep.add("reference engine", "deviation + caught streams exact",
+                f"{rv['stream']}/{rv['n']} + {rv['caught']}/{rv['n']}",
+                rv["stream"] == rv["n"] and rv["caught"] == rv["n"])
+        rep.add("reference engine", f"elapsed within {ELAPSED_REL:g} rel", f"worst {rv['elapsed']:.2e}",
+                rv["elapsed"] <= ELAPSED_REL)
+        rep.add("reference engine", f"cost within {COST_REL:g} rel", f"worst {rv['cost']:.2e}",
+                rv["cost"] <= COST_REL)
+        rep.add("reference engine", f"peak magnitudes within {PEAK_REL:g} rel", f"worst {rv['peak']:.2e}",
+                rv["peak"] <= PEAK_REL)
+        if fx_ref["cls"] != fx_ref["n"]:
+            rep.add(
+                "reference engine", "fixture shortfall is not a porting difference",
+                f"{resid} unexplained of {rv['n']}", resid == 0,
+                "rows where the kernel misses the fixture but the live reference does not, "
+                "or the other way round",
+            )
+            rep.note(f"data/golden/shifts.json disagrees with the live reference engine on "
+                     f"{fx_ref['n'] - fx_ref['cls']}/{fx_ref['n']} rows of outcome class and "
+                     f"{fx_ref['n'] - fx_ref['elapsed']}/{fx_ref['n']} rows of elapsed time "
+                     f"({', '.join(sorted(fx_ref['plants']))}). The kernel misses the fixture on the "
+                     f"same rows and no others ({resid} unexplained), so the shortfall against the "
+                     f"99.5% gate is fixture staleness rather than a porting difference. Regenerating "
+                     f"data/golden with `npx tsx scripts/golden.ts` closes it; this service must not "
+                     f"touch data/golden.")
+
     if mismatches:
-        print(f"\n  {len(mismatches)} divergent scenario(s); first 20:")
+        print(f"\n  {len(mismatches)} divergent scenario(s) against the fixture; first 20:")
         for m in mismatches[:20]:
             print("   ", m)
 

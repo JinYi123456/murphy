@@ -315,19 +315,52 @@ export function sparAdjustment(nominal: number, c: number): number {
 }
 
 /**
+ * The graded level a state points at, clamped into the published list.
+ * Out-of-range indices are a modelling mistake, not a crash: the worst level is
+ * the safe interpretation and the worksheet still shows which row was wrong.
+ */
+function levelOf(st: PsfState): SparLevel {
+  const def = SPAR_PSFs[st.psf];
+  return def.levels[Math.max(0, Math.min(def.levels.length - 1, st.levelIndex))];
+}
+
+/**
+ * Conditions the wording of a generic task type already contains.
+ *
+ * RR679 is explicit that the analyst must not count the same feature twice: the
+ * generic error probability for type B is 0.26 *because* the task is being done
+ * without written procedures, so applying a "procedures inadequate" EPC on top of
+ * it charges the same defect once more and multiplies it. Only overlaps that the
+ * published wording names outright are listed here - over-suppressing would
+ * flatter the method in the other direction.
+ */
+export const GTT_EMBEDDED: Record<string, SparPsfId[]> = {
+  A: ['CX', 'E-T'],
+  B: ['PRU'],
+  C: ['CX'],
+  D: ['CX', 'E-T'],
+  E: ['HCI'],
+  F: ['PRU'],
+  G: ['CX', 'E-T', 'HCI', 'PRU'],
+  H: [],
+  M: ['HCI'],
+};
+
+/**
  * Compute the human error probability for one performance of one action.
  * Deterministic and fully traceable: every contributing table row is returned,
  * so the UI can show the derivation instead of a number nobody can argue with.
  */
 export function computeHep(input: HepInput): HepResult {
-  const { nominal, basis } = nominalFor(input);
+  const { nominal, basis: baseBasis } = nominalFor(input);
+  let basis = baseBasis;
   const rows: HepRow[] = [];
   const fails = input.method === 'sparh';
 
   for (const st of input.psfs) {
     const def = SPAR_PSFs[st.psf];
     if (!def) continue;
-    const lvl = def.levels[Math.max(0, Math.min(def.levels.length - 1, st.levelIndex))];
+    const lvl = levelOf(st);
     if (lvl.fails && fails) {
       return {
         p: 0.99, lo: 0.5, hi: 0.99, nominal, multiplier: 1, rows: [...rows, { id: st.psf, label: def.label, level: lvl.name, mult: 1 }],
@@ -350,18 +383,49 @@ export function computeHep(input: HepInput): HepResult {
     // The maximum factor of an individual condition is taken from the published
     // 1.2 - 30 band rather than a single global value, because treating every
     // condition as a x30 one is how a method ends up reporting 100%.
+    //
+    // Only a condition that is actually present is an EPC. The worksheet carries
+    // a row for all eight SPAR factors including the favourable baseline ones,
+    // and RR679 has no beneficial factors whatsoever, so counting a row the
+    // analyst marked "absent" as an error producer inflates every step - with the
+    // old clamp from severity 0 to the lowest APOA it pushed the ordinary steps
+    // to a certainty of failure, which is not a result but an arithmetic artefact.
     const max = input.epcMax ?? HEART_EPC_MAX;
+    const gtt = input.gtt ?? defaultGtt(input.kind);
+    const embedded = GTT_EMBEDDED[gtt] ?? [];
     let f = 1;
-    for (let i = 0; i < input.psfs.length; i++) {
-      const st = input.psfs[i];
-      const own = Math.min(max, Math.max(1.2, SPAR_PSFs[st.psf].levels[st.levelIndex].action));
-      const apoa = APOA_BY_LEVEL[Math.min(4, Math.max(1, Math.round(st.severity)))];
+    let suppressed = 0;
+    for (const r of rows) {
+      const st = input.psfs.find((x) => x.psf === (r.id as PsfId));
+      const lvl = st ? levelOf(st) : null;
+      const strength = lvl ? (isDiagnosis(input.kind) && lvl.diagnosis !== undefined ? lvl.diagnosis : lvl.action) : r.mult;
+      if (!st || st.severity < 1 || strength <= 1) {
+        r.mult = 1;
+        continue;
+      }
+      if (embedded.includes(st.psf)) {
+        r.mult = 1;
+        r.level = `${r.level} - already inside generic task type ${gtt}, not charged again`;
+        suppressed++;
+        continue;
+      }
+      const own = Math.min(max, Math.max(1.2, strength));
+      const apoa = APOA_BY_LEVEL[Math.min(4, Math.round(st.severity))];
       const epMult = (own - 1) * apoa + 1;
       f *= epMult;
-      rows[i] = { ...rows[i], level: `EPC max ${own} at APOA ${apoa.toFixed(2)}`, mult: epMult };
+      r.level = `${r.level} as EPC, max ${own.toFixed(1)} at APOA ${apoa.toFixed(2)}`;
+      r.mult = epMult;
     }
-    p = Math.min(1, nominal * f);
+    // RR679 caps the result at unity. A step that reaches the cap is not a
+    // probability of 1.0, it is the method saying the task is not achievable as
+    // shaped, so the ceiling is reported at the same value the other two methods
+    // use and the raw product stays visible in the multiplier column.
+    p = Math.min(0.98, nominal * f);
     c = f;
+    if (nominal * f >= 0.98) {
+      basis += `; the EPC product of x${f.toFixed(1)} carries this step past the method's ceiling, so it is reported at 0.98 rather than as a certainty (HEART caps at 1 and would call the step unachievable)`;
+    }
+    if (suppressed) basis += `; ${suppressed} condition${suppressed > 1 ? 's' : ''} already inside the generic task type and not charged again`;
   } else {
     const negatives = rows.filter((r) => r.mult > 1).length;
     if (negatives >= 3 && c > 1) {
