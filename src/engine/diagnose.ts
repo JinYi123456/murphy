@@ -129,8 +129,11 @@ export function synthesizeObservation(
   windowS = 900,
   stepS = 15,
 ): { obs: Observation; truth: string } {
-  const run = forceError ? forceRun(cfg, forceError.stepId, forceError.errorId) : cfg;
-  const shift = simulateShift(run, scn, { trace: true, sampleEveryS: stepS });
+  const shift = simulateShift(cfg, scn, {
+    trace: true,
+    sampleEveryS: stepS,
+    force: forceError ? { stepId: forceError.stepId, errorId: forceError.errorId } : undefined,
+  });
   const twin = getTwin(cfg.procedure.twin);
   const start = Math.max(0, shift.series.length - Math.ceil(windowS / stepS));
   const frames = shift.series.slice(start);
@@ -151,22 +154,6 @@ export function synthesizeObservation(
   };
 }
 
-/**
- * Force a specific error mode to fire at a specific step, by making every other
- * alternative at that step impossible and the requested roll certain. This is a
- * test fixture, not a claim about the plant: it lets us ask how often the
- * diagnosis recovers a known truth.
- */
-function forceRun(cfg: RunConfig, stepId: string, errorId: string | null): RunConfig {
-  const steps = cfg.procedure.steps.map((s) => {
-    if (s.id !== stepId) return s;
-    if (errorId === null) return { ...s, errors: [] };
-    const keep = (s.errors ?? []).filter((e) => e.id === errorId).map((e) => ({ ...e, weight: 1 }));
-    return { ...s, errors: keep };
-  });
-  return { ...cfg, procedure: { ...cfg.procedure, steps } };
-}
-
 /** Heavy-tailed per-sample score: 1 / (1 + (delta / sigma)^2). */
 function kernel(delta: number, sigma: number): number {
   const z = delta / (sigma > 0 ? sigma : 1e-6);
@@ -181,40 +168,61 @@ function kernel(delta: number, sigma: number): number {
  * out rather than assumed away; the reported likelihood is the mean score over
  * replicas. Cost: replicas x hypotheses shifts, which is why the interface runs
  * it on a short window and the GPU is genuinely useful here.
+ *
+ * Channels are compared as *increments from the start of the window*. A real
+ * diagnostician is told where the batch started but not what the operator's
+ * gauge is really reading, and comparing absolute levels makes that unknown
+ * offset dominate every other term - the first version of this scored nothing but
+ * noise. Differencing removes both the start level and a constant instrument
+ * bias, which is exactly the confound that has to go.
  */
 export function diagnose(
   cfg: RunConfig,
   obs: Observation,
-  opts: { replicas?: number; channels?: Channel; truth?: string } = {},
+  opts: { replicas?: number; channels?: Channel; truth?: string; excludeClean?: boolean; only?: string[] } = {},
 ): Diagnosis {
   const channels = (opts.channels ? [opts.channels] : channelsFor(cfg.procedure.twin)).filter((c) => obs.values[c.name]);
   const replicas = Math.max(1, opts.replicas ?? 12);
-  const cands = hypothesesFor(cfg);
+  const cands = hypothesesFor(cfg)
+    .filter((h) => !opts.excludeClean || h.errorId !== null)
+    .filter((h) => !opts.only || opts.only.includes(`${h.step.id}/${h.errorId ?? 'clean'}`));
+  const obsDelta: Record<string, number[]> = {};
+  for (const c of channels) {
+    const series = obs.values[c.name];
+    const base = series[0] ?? 0;
+    obsDelta[c.name] = series.map((v) => v - base);
+  }
   const twin = getTwin(cfg.procedure.twin);
   const base: Hypothesis[] = [];
 
   for (const cand of cands) {
-    const run = forceRun(cfg, cand.step.id, cand.errorId);
+    const force = { stepId: cand.errorId === null ? '*' : cand.step.id, errorId: cand.errorId };
     let score = 0;
     const resid: Record<string, number> = {};
     for (const c of channels) resid[c.name] = 0;
     for (let r = 0; r < replicas; r++) {
-      const shift = simulateShift(run, 1000 + r, { trace: true, sampleEveryS: 15 });
+      const shift = simulateShift(cfg, 1000 + r, { trace: true, sampleEveryS: 15, force });
       const frames = shift.series;
       if (!frames.length) continue;
       const tail = frames.slice(Math.max(0, frames.length - obs.tS.length));
+      const len = Math.min(tail.length, obs.tS.length);
+      if (len < 2) continue;
+      const seg = tail.slice(tail.length - len);
+      const read = (f: (typeof seg)[number], name: string, indicated?: boolean) => {
+        const raw = f.v[name];
+        if (!Number.isFinite(raw)) return 0;
+        return indicated ? raw + (f.d.gaugeBias ?? f.d.tcBias ?? 0) : raw;
+      };
       for (const c of channels) {
-        const series = obs.values[c.name];
+        const series = obsDelta[c.name];
+        const anchor = read(seg[0], c.name, c.indicated);
         let acc = 0;
         let n = 0;
-        for (let i = 0; i < tail.length; i++) {
-          const idx = tail.length - 1 - i;
-          const obsIdx = series.length - 1 - i;
-          if (obsIdx < 0) break;
-          const predicted = c.indicated
-            ? tail[idx].v[c.name] + (tail[idx].d.gaugeBias ?? tail[idx].d.tcBias ?? 0)
-            : tail[idx].v[c.name];
-          const delta = series[obsIdx] - (Number.isFinite(predicted) ? predicted : 0);
+        for (let i = 0; i < len; i++) {
+          const obsIdx = series.length - len + i;
+          if (obsIdx < 0) continue;
+          const predDelta = read(seg[i], c.name, c.indicated) - anchor;
+          const delta = series[obsIdx] - predDelta;
           acc += kernel(delta, c.sigma);
           resid[c.name] += Math.abs(delta);
           n++;

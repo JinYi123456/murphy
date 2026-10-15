@@ -160,6 +160,16 @@ export interface SimOptions {
   sampleEveryS?: number;
   /** run the step under a different method than the configuration asks for */
   method?: HraMethod;
+  /**
+   * Make one step's outcome certain instead of drawing it.
+   *
+   * Diagnosis needs this: the question is "if this specific error had happened,
+   * what would the instruments be showing", not "what do the instruments show in
+   * the fraction of random draws where it happens". Without it a 1-in-1000 error
+   * mode is invisible in a ten-replica comparison and the method quietly scores
+   * noise. `errorId: null` forces the step to be performed correctly.
+   */
+  force?: { stepId: string; errorId: string | null };
 }
 
 /**
@@ -307,8 +317,16 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
     });
 
     const surface = step.errors ?? [];
+    const force = opts.force;
     let thrown: ErrorAlternative | null = null;
-    if (surface.length) {
+    if (force) {
+      // a forced run is a counterfactual: this one step goes this way and every
+      // other step is performed as written, so a measured difference is caused by
+      // the one thing that was changed
+      if (force.stepId === step.id && force.errorId) {
+        thrown = surface.find((e) => e.id === force.errorId) ?? null;
+      }
+    } else if (surface.length) {
       const uErr = drawFrac(key, scn, slot, 0);
       if (uErr < hep.p) {
         let total = 0;

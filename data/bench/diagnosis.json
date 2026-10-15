@@ -1,0 +1,437 @@
+{
+  "procedure": "OP-TRF-014",
+  "plant": "tk_after_instrument_work",
+  "persona": "daytime_competent",
+  "method": "sparh",
+  "channels": [
+    "level",
+    "lineP",
+    "tankP",
+    "delivered"
+  ],
+  "windowS": 4200,
+  "stepS": 15,
+  "replicas": 8,
+  "threshold": 0.05,
+  "errorModes": 46,
+  "observable": 17,
+  "observableShare": 0.3695652173913043,
+  "unobservable": [
+    "d1/d1e1",
+    "d1/d1e3",
+    "d2/d2e1",
+    "d2/d2e2",
+    "d2/d2e3",
+    "d3/d3e1",
+    "d3/d3e2",
+    "d3/d3e3",
+    "d4/d4e2",
+    "d4/d4e3",
+    "d4/d4e4",
+    "d5/d5e1",
+    "d5/d5e2",
+    "d6/d6e2",
+    "d7/d7e1",
+    "d7/d7e2",
+    "d7/d7e3",
+    "d9/d9e1",
+    "d9/d9e2",
+    "d11/d11e1",
+    "d11/d11e2",
+    "d14/d14e1",
+    "d15/d15e2",
+    "d15/d15e3",
+    "d16/d16e2",
+    "d17/d17e1",
+    "d17/d17e2",
+    "d17/d17e3",
+    "e1/e1e1"
+  ],
+  "trials": 17,
+  "top1": 0.17647058823529413,
+  "top3": 0.5294117647058824,
+  "chanceTop1": 0.058823529411764705,
+  "lift": 3.0000000000000004,
+  "divergence": [
+    {
+      "id": "d1/d1e2",
+      "label": "Dispatch note and permit agree on product but name different tanks. The operator matches on product, not on tank",
+      "kind": "misread",
+      "divergence": 7.1409
+    },
+    {
+      "id": "d10/d10e1",
+      "label": "Local handle left in hand after the last job, so the start from the control room does nothing",
+      "kind": "omission",
+      "divergence": 6.3164
+    },
+    {
+      "id": "d10/d10e2",
+      "label": "Started P-202, the pump for the other rack, because the panel tag moved when the panel was replaced",
+      "kind": "wrong_target",
+      "divergence": 6.3164
+    },
+    {
+      "id": "d10/d10e3",
+      "label": "Started the pump with the inlet still shut, which is the definition of a dead-headed line",
+      "kind": "commission",
+      "divergence": 6.3164
+    },
+    {
+      "id": "d8/d8e1",
+      "label": "The vent was shut for the roof inspection. It is up the platform ladder, off the transfer walk, and nobody thought of it",
+      "kind": "omission",
+      "divergence": 3.2519
+    },
+    {
+      "id": "d8/d8e2",
+      "label": "Opened the nitrogen blanket valve next to the vent. The tank now pressurises instead of breathing, which looks like a healthy result on the status board",
+      "kind": "wrong_target",
+      "divergence": 3.2519
+    },
+    {
+      "id": "d8/d8e3",
+      "label": "Climbed the ladder, found the handle stiff, forced it a quarter turn and assumed it was through",
+      "kind": "incomplete",
+      "divergence": 3.2519
+    },
+    {
+      "id": "d12/d12e4",
+      "label": "Level rising slower than the estimate, so he opened the recirculation bypass to keep the pump loaded, against step 13",
+      "kind": "commission",
+      "divergence": 0.9939
+    },
+    {
+      "id": "d15/d15e1",
+      "label": "Closed V1 before stopping the pump, so the trapped column hammered and the couplings wept",
+      "kind": "out_of_sequence",
+      "divergence": 0.8828
+    },
+    {
+      "id": "d12/d12e1",
+      "label": "Went back to the rack office to close the permit paperwork, and the level crossed while he was typing",
+      "kind": "delayed_response",
+      "divergence": 0.727
+    },
+    {
+      "id": "d12/d12e2",
+      "label": "The local indicator has been reading low since the transmitter bench test. He stops the pump when it says 9.30 and the tank is already above it",
+      "kind": "misread",
+      "divergence": 0.727
+    },
+    {
+      "id": "d12/d12e3",
+      "label": "Left the watch entirely to help the other bay discharge a late load",
+      "kind": "omission",
+      "divergence": 0.727
+    },
+    {
+      "id": "d16/d16e1",
+      "label": "Broke the coupling before the line had drained, so the contents of the hose went on the deck",
+      "kind": "premature",
+      "divergence": 0.3992
+    },
+    {
+      "id": "d4/d4e1",
+      "label": "Opened V2, the draw-off valve on the same manifold with the same handwheel and a tag nobody can read from the working platform",
+      "kind": "wrong_target",
+      "divergence": 0.2941
+    },
+    {
+      "id": "d6/d6e1",
+      "label": "Closed by hand but the stem packing is stiff and the disc is two turns off its seat",
+      "kind": "incomplete",
+      "divergence": 0.1092
+    },
+    {
+      "id": "d14/d14e2",
+      "label": "The meter is a cumulative total, not a batch total. He works the difference out from memory",
+      "kind": "misread",
+      "divergence": 0.0663
+    },
+    {
+      "id": "d14/d14e3",
+      "label": "Already stopped on level, so he does not look at the meter again",
+      "kind": "omission",
+      "divergence": 0.0663
+    },
+    {
+      "id": "d1/d1e1",
+      "label": "Permit signed in the office against yesterday's load; the tank named on it is TK-103",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d1/d1e3",
+      "label": "No permit at all, because it is the fourth load of the week into the same tank",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d2/d2e1",
+      "label": "The register is in the control room and the shift is behind. Assumed the fitter signed it back like he always does",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d2/d2e2",
+      "label": "Confirmed the row for LT-101. The isolation that matters is the next row down, LSHH-101",
+      "kind": "misread",
+      "divergence": 0
+    },
+    {
+      "id": "d2/d2e3",
+      "label": "Transmitter confirmed in service. Nobody looked at whether the high-high switch loop was proved after the bench test",
+      "kind": "incomplete",
+      "divergence": 0
+    },
+    {
+      "id": "d3/d3e1",
+      "label": "Bond clip is on the painted chassis rail. It looks connected and measures nothing",
+      "kind": "incomplete",
+      "divergence": 0
+    },
+    {
+      "id": "d3/d3e2",
+      "label": "Walked past it because the driver said he had just made up for the last load",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d3/d3e3",
+      "label": "Checked the bond on the vehicle in the adjacent bay",
+      "kind": "wrong_target",
+      "divergence": 0
+    },
+    {
+      "id": "d4/d4e2",
+      "label": "Assumed V1 had been left open from the last transfer into this tank",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d4/d4e3",
+      "label": "Cracked the cross-connect V3 open to free a stuck stem, and left it there",
+      "kind": "commission",
+      "divergence": 0
+    },
+    {
+      "id": "d4/d4e4",
+      "label": "Rising stem valve turned the wrong way: the handwheel came up, which reads as open",
+      "kind": "wrong_direction",
+      "divergence": 0
+    },
+    {
+      "id": "d5/d5e1",
+      "label": "Knew V2 was closed because he closed it himself at the end of the last transfer",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d5/d5e2",
+      "label": "The valve is quarter-turn and the indicator plate was refitted upside down after the packing change",
+      "kind": "misread",
+      "divergence": 0
+    },
+    {
+      "id": "d6/d6e2",
+      "label": "V3 is only used for tank cleaning, so it never occurs to him as something to check",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d7/d7e1",
+      "label": "Did the walk from the rack only as far as the first bend, where the manifold is out of sight",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d7/d7e2",
+      "label": "Confirmed the valves visible from the walkway, which does not include the tank bottom outlet",
+      "kind": "incomplete",
+      "divergence": 0
+    },
+    {
+      "id": "d7/d7e3",
+      "label": "Walked the line while talking on the radio about the next load, and registered the positions he expected rather than the ones he passed",
+      "kind": "commission",
+      "divergence": 0
+    },
+    {
+      "id": "d9/d9e1",
+      "label": "Cleared the tray by pushing last shift's standing liquid over the weep hole into the bund drain, so the tray is empty for this transfer and the bund is not",
+      "kind": "commission",
+      "divergence": 0
+    },
+    {
+      "id": "d9/d9e2",
+      "label": "Tray looked dry from above",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d11/d11e1",
+      "label": "Read the gauge board of the tank two bays along, which sits at a similar height",
+      "kind": "misread",
+      "divergence": 0
+    },
+    {
+      "id": "d11/d11e2",
+      "label": "No start level written down, so the delivered quantity has to be judged by eye later",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d14/d14e1",
+      "label": "The totaliser on the adjacent rack is at a similar number and is the one visible from the road",
+      "kind": "wrong_target",
+      "divergence": 0
+    },
+    {
+      "id": "d15/d15e2",
+      "label": "Pump stopped at the handle but not isolated. The next crew will find it running against a closed inlet",
+      "kind": "incomplete",
+      "divergence": 0
+    },
+    {
+      "id": "d15/d15e3",
+      "label": "Closed V3 instead of V1, leaving the inlet open to a tank that is no longer receiving",
+      "kind": "wrong_target",
+      "divergence": 0
+    },
+    {
+      "id": "d16/d16e2",
+      "label": "Left the hose in the tray, dripping",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d17/d17e1",
+      "label": "Written up next shift from memory, so a wrong-tank receipt stays invisible until the monthly stock reconciliation",
+      "kind": "omission",
+      "divergence": 0
+    },
+    {
+      "id": "d17/d17e2",
+      "label": "Logged the indicated level as the true level, carrying the instrument error into the stock record",
+      "kind": "misread",
+      "divergence": 0
+    },
+    {
+      "id": "d17/d17e3",
+      "label": "Status board left showing TK-101 as not receiving, so the next dispatch is planned into a full tank",
+      "kind": "commission",
+      "divergence": 0
+    },
+    {
+      "id": "e1/e1e1",
+      "label": "Release not noticed, or noticed and not believed",
+      "kind": "delayed_response",
+      "divergence": 0
+    }
+  ],
+  "rows": [
+    {
+      "truth": "d1/d1e2",
+      "rank": 0,
+      "posterior": 0.13924119136657853,
+      "top": "d1/d1e2"
+    },
+    {
+      "truth": "d10/d10e1",
+      "rank": 0,
+      "posterior": 0.09532223098765859,
+      "top": "d10/d10e1"
+    },
+    {
+      "truth": "d10/d10e2",
+      "rank": 5,
+      "posterior": 0.08170476941799301,
+      "top": "d10/d10e1"
+    },
+    {
+      "truth": "d10/d10e3",
+      "rank": 1,
+      "posterior": 0.09532223098765859,
+      "top": "d10/d10e1"
+    },
+    {
+      "truth": "d8/d8e1",
+      "rank": 0,
+      "posterior": 0.12311070698134156,
+      "top": "d8/d8e1"
+    },
+    {
+      "truth": "d8/d8e2",
+      "rank": 4,
+      "posterior": 0.06574919406157842,
+      "top": "d8/d8e1"
+    },
+    {
+      "truth": "d8/d8e3",
+      "rank": 3,
+      "posterior": 0.07852879514288162,
+      "top": "d8/d8e1"
+    },
+    {
+      "truth": "d12/d12e4",
+      "rank": 13,
+      "posterior": 0.04339301323248355,
+      "top": "d16/d16e1"
+    },
+    {
+      "truth": "d15/d15e1",
+      "rank": 2,
+      "posterior": 0.07017382485938184,
+      "top": "d16/d16e1"
+    },
+    {
+      "truth": "d12/d12e1",
+      "rank": 2,
+      "posterior": 0.07761083716626693,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d12/d12e2",
+      "rank": 6,
+      "posterior": 0.055500666533344734,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d12/d12e3",
+      "rank": 13,
+      "posterior": 0.04372785404290261,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d16/d16e1",
+      "rank": 1,
+      "posterior": 0.11505248103219104,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d4/d4e1",
+      "rank": 4,
+      "posterior": 0.06829449935221524,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d6/d6e1",
+      "rank": 1,
+      "posterior": 0.11488919788273425,
+      "top": "d16/d16e1"
+    },
+    {
+      "truth": "d14/d14e2",
+      "rank": 2,
+      "posterior": 0.0800293677790305,
+      "top": "d6/d6e1"
+    },
+    {
+      "truth": "d14/d14e3",
+      "rank": 5,
+      "posterior": 0.059361926651876736,
+      "top": "d6/d6e1"
+    }
+  ]
+}
