@@ -28,14 +28,17 @@ atmospheric storage tank — different plant state and different crew.
 
 | Plant state | Competent day crew | Night trainee |
 | --- | --- | --- |
-| `tk_asdesigned` | 0.53% of shifts lost | 5.58% of shifts lost, EUR 0.62M/yr |
-| `tk_after_instrument_work` | 10.9% of shifts lost, EUR 1.63M/yr | 44.7% of shifts lost, EUR 6.0M/yr |
-| `tk_uprated` | 9.2% of shifts breach the tank roof, EUR 12.1M/yr | 33.0% breach the roof, EUR 43.8M/yr |
+| `tk_asdesigned` | 0.70% of shifts lost | 5.72% of shifts lost, EUR 0.69M/yr |
+| `tk_after_instrument_work` | 10.87% of shifts lost, EUR 1.63M/yr | 42.88% of shifts lost, EUR 5.8M/yr |
+| `tk_uprated` | 10.87% lost, 9.2% breach the roof, EUR 12.1M/yr | 42.75% lost, 32.1% breach the roof, EUR 42.9M/yr |
 
-Reproduce with `npx tsx scripts/smoke.ts 4000`, which prints every procedure,
-plant state and crew in the repository. These figures moved by a few tenths of a
-percent when the reliability layer was corrected twice after this table was first
-written, which is the reason the command is part of the README and not a footnote.
+Reproduce with `npx tsx scripts/figures.ts`, which runs the console's own default
+configuration — same seed, same 6,000 shifts — so every figure above is what the
+deployed application prints when those two dropdowns are set that way and Run is
+pressed. `npx tsx scripts/smoke.ts 4000` sweeps the whole model on its own seeds
+and lands within a few tenths of a percent of these. Both numbers moved when the
+reliability layer was corrected twice after this table was first written, which is
+the reason the command is part of the README and not a footnote.
 
 The post-maintenance state is dominated by two stations: `d8`, confirm the tank
 vent is open, at a modelled 9–33% per performance depending on the crew, and
@@ -59,6 +62,8 @@ npm run dev          # then open http://localhost:3000
 npm test             # engine and simulation suites
 npm run build        # production build of the app
 npm run golden       # regenerate data/golden fixtures
+npx tsx scripts/figures.ts          # the figures quoted above, on the console's own seed
+npx tsx scripts/figures.ts 6000 --repair   # ... and the repair loop on that case
 npx tsx scripts/backtest.ts   # rewrite data/bench/backtest.md
 npx tsx scripts/smoke.ts 3000 tk_after_instrument_work
 ```

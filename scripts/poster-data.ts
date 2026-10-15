@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildRunConfig } from '../src/lib/registry';
+import { buildRunConfig, DEFAULT_CONFIG } from '../src/lib/registry';
 import { runBatch, simulateShift } from '../src/engine/index';
 import type { ConsoleConfig } from '../src/lib/registry';
 
@@ -8,16 +8,14 @@ import type { ConsoleConfig } from '../src/lib/registry';
  * Dump the real numbers a cover or a slide needs.
  *
  * The poster is drawn from an actual run rather than illustrated, so anything a
- * judge can see in the interface is also what the image is built from.
+ * judge can see in the interface is also what the image is built from. It runs on
+ * the console's own seed and shift count for the same reason: the headline on the
+ * cover is then the headline the application prints.
  */
 const cfg: ConsoleConfig = {
-  procedureId: 'OP-TRF-014',
+  ...DEFAULT_CONFIG,
   personaId: 'night_trainee',
   plantId: 'tk_after_instrument_work',
-  method: 'sparh',
-  controls: [],
-  n: 4000,
-  seed: 'poster-1',
 };
 const run = buildRunConfig(cfg);
 const { summary } = runBatch(run, cfg.n, { variantId: 'poster', collectWorst: 1 });

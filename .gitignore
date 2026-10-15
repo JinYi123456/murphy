@@ -15,3 +15,5 @@ media/work/
 
 # agent scratch and local probes
 .tmp/
+
+.vercel

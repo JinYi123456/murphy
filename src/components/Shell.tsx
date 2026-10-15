@@ -61,7 +61,7 @@ export function Shell({ s }: { s: ConsoleStore }) {
               {s.where === 'amd' ? `ran on ${s.device ?? 'amd'}` : s.health?.backends.amd.reachable ? 'amd ready' : 'amd not attached'}
             </Chip>
             <Chip ok={s.health?.backends.llm.configured ?? null} title={s.health?.backends.llm.note ?? 'open model served on AMD'}>
-              {s.health?.backends.llm.model ?? 'model on amd'}
+              {s.health?.backends.llm.model ?? 'llm not attached'}
             </Chip>
             <Chip ok={s.health?.backends.evolus.configured ?? null} title="Evolus workflows, extractors, knowledge">
               evolus
