@@ -92,12 +92,16 @@ same file run in three places (`next.config.ts` says so explicitly).
 | `murphy_gpu/hra.py` | The same published tables, tensorised. |
 | `murphy_gpu/economics.py` | The same cost layer over the same `data/costs.json`. |
 | `murphy_gpu/kernel.py` | A whole batch advancing together; per-scenario decisions are masks, never loops. |
+| `murphy_gpu/engine.py` | Configuration registry and batch runner, mirroring `src/engine/batch.ts` field for field. |
+| `murphy_gpu/api.py` | Stateless FastAPI service — `/health`, `/run`, `/bench`, `/equivalence`, `/configurations` — served with uvicorn. |
 | `verify_golden.py` | The gate: philox exact, tank state to 1e-9 relative, HEP to 1e-12, outcome class match at 99.5%. |
+| `bench.py` | Throughput of CPU against the AMD device, written to `data/bench/`. |
 | `tools/` | Reference-audit and kernel-inspection helpers used while porting. |
 
 The service implements the transfer twin only. A twin that has not been ported
 still runs at full fidelity on the reference engine — slower, and labelled as
-such.
+such. `GET /equivalence` re-runs the fixture gates inside the service, so the web
+app can ask whether the accelerator currently agrees with the engine.
 
 ## Data flow
 

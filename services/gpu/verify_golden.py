@@ -251,6 +251,21 @@ def first_divergent_step(out: kernel.ShiftOutcome, i: int, expected: dict, proce
     return "outcome class only"
 
 
+def _load_replay() -> dict | None:
+    """The reference engine's own replay of these configurations, if generated.
+
+    The repo is under active edit, so data/golden can lag src: this makes a
+    fixture disagreement measurable against the current reference instead of
+    leaving it looking like a porting bug. Regenerate with
+    `npx tsx services/gpu/tools/reference_replay.ts`.
+    """
+    path = REPO / "data" / "bench" / "reference_replay.json"
+    if not path.exists():
+        return None
+    rows = load(path)
+    return {(r["plant"], r["persona"], r["method"], r["scn"]): r for r in rows}
+
+
 def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: int | None = None) -> None:
     fx = load(GOLDEN / "shifts.json")
     procedure = load(DATA / "procedures" / "OP-TRF-014.json")
@@ -265,6 +280,8 @@ def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: i
     total = matched = cost_ok = 0
     mismatches: list[str] = []
     peak_bad = 0
+    replay = _load_replay()
+    r_total = r_match = r_cost = r_elapsed = 0
     t0 = time.time()
     keys = sorted(groups)
     cap = limit_groups if limit_groups is not None else (4 if quick else len(keys))
@@ -276,6 +293,17 @@ def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: i
             procedure, personas[persona_id], plants[plant_id], method, seed, n, device, costs
         )
         for i, expected in enumerate(rows):
+            if replay is not None:
+                key = (plant_id, persona_id, method, expected["scn"])
+                ref = replay.get(key)
+                if ref is not None:
+                    r_total += 1
+                    got_cls = tank.OUTCOME_CLASSES[int(out.outcome[i])]
+                    r_match += got_cls == ref["outcome"]
+                    r_elapsed += abs(float(out.elapsed[i]) - float(ref["elapsedS"])) < 1e-3
+                    r_cost += abs(float(out.cost[i]) - float(ref["costEur"])) <= 1e-6 * max(
+                        1.0, abs(float(ref["costEur"]))
+                    )
             total += 1
             got_cls = tank.OUTCOME_CLASSES[int(out.outcome[i])]
             if got_cls == expected["outcome"]:

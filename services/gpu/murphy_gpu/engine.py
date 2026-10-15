@@ -20,7 +20,7 @@ import torch
 
 from . import hra, kernel, tank
 
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[3]
 DATA = REPO / "data"
 
 METHODS = ("sparh", "therp", "heart")

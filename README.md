@@ -66,9 +66,12 @@ batched PyTorch service.
 
 The service in `services/gpu` is an accelerator, not a requirement. **The browser
 engine is the reference implementation.** `services/gpu/README.md` is not present
-in this repository, so there are no container commands to quote here; the service
-is started from `services/gpu` with your own ROCm Python environment, and the
-TypeScript fixtures are reproduced by `python services/gpu/verify_golden.py`.
+in this repository, so there are no container commands to quote here. The service
+is a FastAPI app (`murphy_gpu/api.py`, serving `/health`, `/run`, `/bench` and
+`/equivalence`) that you start with uvicorn from a ROCm Python environment of
+your own. `python services/gpu/verify_golden.py` holds it to the fixtures the
+TypeScript engine writes; `python services/gpu/bench.py` measures the throughput
+difference.
 
 To point the app at a service that is already running:
 
@@ -146,5 +149,5 @@ any of them.
 
 ## License
 
-MIT. Declared in `package.json`; the engine, the data files and the twins are all
+MIT. See [LICENSE](LICENSE). The engine, the twins and the data files are all
 covered by it.

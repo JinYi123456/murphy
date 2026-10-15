@@ -30,6 +30,22 @@ APP_DIR = Path(__file__).resolve().parents[1]
 if str(APP_DIR) not in sys.path:
     sys.path.insert(0, str(APP_DIR))
 
+
+def load_sibling(module: str, filename: str):
+    """Import a script that sits next to the package (bench.py, verify_golden.py).
+
+    Loaded by path so the service answers correctly no matter which directory
+    uvicorn was started from.
+    """
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(module, APP_DIR / filename)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load {filename}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 app = FastAPI(title="MURPHY GPU engine", version="1.0.0")
 REGISTRY = engine.Registry()
 
@@ -139,9 +155,8 @@ def configurations() -> dict:
 
 @app.post("/bench")
 def bench(req: BenchRequest) -> dict:
-    from . import bench as bench_mod
-
     try:
+        bench_mod = load_sibling("murphy_bench_cli", "bench.py")
         return bench_mod.sweep(
             REGISTRY, req.device, req.batches, req.repeats,
             req.procedure, req.persona, req.plant, req.method, req.seed,
@@ -155,9 +170,9 @@ def equivalence(groups: int = 2, device: str = "cpu") -> dict:
     """Re-run the fixture gates. `groups` caps how many shift groups are
     replayed, because the full fixture sweep takes minutes on a CPU."""
     try:
-        import verify_golden as vg
-    except Exception as exc:  # pragma: no cover - depends on launch directory
-        raise HTTPException(status_code=500, detail=f"verify_golden not importable: {exc}") from exc
+        vg = load_sibling("murphy_verify_golden", "verify_golden.py")
+    except Exception as exc:  # pragma: no cover - depends on checkout layout
+        raise HTTPException(status_code=500, detail=f"verify_golden not loadable: {exc}") from exc
 
     dev = engine.resolve_device(device)
     rep = vg.Report()
