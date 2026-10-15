@@ -1,0 +1,91 @@
+{
+  "note": "Every unit rate carries a source basis. These are order-of-magnitude planning figures drawn from published incident cost data and contractor rate ranges, not quotations. Change them to match a site's own numbers; the engine re-derives everything downstream.",
+  "products": {
+    "toluene": { "eurPerM3": 940, "recoveryContained": 0.7, "recoveryEscaped": 0.1, "flammable": true },
+    "diesel": { "eurPerM3": 870, "recoveryContained": 0.75, "recoveryEscaped": 0.15, "flammable": true },
+    "sulphuric_acid": { "eurPerM3": 130, "recoveryContained": 0.4, "recoveryEscaped": 0.0, "flammable": false },
+    "ethanol": { "eurPerM3": 780, "recoveryContained": 0.65, "recoveryEscaped": 0.1, "flammable": true },
+    "default": { "eurPerM3": 800, "recoveryContained": 0.7, "recoveryEscaped": 0.1, "flammable": true }
+  },
+  "productSources": {
+    "eurPerM3": "ex-terminal bulk price per cubic metre at delivery",
+    "recoveryContained": "fraction recoverable from intact secondary containment by vacuum truck",
+    "recoveryEscaped": "fraction recoverable once product has left the containment to ground or drainage"
+  },
+  "terminal": {
+    "cleanupPerContainedM3": 210,
+    "remediationPerEscapedM3": 4200,
+    "investigationFlatEur": 34000,
+    "rackIdleEurPerHour": 2600,
+    "flushFlatEur": 9500,
+    "abortedBatchEur": 3400
+  },
+  "terminalSources": {
+    "cleanupPerContainedM3": "vacuum collection, waste classification and disposal per m3 of hazardous liquid",
+    "remediationPerEscapedM3": "soil and groundwater remediation per m3 that reached the environment, including sampling and reporting",
+    "investigationFlatEur": "internal root cause investigation, management time and legal review for a reportable event",
+    "rackIdleEurPerHour": "contribution margin lost per hour a loading bay plus one tank are out of service",
+    "flushFlatEur": "downgrade of commingled product and line flushing after a misrouting",
+    "abortedBatchEur": "tanker demurrage and re-dispatch when a transfer has to be stopped and re-planned"
+  },
+  "furnace": {
+    "deflagrationRepairEur": 480000,
+    "deflagrationOutageH": 1440,
+    "refractoryRepairEur": 62000,
+    "refractoryOutageH": 264,
+    "hotspotRepairEur": 21000,
+    "hotspotOutageH": 72,
+    "inspectionFlatEur": 14000,
+    "inspectionOutageH": 16,
+    "repeatHeatupEur": 6800,
+    "tripRestartEur": 3900,
+    "lineIdleEurPerHour": 9500
+  },
+  "furnaceSources": {
+    "deflagrationRepairEur": "rebuild of furnace shell, burner blocks and lining after an internal deflagration",
+    "refractoryRepairEur": "cut-out and re-gun of a damaged roof or sidewall lining",
+    "hotspotRepairEur": "unscheduled outage for a shell hot spot: cool, survey, patch, dry out",
+    "lineIdleEurPerHour": "contribution margin lost per hour a reheat furnace is off line ahead of the rolling mill",
+    "repeatHeatupEur": "fuel and crew for an aborted cure cycle that has to be restarted from cold"
+  },
+  "fines": {
+    "reportableThresholdM3": 1.0,
+    "fixedEur": 24000,
+    "perEscapedM3Eur": 18000,
+    "capEur": 900000
+  },
+  "fineSources": {
+    "reportableThresholdM3": "quantity that makes a release reportable to the competent authority",
+    "fixedEur": "median administrative penalty for a first reportable release",
+    "perEscapedM3Eur": "additional penalty scaling with the quantity that reached the environment",
+    "capEur": "upper band observed for a single-site release without injury"
+  },
+  "escalation": {
+    "ignitionProbabilityPerEvent": 0.06,
+    "catastrophicEur": 26000000,
+    "catastrophicFurnaceEur": 9000000,
+    "byClass": {
+      "tank_breach": 0.22,
+      "overfill": 0.12,
+      "line_failure": 0.09,
+      "containment_escape": 0.03,
+      "minor_release": 0.02,
+      "misrouting": 0,
+      "no_flow": 0,
+      "short_batch": 0,
+      "trip_stop": 0,
+      "normal": 0,
+      "intercepted": 0,
+      "deflagration": 1,
+      "refractory_damage": 0.02,
+      "shell_hotspot": 0.05,
+      "hot_start": 0.01,
+      "no_light_off": 0
+    }
+  },
+  "escalationSources": {
+    "ignitionProbabilityPerEvent": "probability that a flammable release on an operating rack finds an ignition source during the event",
+    "catastrophicEur": "loss of the tank farm and adjacent process units, business interruption and third party liability for a vapour cloud ignition",
+    "byClass": "ignition probability conditioned on the release mechanism; a roof overflow atomising light product is more likely to ignite than a pool held in a bund"
+  }
+}

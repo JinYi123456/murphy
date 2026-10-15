@@ -1,0 +1,70 @@
+[
+  {
+    "id": "tk_asdesigned",
+    "twin": "tank_transfer",
+    "label": "As designed: protections in service and proved",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "driftRate": 0.12, "shiftsPerYear": 420 },
+    "provenRecent": true,
+    "preIsolated": [],
+    "product": "toluene",
+    "freeboardPct": 0.49,
+    "notes": "What the procedure assumes. The failure rate here is the cost of the human action alone."
+  },
+  {
+    "id": "tk_after_instrument_work",
+    "twin": "tank_transfer",
+    "label": "Two weeks after bench testing LT-101 and LSHH-101",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "driftRate": 0.3, "shiftsPerYear": 420 },
+    "provenRecent": false,
+    "preIsolated": ["PIS", "LAH", "V4"],
+    "product": "toluene",
+    "freeboardPct": 0.49,
+    "notes": "The realistic state of a tank that has had work on it: loops isolated, return to service recorded somewhere else, and the vent line shut after the roof inspection."
+  },
+  {
+    "id": "tk_alarm_fatigue",
+    "twin": "tank_transfer",
+    "label": "Rack with a noisy level transmitter and a crowded bund",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "alarmFrequentFalse": true, "driftRate": 0.35, "shiftsPerYear": 610 },
+    "provenRecent": false,
+    "preIsolated": [],
+    "instrumentDrift": { "level": -0.3 },
+    "product": "toluene",
+    "freeboardPct": 0.5,
+    "notes": "The crew has learned to discount the alarm, and the indicator reads low. Both of those are conditions the procedure never mentions."
+  },
+  {
+    "id": "tk_uprated",
+    "twin": "tank_transfer",
+    "label": "Tank uprated for throughput, freeboard reduced, bund partially full",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "driftRate": 0.2, "shiftsPerYear": 780 },
+    "provenRecent": true,
+    "preIsolated": ["V4"],
+    "product": "toluene",
+    "freeboardPct": 0.55,
+    "notes": "Capacity was added by shortening the margin rather than by building a tank: the batch still fits, with 1.7 m3 of room above the high-high trip point. This is where the response budget stops fitting."
+  },
+  {
+    "id": "fn_after_lining_repair",
+    "twin": "furnace_lightoff",
+    "label": "Furnace 4, first light-off after a partial re-line",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "driftRate": 0.25, "shiftsPerYear": 96 },
+    "provenRecent": false,
+    "preIsolated": ["GASLEAK"],
+    "instrumentDrift": { "level": 30 },
+    "product": "natural_gas",
+    "freeboardPct": 0.15,
+    "notes": "Thermocouple reads high after replacement, one burner management valve is passing, and the lining still holds water."
+  },
+  {
+    "id": "fn_cold_restart",
+    "twin": "furnace_lightoff",
+    "label": "Furnace 4, cold restart after a planned outage",
+    "protection": { "independent": true, "pis": true, "lah": true, "containment": true, "interlock": true, "driftRate": 0.12, "shiftsPerYear": 96 },
+    "provenRecent": true,
+    "preIsolated": [],
+    "product": "natural_gas",
+    "freeboardPct": 0.1,
+    "notes": "Clean configuration. The residual risk is the ramp schedule and the purge, both of which are human timed."
+  }
+]

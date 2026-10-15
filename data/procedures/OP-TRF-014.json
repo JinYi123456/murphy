@@ -1,0 +1,347 @@
+{
+  "id": "OP-TRF-014",
+  "title": "Transfer of product from road tanker to storage tank TK-101",
+  "twin": "tank_transfer",
+  "revision": "7",
+  "language": "en",
+  "roles": ["field operator", "control room", "verifier"],
+  "summary": "Line up, start and monitor a 55 m3 flammable liquid transfer from a road tanker into an atmospheric storage tank whose freeboard at the end of the batch is 0.74 m.",
+  "sourceDocument": "data/sop/OP-TRF-014.md",
+  "warnings": [
+    {
+      "id": "W1",
+      "label": "Step 8 makes the vent confirmation conditional on doubt, and the cue for doubt is a roof camera in another building",
+      "cond": "ambiguous_wording",
+      "level": 3,
+      "steps": ["d8"]
+    },
+    {
+      "id": "W2",
+      "label": "Step 12 assigns a 30 minute monitoring task with no watch rotation and no instruction on what to do if the operator has to leave",
+      "cond": "poor_procedure",
+      "level": 2,
+      "steps": ["d12"]
+    },
+    {
+      "id": "W3",
+      "label": "V1, V2 and V3 are identical handwheels on one manifold with no positive position indication",
+      "cond": "confusable_device",
+      "level": 2,
+      "steps": ["d4", "d5", "d6", "d15"]
+    },
+    {
+      "id": "W4",
+      "label": "The procedure requires the isolation register to be obtained, not reconciled line by line against the permit",
+      "cond": "post_maintenance_state",
+      "level": 2,
+      "steps": ["d2"]
+    },
+    {
+      "id": "W5",
+      "label": "No stated maximum elapsed time for the transfer, so a stalled line-up can be watched indefinitely",
+      "cond": "situation_awareness",
+      "level": 2,
+      "steps": ["d12", "d14"]
+    },
+    {
+      "id": "W6",
+      "label": "The only barrier against continued filling after the pump stops is a phone call to the control room",
+      "cond": "incomplete_function_test",
+      "level": 2,
+      "steps": ["d15"]
+    }
+  ],
+  "steps": [
+    {
+      "id": "d1",
+      "title": "Confirm a valid transfer permit for the tank on the dispatch note",
+      "text": "Hold a valid transfer permit for the tank named on the dispatch note.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "authorise",
+      "cond": ["ambiguous_wording"],
+      "durS": 120,
+      "errors": [
+        { "id": "d1e1", "kind": "omission", "weight": 30, "text": "Permit signed in the office against yesterday's load; the tank named on it is TK-103", "patch": {}, "source": "analyst" },
+        { "id": "d1e2", "kind": "misread", "weight": 45, "text": "Dispatch note and permit agree on product but name different tanks. The operator matches on product, not on tank", "patch": { "level": 7.85 }, "source": "analyst" },
+        { "id": "d1e3", "kind": "omission", "weight": 25, "text": "No permit at all, because it is the fourth load of the week into the same tank", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d2",
+      "title": "Reconcile the instrument isolation register against the permit",
+      "text": "If the tank has had instrument work in the last 14 days, obtain the isolation register from the control room and confirm that LT-101 and LSHH-101 have been returned to service and signed back by the instrument fitter.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "verify",
+      "gtt": "F",
+      "cond": ["post_maintenance_state", "incomplete_function_test", "ambiguous_wording"],
+      "durS": 240,
+      "applies": { "LAH": 1, "PIS": 1 },
+      "errors": [
+        { "id": "d2e1", "kind": "omission", "weight": 40, "text": "The register is in the control room and the shift is behind. Assumed the fitter signed it back like he always does", "patch": { "PIS": 0 }, "source": "analyst" },
+        { "id": "d2e2", "kind": "misread", "weight": 30, "text": "Confirmed the row for LT-101. The isolation that matters is the next row down, LSHH-101", "patch": { "PIS": 0 }, "source": "analyst" },
+        { "id": "d2e3", "kind": "incomplete", "weight": 30, "text": "Transmitter confirmed in service. Nobody looked at whether the high-high switch loop was proved after the bench test", "patch": { "PISFAIL": 1 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d3",
+      "title": "Confirm the vehicle is bonded, earthed and the hose made up",
+      "text": "Confirm that the vehicle is bonded and earthed and that the hose is made up with the correct couplings and the break-away arm in service.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "cond": ["absent_cue"],
+      "durS": 150,
+      "applies": { "RACK": 1 },
+      "errors": [
+        { "id": "d3e1", "kind": "incomplete", "weight": 45, "text": "Bond clip is on the painted chassis rail. It looks connected and measures nothing", "patch": { "BOND_OK": 0 }, "source": "analyst" },
+        { "id": "d3e2", "kind": "omission", "weight": 30, "text": "Walked past it because the driver said he had just made up for the last load", "patch": {}, "source": "analyst" },
+        { "id": "d3e3", "kind": "wrong_target", "weight": 25, "text": "Checked the bond on the vehicle in the adjacent bay", "patch": { "BOND_OK": 0 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d4",
+      "title": "Open the tank inlet valve V1",
+      "text": "Open the tank inlet valve V1 on TK-101.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "actuate",
+      "similarity": 3,
+      "cond": ["confusable_device"],
+      "durS": 90,
+      "applies": { "V1": 1 },
+      "errors": [
+        { "id": "d4e1", "kind": "wrong_target", "weight": 30, "text": "Opened V2, the draw-off valve on the same manifold with the same handwheel and a tag nobody can read from the working platform", "patch": { "V2": 1 }, "source": "analyst" },
+        { "id": "d4e2", "kind": "omission", "weight": 25, "text": "Assumed V1 had been left open from the last transfer into this tank", "patch": {}, "source": "analyst" },
+        { "id": "d4e3", "kind": "commission", "weight": 20, "text": "Cracked the cross-connect V3 open to free a stuck stem, and left it there", "patch": { "V3": 1 }, "alsoApplies": true, "source": "analyst" },
+        { "id": "d4e4", "kind": "wrong_direction", "weight": 25, "text": "Rising stem valve turned the wrong way: the handwheel came up, which reads as open", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d5",
+      "title": "Confirm the tank draw-off valve V2 is closed",
+      "text": "Confirm the tank draw-off valve V2 is closed.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "verify",
+      "similarity": 3,
+      "cond": ["confusable_device", "memory_load"],
+      "durS": 60,
+      "applies": { "V2": 0 },
+      "verify": { "of": ["d4"], "via": "label", "kind": "verify" },
+      "errors": [
+        { "id": "d5e1", "kind": "omission", "weight": 50, "text": "Knew V2 was closed because he closed it himself at the end of the last transfer", "patch": {}, "source": "analyst" },
+        { "id": "d5e2", "kind": "misread", "weight": 50, "text": "The valve is quarter-turn and the indicator plate was refitted upside down after the packing change", "patch": { "V2": 1 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d6",
+      "title": "Confirm the cross-connect valve V3 to TK-102 is closed",
+      "text": "Confirm the cross-connect valve V3 to TK-102 is closed.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "verify",
+      "similarity": 3,
+      "cond": ["confusable_device", "post_maintenance_state"],
+      "durS": 60,
+      "applies": { "V3": 0 },
+      "verify": { "of": ["d4"], "via": "label", "kind": "verify" },
+      "errors": [
+        { "id": "d6e1", "kind": "incomplete", "weight": 55, "text": "Closed by hand but the stem packing is stiff and the disc is two turns off its seat", "patch": { "V3LEAK": 1, "V3": 0 }, "alsoApplies": true, "source": "analyst" },
+        { "id": "d6e2", "kind": "omission", "weight": 45, "text": "V3 is only used for tank cleaning, so it never occurs to him as something to check", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d7",
+      "title": "Walk the line from the tanker to the tank",
+      "text": "Walk the line from the tanker to the tank and confirm every valve is in the position stated above.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "gtt": "F",
+      "cond": ["memory_load", "situation_awareness"],
+      "durS": 210,
+      "verify": { "of": ["d4", "d5", "d6"], "via": "physical", "kind": "verify", "gtt": "F" },
+      "errors": [
+        { "id": "d7e1", "kind": "omission", "weight": 35, "text": "Did the walk from the rack only as far as the first bend, where the manifold is out of sight", "patch": {}, "source": "analyst" },
+        { "id": "d7e2", "kind": "incomplete", "weight": 40, "text": "Confirmed the valves visible from the walkway, which does not include the tank bottom outlet", "patch": {}, "source": "analyst" },
+        { "id": "d7e3", "kind": "commission", "weight": 25, "text": "Walked the line while talking on the radio about the next load, and registered the positions he expected rather than the ones he passed", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d8",
+      "title": "Confirm the tank vent valve V4 is open",
+      "text": "Confirm the tank vent valve V4 is open. The vent line was isolated for the roof inspection work; if in doubt, ask the control room to confirm on the roof camera.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "actuate",
+      "similarity": 2,
+      "gtt": "B",
+      "cond": ["post_maintenance_state", "absent_cue", "incomplete_function_test"],
+      "durS": 180,
+      "applies": { "V4": 1 },
+      "errors": [
+        { "id": "d8e1", "kind": "omission", "weight": 45, "text": "The vent was shut for the roof inspection. It is up the platform ladder, off the transfer walk, and nobody thought of it", "patch": { "V4": 0 }, "source": "analyst" },
+        { "id": "d8e2", "kind": "wrong_target", "weight": 25, "text": "Opened the nitrogen blanket valve next to the vent. The tank now pressurises instead of breathing, which looks like a healthy result on the status board", "patch": { "V4": 0 }, "source": "analyst" },
+        { "id": "d8e3", "kind": "incomplete", "weight": 30, "text": "Climbed the ladder, found the handle stiff, forced it a quarter turn and assumed it was through", "patch": { "V4": 0 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d9",
+      "title": "Check the hose and clear the drip tray",
+      "text": "Open the hose box, check the hose for damage and confirm the drip tray is clear.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "cond": [],
+      "durS": 120,
+      "errors": [
+        { "id": "d9e1", "kind": "commission", "weight": 60, "text": "Cleared the tray by pushing last shift's standing liquid over the weep hole into the bund drain, so the tray is empty for this transfer and the bund is not", "patch": { "BUND_HEADROOM": 0.35 }, "source": "analyst" },
+        { "id": "d9e2", "kind": "omission", "weight": 40, "text": "Tray looked dry from above", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d10",
+      "title": "Start pump P-201",
+      "text": "Start pump P-201 and confirm flow is heard at the tank inlet.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": ["timing_critical"],
+      "durS": 60,
+      "applies": { "PUMP": 1 },
+      "errors": [
+        { "id": "d10e1", "kind": "omission", "weight": 35, "text": "Local handle left in hand after the last job, so the start from the control room does nothing", "patch": { "PUMP": 0 }, "source": "analyst" },
+        { "id": "d10e2", "kind": "wrong_target", "weight": 30, "text": "Started P-202, the pump for the other rack, because the panel tag moved when the panel was replaced", "patch": { "scale": 0.02 }, "source": "analyst" },
+        { "id": "d10e3", "kind": "commission", "weight": 35, "text": "Started the pump with the inlet still shut, which is the definition of a dead-headed line", "patch": { "V1": 0 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d11",
+      "title": "Record the start level on the permit",
+      "text": "Record the start level from the local indicator on TK-101 on the permit.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "communicate",
+      "cond": ["absent_cue"],
+      "durS": 90,
+      "errors": [
+        { "id": "d11e1", "kind": "misread", "weight": 50, "text": "Read the gauge board of the tank two bays along, which sits at a similar height", "patch": {}, "source": "analyst" },
+        { "id": "d11e2", "kind": "omission", "weight": 50, "text": "No start level written down, so the delivered quantity has to be judged by eye later", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d12",
+      "title": "Watch the level and stop the pump at 9.30 m",
+      "text": "The transfer takes approximately 30 minutes. Go back to the rack and watch the level indicator. Stop the pump when the level reaches 9.30 m.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "gtt": "D",
+      "cond": ["timing_critical", "fatigue", "mistrust"],
+      "durS": 60,
+      "watch": {
+        "var": "indicated:level",
+        "atLeast": 9.3,
+        "alt": { "var": "delivered", "atLeast": 55 },
+        "lateMaxS": 330,
+        "onHit": { "PUMP": 0, "STOP": 1 },
+        "maxWaitS": 2400
+      },
+      "errors": [
+        { "id": "d12e1", "kind": "delayed_response", "weight": 34, "text": "Went back to the rack office to close the permit paperwork, and the level crossed while he was typing", "patch": {}, "source": "analyst" },
+        { "id": "d12e2", "kind": "misread", "weight": 26, "text": "The local indicator has been reading low since the transmitter bench test. He stops the pump when it says 9.30 and the tank is already above it", "patch": {}, "source": "analyst" },
+        { "id": "d12e3", "kind": "omission", "weight": 22, "text": "Left the watch entirely to help the other bay discharge a late load", "patch": { "PUMP": 1 }, "source": "analyst" },
+        { "id": "d12e4", "kind": "commission", "weight": 18, "text": "Level rising slower than the estimate, so he opened the recirculation bypass to keep the pump loaded, against step 13", "patch": { "scale": 1.3 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d14",
+      "title": "Stop the pump when the meter reads 55 m3",
+      "text": "Stop pump P-201 when the meter on the rack reads 55 m3.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "similarity": 2,
+      "cond": ["confusable_device", "absent_cue"],
+      "durS": 45,
+      "watch": {
+        "var": "delivered",
+        "atLeast": 55,
+        "alt": { "var": "level", "atLeast": 9.6 },
+        "lateMaxS": 200,
+        "onHit": { "PUMP": 0, "STOP": 1 },
+        "maxWaitS": 1800
+      },
+      "errors": [
+        { "id": "d14e1", "kind": "wrong_target", "weight": 40, "text": "The totaliser on the adjacent rack is at a similar number and is the one visible from the road", "patch": {}, "source": "analyst" },
+        { "id": "d14e2", "kind": "misread", "weight": 35, "text": "The meter is a cumulative total, not a batch total. He works the difference out from memory", "patch": {}, "source": "analyst" },
+        { "id": "d14e3", "kind": "omission", "weight": 25, "text": "Already stopped on level, so he does not look at the meter again", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d15",
+      "title": "Close V1 and isolate the pump",
+      "text": "Close the tank inlet valve V1. Stop and isolate the pump at the local handle.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "actuate",
+      "similarity": 3,
+      "cond": ["confusable_device"],
+      "durS": 120,
+      "applies": { "V1": 0, "PUMP": 0 },
+      "errors": [
+        { "id": "d15e1", "kind": "out_of_sequence", "weight": 30, "text": "Closed V1 before stopping the pump, so the trapped column hammered and the couplings wept", "patch": { "HAMMER": 1 }, "alsoApplies": true, "source": "analyst" },
+        { "id": "d15e2", "kind": "incomplete", "weight": 40, "text": "Pump stopped at the handle but not isolated. The next crew will find it running against a closed inlet", "patch": { "PUMP": 1, "V1": 0 }, "source": "analyst" },
+        { "id": "d15e3", "kind": "wrong_target", "weight": 30, "text": "Closed V3 instead of V1, leaving the inlet open to a tank that is no longer receiving", "patch": { "V3": 0, "V1": 1 }, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d16",
+      "title": "Drain and disconnect the hose",
+      "text": "Drain and disconnect the hose into the drip tray. Return the hose to the hose box and hang the not-in-service tag on the vehicle stand.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "actuate",
+      "cond": [],
+      "durS": 240,
+      "errors": [
+        { "id": "d16e1", "kind": "premature", "weight": 55, "text": "Broke the coupling before the line had drained, so the contents of the hose went on the deck", "patch": { "HOSE_SPILL": 1 }, "source": "analyst" },
+        { "id": "d16e2", "kind": "omission", "weight": 45, "text": "Left the hose in the tray, dripping", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "d17",
+      "title": "Complete the log and update the status board",
+      "text": "Enter the delivered quantity, the finish level and your initials on the tank log. Update the tank status board.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "communicate",
+      "cond": ["ambiguous_wording"],
+      "durS": 150,
+      "verify": { "of": ["d14"], "via": "document", "kind": "verify" },
+      "errors": [
+        { "id": "d17e1", "kind": "omission", "weight": 45, "text": "Written up next shift from memory, so a wrong-tank receipt stays invisible until the monthly stock reconciliation", "patch": {}, "source": "analyst" },
+        { "id": "d17e2", "kind": "misread", "weight": 30, "text": "Logged the indicated level as the true level, carrying the instrument error into the stock record", "patch": {}, "source": "analyst" },
+        { "id": "d17e3", "kind": "commission", "weight": 25, "text": "Status board left showing TK-101 as not receiving, so the next dispatch is planned into a full tank", "patch": {}, "source": "analyst" }
+      ]
+    },
+    {
+      "id": "e1",
+      "title": "Emergency: stop on a release",
+      "text": "If product is released on the rack deck, stop the pump immediately from the rack emergency stop, close V1 if you can reach it safely, and call the control room on channel 1.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "recover",
+      "gtt": "C",
+      "cond": ["unprepared_exception", "situation_awareness", "timing_critical"],
+      "durS": 30,
+      "emergency": { "maxResponseS": 150, "onHit": { "PUMP": 0, "STOP": 1, "V1": 0 } },
+      "errors": [
+        { "id": "e1e1", "kind": "delayed_response", "weight": 100, "text": "Release not noticed, or noticed and not believed", "patch": {}, "source": "analyst" }
+      ]
+    }
+  ]
+}
