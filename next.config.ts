@@ -7,8 +7,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Standalone output keeps the container image to the traced dependency set
   // instead of a whole node_modules, which matters when the image is what a
-  // judge runs.
-  output: 'standalone',
+  // judge runs. A PaaS builds its own output format, so standalone is requested
+  // explicitly by the Dockerfile rather than assumed by every host.
+  ...(process.env.BUILD_TARGET === 'docker' ? { output: 'standalone' } : {}),
   experimental: { inlineCss: true },
 };
 
