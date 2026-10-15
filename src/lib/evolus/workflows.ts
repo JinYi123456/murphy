@@ -174,8 +174,12 @@ export function localDiff(documentText: string, procedure = PROCEDURES[0]): Diff
   const hay = norm(documentText);
   const fields: DiffField[] = [];
 
-  const docId = /([A-Z]{2,}-[A-Z0-9-]+\d*)/.exec(documentText)?.[1] ?? '';
-  const docRev = /revision:?\s*\**\s*([A-Za-z0-9.-]+)/i.exec(documentText)?.[1] ?? '';
+  // a document number is two letter groups and a digit group: an asset tag such as
+  // TK-101 has the same shape as a number and would otherwise be read as one
+  const docId = /\*\*Document:\*\*\s*([A-Z0-9-]+)/.exec(documentText)?.[1]
+    ?? /\b([A-Z]{2,}-[A-Z]{2,}-\d+[A-Z0-9-]*)\b/.exec(documentText)?.[1]
+    ?? '';
+  const docRev = /\*\*Revision:\*\*\s*\**\s*([A-Za-z0-9.-]+)/i.exec(documentText)?.[1] ?? '';
   if (procedure) {
     fields.push({ field: 'document id', ours: procedure.id, document: docId, status: docId === procedure.id ? 'match' : docId ? 'differs' : 'only_ours' });
     fields.push({ field: 'revision', ours: procedure.revision, document: docRev, status: docRev === procedure.revision ? 'match' : docRev ? 'differs' : 'only_ours' });
@@ -275,9 +279,12 @@ export async function routeChangeOrder(req: ChangeOrderRequest): Promise<ChangeO
 
   try {
     const callback = process.env.EVOLUS_CALLBACK_BASE_URL?.trim();
+    // the anonymised artefact is what travels: a personal name must not leave this
+    // process in a file part simply because the approval workflow wants "the order"
+    const attach = anonymized || req.markdown;
     const accepted = await executeWorkflow(workflowId, {
       input: digest,
-      files: [{ bytes: new TextEncoder().encode(req.markdown), filename: `${req.facts?.order ?? 'change-order'}.md`, contentType: 'text/markdown' }],
+      files: [{ bytes: new TextEncoder().encode(attach), filename: `${req.facts?.order ?? 'change-order'}.md`, contentType: 'text/markdown' }],
       parameters: {
         procedure: req.facts?.procedureId ?? PROCEDURES[0]?.id ?? 'unknown',
         from_revision: req.facts?.from ?? '',
@@ -296,6 +303,10 @@ export async function routeChangeOrder(req: ChangeOrderRequest): Promise<ChangeO
     stages.push({ block: 'workflow.poll', ok: state.status === 'Completed', detail: `${state.status} after ${state.polls} poll(s)`, executionId: state.executionId });
     credits += Number(state.raw.creditsConsumed ?? 0);
 
+    // if the anonymiser failed, the document that travelled is the one as written,
+    // and the approver has to be told that rather than finding out later
+    const leaked = stages.some((s) => s.block.startsWith('ai-tools.anonymize') && !s.ok && !s.skipped);
+
     return {
       path: state.status === 'Completed' ? 'evolus' : 'partial',
       status: state.status,
@@ -305,7 +316,7 @@ export async function routeChangeOrder(req: ChangeOrderRequest): Promise<ChangeO
       digest,
       stages,
       creditsConsumed: credits,
-      note: state.status === 'Completed' ? `workflow ${workflowId} completed execution ${accepted.executionId}` : `workflow ${workflowId} ended ${state.status} for execution ${accepted.executionId}`,
+      note: `${state.status === 'Completed' ? `workflow ${workflowId} completed execution ${accepted.executionId}` : `workflow ${workflowId} ended ${state.status} for execution ${accepted.executionId}`}${leaked ? '; anonymisation failed, the order was routed as written' : ''}`,
     };
   } catch (e) {
     const err = e as EvolusError;

@@ -1,0 +1,93 @@
+{
+  "note": "Backtest cases. Each one gives MURPHY a written procedure and a plant state, and nothing else. The held-out causes are the findings that the published investigation recorded. The mapping from a published cause to a step, an error mode or a shaping condition in the model is an analyst judgement made in advance by us and printed here so it can be argued with; the test measures whether the model ranks the mechanism the report identified, not whether it foretold an accident.",
+  "cases": [
+    {
+      "id": "BUN-TANK",
+      "title": "Storage tank overfilled while its level protection was unavailable",
+      "citation": "Buncefield: Why did it happen? - Competent Authority report for HSE and MIIB (2006). https://www.hse.gov.uk/comah/buncefield/ - tank 912 filled beyond its overfill level because the automatic tank gauge display had flat-lined so its alarms could not operate, and the independent high-high level switch had been installed without its padlock so the test lever left it bypassed; no management of change was performed when the switches were replaced; more than 250,000 litres of petrol escaped, over 40 people were injured.",
+      "givesMurphy": {
+        "procedure": "OP-TRF-014",
+        "plant": "tk_buncefield_shape",
+        "personas": ["daytime_competent", "night_trainee", "fatigued_relief", "rushed_turnaround"]
+      },
+      "heldOut": [
+        {
+          "cause": "The level instrument the crew relied on had failed in a way that produced no indication",
+          "foundBy": [{ "step": "d12", "error": "d12e2" }, { "step": "d11", "error": "d11e1" }, { "condition": "mistrust" }]
+        },
+        {
+          "cause": "The independent high-high function was present but bypassed, and nothing in the procedure proved it",
+          "foundBy": [{ "step": "d2", "error": "d2e3" }, { "condition": "incomplete_function_test" }]
+        },
+        {
+          "cause": "The transfer relied on measurements that were not independent of one another",
+          "foundBy": [{ "step": "d5", "error": "d5e1" }, { "step": "d7", "error": "d7e3" }, { "condition": "confusable_device" }]
+        },
+        {
+          "cause": "Crews had made a practice of working the batch down to the alarm band rather than keeping margin",
+          "foundBy": [{ "step": "d12", "error": "d12e1" }, { "condition": "time_pressure" }, { "warning": "W2" }]
+        },
+        {
+          "cause": "A change to the protection scheme went through without a management-of-change review",
+          "foundBy": [{ "step": "d2", "error": "d2e1" }, { "condition": "post_maintenance_state" }, { "warning": "W4" }]
+        }
+      ]
+    },
+    {
+      "id": "CLC-GAS",
+      "title": "Fuel gas accumulated in a furnace after an air-supply trip and ignited on re-light",
+      "citation": "US Chemical Safety and Hazard Investigation Board, Incident Reports Volume 2 (2025), Cleveland-Cliffs Warren (2023): after a forced-draught fan trip the burner flame went out, the operator did not register the screen alarm, roughly 28,000 cubic feet of fuel gas accumulated in the furnace and then exploded, causing about USD 1M of damage.",
+      "givesMurphy": {
+        "procedure": "OP-HT-006",
+        "plant": "fn_after_lining_repair",
+        "personas": ["daytime_competent", "night_trainee", "language_shift", "rushed_turnaround"]
+      },
+      "heldOut": [
+        {
+          "cause": "Gas continued to enter an unlit chamber after the air supply was lost",
+          "foundBy": [{ "step": "h9", "error": "h9e3" }, { "step": "h4", "error": "h4e2" }]
+        },
+        {
+          "cause": "The indication that should have told the operator was on a screen he was not watching",
+          "foundBy": [{ "step": "h6", "error": "h6e1" }, { "step": "h13", "error": "h13e1" }, { "condition": "absent_cue" }]
+        },
+        {
+          "cause": "No step required the atmosphere to be proven clear again before re-ignition",
+          "foundBy": [{ "step": "h10", "error": "h10e1" }, { "warning": "W2" }]
+        },
+        {
+          "cause": "The crew could not act inside the time the accumulation allowed",
+          "foundBy": [{ "step": "e1", "error": "e1e1" }, { "condition": "timing_critical" }]
+        }
+      ]
+    },
+    {
+      "id": "DKN-WORD",
+      "title": "A purge procedure that did not say where the purge medium came from",
+      "citation": "US Chemical Safety and Hazard Investigation Board, Incident Reports Volume 2 (2025), Daikin Spring Valley / Decatur (2021): a drying tower was returned to service using a two-step nitrogen and refrigerant purge, the procedure did not specify the source of the refrigerant, toxic vapours were vented down onto working operators, and two people died days later.",
+      "givesMurphy": {
+        "procedure": "OP-HT-006",
+        "plant": "fn_cold_restart",
+        "personas": ["daytime_competent", "language_shift", "night_trainee"]
+      },
+      "heldOut": [
+        {
+          "cause": "The procedure referenced another document for the details of a safety-critical step",
+          "foundBy": [{ "step": "h5", "error": "h5e3" }, { "warning": "W1" }, { "condition": "ambiguous_wording" }]
+        },
+        {
+          "cause": "The step could be completed and still leave the protective function unproved",
+          "foundBy": [{ "step": "h5", "error": "h5e1" }, { "step": "h6", "error": "h6e2" }, { "condition": "incomplete_function_test" }]
+        },
+        {
+          "cause": "Confusion between two nearly identical adjacent systems",
+          "foundBy": [{ "step": "h5", "error": "h5e4" }, { "step": "h11", "error": "h11e2" }, { "condition": "confusable_device" }]
+        },
+        {
+          "cause": "The hazard was invisible to the people downstream of the vent",
+          "foundBy": [{ "step": "h2", "error": "h2e1" }, { "condition": "absent_cue" }]
+        }
+      ]
+    }
+  ]
+}

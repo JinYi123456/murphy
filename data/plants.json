@@ -127,5 +127,30 @@
     "product": "natural_gas",
     "freeboardPct": 0.1,
     "notes": "Clean configuration. The residual risk is the ramp schedule and the purge, both of which are human timed."
+  },
+  {
+    "id": "tk_buncefield_shape",
+    "twin": "tank_transfer",
+    "label": "Tank uprated without review, high-high switch bypassed since installation",
+    "protection": {
+      "independent": false,
+      "pis": true,
+      "lah": true,
+      "containment": true,
+      "interlock": false,
+      "alarmFrequentFalse": true,
+      "driftRate": 0.4,
+      "shiftsPerYear": 120
+    },
+    "provenRecent": false,
+    "preIsolated": [
+      "PIS"
+    ],
+    "instrumentDrift": {
+      "level": -0.45
+    },
+    "product": "toluene",
+    "freeboardPct": 0.55,
+    "notes": "The shape that produced a real overfill: the protective switch was never in service, the display reads low, the batch is planned into the alarm band, and the crew has been trained by experience to discount the annunciator."
   }
 ]

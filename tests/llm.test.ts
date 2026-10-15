@@ -226,10 +226,10 @@ describe('chat', () => {
     expect(res.text).toBe('{"ok":1}');
     expect(n).toBe(2);
 
-    n = 0;
-    vi.stubGlobal('fetch', vi.fn(async () => new Response('{"error":"model not found"}', { status: 404 })));
+    const refused = vi.fn(async () => new Response('{"error":"model not found"}', { status: 404 }));
+    vi.stubGlobal('fetch', refused);
     await expect(chat([{ role: 'user', content: 'x' }], { maxTokens: 20 })).rejects.toThrow(/HTTP 404/);
-    expect(n).toBe(1);
+    expect(refused).toHaveBeenCalledTimes(1);
   });
 
   it('treats a timeout as a transport fault worth one retry', async () => {
@@ -471,7 +471,8 @@ describe('draftChangeOrder', () => {
       expect(result.markdown).toContain(heading);
     }
     expect(result.markdown).toContain(result.facts.failureBasePct);
-    expect(result.markdown).toContain('did not earn its place');
+    expect(result.markdown).toContain('freeboard_policy');
+    expect(result.markdown).toContain('below the EUR 1000 threshold');
   });
 });
 

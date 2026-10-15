@@ -1136,7 +1136,7 @@ export async function draftChangeOrder(loop: RepairLoopResult): Promise<AgentOut
   } catch (e) {
     return {
       result: { markdown: renderOrder(facts, offlineNarrative(facts)), scrubbed: [], author: 'offline', facts },
-      llm: acc.provenance(`offline path: ${(e as Error).message}`),
+      llm: acc.decline(`offline path: ${(e as Error).message}`),
     };
   }
 }

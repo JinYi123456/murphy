@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { evolusStatus, EVOLUS_REST_ROOT, EVOLUS_CHAT_ROOT, AI_TOOLS } from '../../../../lib/evolus/client';
-import { ledgerSummary, recentExecutions } from '../../../../lib/evolus/ledger';
+import { ledgerSummary, readLedger, recentExecutions } from '../../../../lib/evolus/ledger';
 
 export const runtime = 'nodejs';
 
@@ -11,7 +11,8 @@ export const runtime = 'nodejs';
  * because the vendor is having an afternoon is not a status endpoint. Presence of
  * each variable is reported by name, and the ledger carries the identifiers the
  * platform actually gave us, so a claim on screen can be checked against a real
- * execution id.
+ * execution id. The rows are timings, endpoints and identifiers - never payloads,
+ * which is why they are safe to hand to a browser.
  */
 export async function GET() {
   const status = evolusStatus();
@@ -22,6 +23,7 @@ export async function GET() {
     note: status.note,
     blocksUsed: status.blocksUsed,
     ledger: ledgerSummary(),
+    calls: readLedger(12),
     identifiers: recentExecutions(12),
     contract: {
       restRoot: EVOLUS_REST_ROOT,

@@ -215,12 +215,14 @@ function urlFor(opts: CallOptions): string {
 export async function evolusCall(opts: CallOptions): Promise<EvolusCall> {
   const t0 = Date.now();
   const headers = opts.auth === 'bearer' ? bearerHeaders(opts.headers ?? {}) : restHeaders(opts.headers ?? {});
-  const endpoint = opts.path.split('?')[0];
-  const entry = recordLedger({ at: new Date().toISOString(), block: opts.block, endpoint, ms: 0, ok: false });
+  const target = urlFor(opts);
+  // the pathname, version prefix included: `/api/v1/ai-tools/summarize/run` is what
+  // a support ticket quotes, and a query string could carry a document name
+  const entry = recordLedger({ at: new Date().toISOString(), block: opts.block, endpoint: new URL(target).pathname, ms: 0, ok: false });
 
   let res: Response;
   try {
-    res = await fetch(urlFor(opts), {
+    res = await fetch(target, {
       method: opts.method ?? 'POST',
       headers,
       ...(opts.body !== undefined ? { body: opts.body } : {}),
@@ -229,7 +231,7 @@ export async function evolusCall(opts: CallOptions): Promise<EvolusCall> {
   } catch (e) {
     entry.ms = Date.now() - t0;
     entry.errorCode = 'transport';
-    throw new EvolusError(redact(`evolus ${endpoint} unreachable: ${(e as Error).message}`), 0);
+    throw new EvolusError(redact(`evolus ${opts.path} unreachable: ${(e as Error).message}`), 0);
   }
 
   entry.ms = Date.now() - t0;
@@ -336,11 +338,14 @@ export async function executeWorkflow(workflowId: string, req: WorkflowRequest):
   if (!executionId) throw new EvolusError('evolus accepted the workflow but returned no execution id', res.status, undefined, entry.traceId);
   entry.executionId = executionId;
   entry.jobId = String(j.jobId ?? entry.jobId ?? '') || undefined;
+  // the receipt carries the trace id in the body; headers are the fallback, not the source
+  const traceId = typeof j.traceId === 'string' ? j.traceId : entry.traceId;
+  entry.traceId = traceId;
   return {
     jobId: String(j.jobId ?? entry.jobId ?? ''),
     executionId,
     enqueuedAt: j.enqueuedAt ? String(j.enqueuedAt) : undefined,
-    traceId: entry.traceId,
+    traceId,
     httpStatus: res.status,
   };
 }

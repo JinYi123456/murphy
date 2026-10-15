@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ConsoleStore } from '../lib/useConsole';
 import { CONTROL_CATALOGUE, procedureById, PERSONAS, PLANTS } from '../lib/registry';
 import { targetSteps } from '../engine/repair';
@@ -120,7 +120,7 @@ export function ChangeLab({ s }: { s: ConsoleStore }) {
       </section>
 
       {/* ------------------------------------------------------ control picker */}
-      <section className="panel p-4">
+      <section className="no-print panel p-4">
         <h3 className="text-[12px] uppercase tracking-[0.18em] text-bone">Candidate controls</h3>
         <p className="mt-1 text-[11px] text-ash">
           solid left edge and filled head: the error is engineered out. dashed edge: the fix depends on a
@@ -149,7 +149,7 @@ export function ChangeLab({ s }: { s: ConsoleStore }) {
       </section>
 
       {/* ---------------------------------------------------------------- tape */}
-      <section className="panel p-4">
+      <section className="no-print panel p-4">
         <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
           <h3 className="text-[12px] uppercase tracking-[0.18em] text-bone">Repair loop, live</h3>
           <p className="text-[11px] text-ash">ndjson events as they arrive from the server</p>
@@ -509,7 +509,10 @@ function ChangeOrder({ s }: { s: ConsoleStore }) {
           failure {pct(baseline.failureRate)} to {pct(st.summary.failureRate)}, paired change{' '}
           {pts(st.verdict.failure.delta)} with 95% CI [{pts(st.verdict.failure.ciLow)}, {pts(st.verdict.failure.ciHigh)}];
           expected loss {eur(baseline.annualLossEur)}/yr to {eur(st.summary.annualLossEur)}/yr; controls cost{' '}
-          {eur(cost)}/yr; net {eur(st.verdict.netEur)}/yr</li>
+          {eur(cost)}/yr; net {eur(st.verdict.netEur)}/yr.
+          <span className="text-ash"> {accepted.length} candidate{accepted.length === 1 ? '' : 's'} passed the individual gate;{' '}
+          {st.controls.length} of them are in the adopted set, because controls are re-tested together before
+          anything is claimed.</span></li>
         <li><span className="label">5 ideas tested and rejected</span><br />
           <span className="text-ash">{rejected.length ? rejected.map((t) => `${t.control.id} (${t.verdict?.reasons[0] ?? 'no reason recorded'})`).join('; ') : 'none - every candidate the procedure admitted was adopted'}</span></li>
         <li><span className="label">6 what this does not say</span><br />

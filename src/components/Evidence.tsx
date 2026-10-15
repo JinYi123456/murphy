@@ -144,8 +144,8 @@ export function Evidence({ s }: { s: ConsoleStore }) {
           </button>
         </div>
         <p className="mt-2 max-w-[1000px] text-[11px] leading-relaxed text-ash">
-          The change order prints from the change lab. This sheet prints what it says it printed: the run, the
-          backends, the model report and the limitations.
+          Print sends the marked sheets on this page and in the change lab to paper; the interactive chrome
+          carries a no-print class. It prints through the console header, which this screen does not own.
         </p>
       </section>
 
@@ -287,10 +287,12 @@ export function Evidence({ s }: { s: ConsoleStore }) {
         <div className="mt-4 border border-rule bg-void px-3 py-2">
           <span className="label">tokens and model latency</span>
           <p className="mt-1 text-[11px] leading-relaxed text-bone">
-            No model call was made in this session. Nothing on the application state carries a token count, a
-            completion or a billed request, so there is nothing to total here and nothing is estimated. If a
-            model-backed route is attached, its presence shows in the panel above and its accounting would
-            appear on this line as data rather than as a claim.
+            No model call is recorded on this session's state. The console store carries no token count, no
+            completion and no billed request from any route, so there is nothing to total on this line and
+            nothing is estimated: every figure on the other four screens came from the deterministic kernel and
+            the paired bootstrap. The model service itself is reported by presence in the panel above; if a
+            model-backed route is later attached to the store, its token and latency accounting appears here as
+            measured data rather than as a claim.
           </p>
         </div>
       </section>

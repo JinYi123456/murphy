@@ -19,15 +19,18 @@ export const runtime = 'nodejs';
  * numbers are evidence, and evidence does not come from a sampler.
  */
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => null)) as (RepairLoopResult & { cfg?: ConsoleConfig; n?: number }) | null;
+  const body = (await req.json().catch(() => null)) as
+    | (RepairLoopResult & { cfg?: ConsoleConfig; n?: number; loop?: RepairLoopResult })
+    | null;
   if (!body) {
     return NextResponse.json({ error: 'a repair loop result or a cfg is required', llm: { used: false, reason: 'no body' } }, { status: 400 });
   }
 
   let loop: RepairLoopResult;
   try {
-    if (body.baseline && body.trials) {
-      loop = body;
+    const supplied = body.loop ?? body;
+    if (supplied.baseline && supplied.trials) {
+      loop = supplied;
     } else if (body.cfg?.procedureId) {
       const cfg = body.cfg;
       const shifts = Math.min(20_000, Math.max(500, body.n ?? cfg.n ?? 3000));

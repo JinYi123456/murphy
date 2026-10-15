@@ -2,21 +2,18 @@
 
 A port of `src/engine/economics.ts` for tensors. Money is kept in its own layer
 so that a reviewer who disagrees with a price does not have to disagree with the
-physics. Every unit rate comes from data/costs.json with its source string; the
-numbers here are transcription, not invention.
+physics. Every unit rate is transcribed from data/costs.json with its source
+string; nothing here is invented.
 
 The reference builds a list of costed items and only books one when it exceeds
-0.5 euro, so the same threshold is applied per item here as a mask rather than
-being folded into the sum.
+0.5 euro, so that threshold is applied per item as a mask rather than folded into
+the sum - which matters, because a small release then costs nothing at all rather
+than something rounded to zero.
 """
 
 from __future__ import annotations
 
 import torch
-
-
-def _product(costs: dict, product: str) -> dict:
-    return costs["products"].get(product) or costs["products"]["toluene"]
 
 
 def cost_tank(
@@ -28,9 +25,9 @@ def cost_tank(
 ) -> dict[str, torch.Tensor]:
     """Total euro cost and expected escalated loss per scenario.
 
-    `outcome` holds indices into `classes`, the twin's own class list.
+    `outcome` holds indices into `classes`, the twin's own outcome list.
     """
-    pr = _product(costs, product)
+    pr = costs["products"].get(product) or costs["products"]["toluene"]
     term = costs["terminal"]
     fines = costs["fines"]
     esc = costs["escalation"]
@@ -40,76 +37,62 @@ def cost_tank(
     contained = mag["containedM3"]
     escaped = mag["escapedM3"]
     diverted = mag["divertedM3"]
+    zero = torch.zeros_like(release)
+    ones = torch.ones_like(release)
 
-    rc = pr["recoveryContained"]
-    lost = release - contained * rc - (release - contained - escaped) * rc
-    released = release > 0
+    def full(value: float) -> torch.Tensor:
+        return ones * float(value)
 
-    def item(value: torch.Tensor, booked: torch.Tensor) -> torch.Tensor:
-        # `add(label, eur)` in the reference only pushes an item above 0.5, and
-        # several items are additionally gated by a condition
-        return torch.where(released & booked & (value > 0.5), value, torch.zeros_like(value))
-
-    total = torch.zeros_like(release)
-
-    total = total + item(torch.clamp(lost, min=0.0) * pr["eurPerM3"], torch.ones_like(release))
-    total = total + item(contained * (1 - rc) * term["cleanupPerContainedM3"], torch.ones_like(release))
-    total = total + item(escaped * term["remediationPerEscapedM3"], torch.ones_like(release))
-
-    reportable = (escaped > fines["reportableThresholdM3"]) | (release > fines["reportableThresholdM3"] * 4)
-    total = total + item(
-        torch.clamp(fines["fixedEur"] + escaped * fines["perEscapedM3Eur"], max=fines["capEur"]), reportable
-    )
-    total = total + item(
-        torch.full_like(release, float(term["investigationFlatEur"])), reportable
-    )
-
-    # out-of-service hours by failure mechanism, in the order the ternary chain
-    # reads them
     def is_class(name: str) -> torch.Tensor:
         return outcome == classes.index(name)
 
+    def booked(value: torch.Tensor, condition: torch.Tensor) -> torch.Tensor:
+        return torch.where(condition & (value > 0.5), value, zero)
+
+    rc = pr["recoveryContained"]
+    # the lost volume is what neither the vacuum truck nor the remediation crew
+    # gets back; the reference's formula is transcribed, not improved
+    lost = release - contained * rc - (release - contained - escaped) * rc
+    released = release > 0
+
+    total = booked(torch.clamp(lost, min=0.0) * pr["eurPerM3"], released)
+    total = total + booked(contained * (1 - rc) * term["cleanupPerContainedM3"], released)
+    total = total + booked(escaped * term["remediationPerEscapedM3"], released)
+
+    reportable = (escaped > fines["reportableThresholdM3"]) | (release > fines["reportableThresholdM3"] * 4)
+    total = total + booked(
+        torch.clamp(full(fines["fixedEur"]) + escaped * fines["perEscapedM3Eur"], max=fines["capEur"]),
+        released & reportable,
+    )
+    total = total + booked(full(term["investigationFlatEur"]), released & reportable)
+
     out_hours = torch.where(
         is_class("tank_breach"),
-        168.0,
+        full(168),
         torch.where(
             is_class("overfill") | is_class("line_failure"),
-            48.0,
-            torch.where(is_class("containment_escape"), 72.0, 12.0),
+            full(48),
+            torch.where(is_class("containment_escape"), full(72), full(12)),
         ),
     )
-    total = total + item(out_hours * term["rackIdleEurPerHour"], torch.ones_like(release))
+    total = total + booked(out_hours * term["rackIdleEurPerHour"], released)
 
-    total = total + torch.where(
-        (diverted > 1) & (diverted * pr["eurPerM3"] * 0.35 + term["flushFlatEur"] > 0.5),
-        diverted * pr["eurPerM3"] * 0.35 + term["flushFlatEur"],
-        torch.zeros_like(release),
-    )
-    aborted = torch.where(
-        is_class("no_flow"),
-        float(term["abortedBatchEur"]),
-        float(term["abortedBatchEur"]) * 0.6,
-    )
-    total = total + torch.where(
-        (is_class("no_flow") | is_class("short_batch")) & (aborted > 0.5),
-        aborted,
-        torch.zeros_like(release),
-    )
-    detention = float(term["abortedBatchEur"]) * 0.4
-    total = total + torch.where(is_class("trip_stop") & (detention > 0.5), detention, torch.zeros_like(release))
+    total = total + booked(diverted * pr["eurPerM3"] * 0.35 + full(term["flushFlatEur"]), diverted > 1)
 
+    aborted = full(term["abortedBatchEur"]) * torch.where(is_class("no_flow"), ones, ones * 0.6)
+    total = total + booked(aborted, is_class("no_flow") | is_class("short_batch"))
+    total = total + booked(full(term["abortedBatchEur"] * 0.4), is_class("trip_stop"))
+
+    # expected loss if the event escalates, reported separately from booked cost
     by_class = esc["byClass"]
-    fallback = torch.where(release > 0, float(esc["ignitionProbabilityPerEvent"]), 0.0)
     table = torch.tensor(
         [float(by_class.get(name, 0.0)) for name in classes], dtype=torch.float64, device=device
     )
-    # an outcome the escalation table does not list falls back to the
-    # unconditional ignition probability for a release, as the reference's `??`
-    # does; the table is sparse for classes a given twin cannot produce
-    missing = torch.zeros_like(release, dtype=torch.bool)
+    fallback = torch.where(released, full(esc["ignitionProbabilityPerEvent"]), zero)
+    missing = torch.zeros_like(released)
     for i, name in enumerate(classes):
         if name not in by_class:
-            missing = missing | (outcome == i)
+            missing = missing | is_class(name)
     prob = torch.where(missing, fallback, table[outcome])
 
     return {

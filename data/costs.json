@@ -54,12 +54,12 @@
     "abortedBatchEur": "tanker demurrage and re-dispatch when a transfer has to be stopped and re-planned"
   },
   "furnace": {
-    "deflagrationRepairEur": 620000,
-    "deflagrationOutageH": 480,
+    "deflagrationRepairEur": 380000,
+    "deflagrationOutageH": 264,
     "refractoryRepairEur": 78000,
     "refractoryOutageH": 336,
     "hotspotRepairEur": 21000,
-    "hotspotOutageH": 72,
+    "hotspotOutageH": 48,
     "inspectionFlatEur": 14000,
     "inspectionOutageH": 16,
     "repeatHeatupEur": 6800,

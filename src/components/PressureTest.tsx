@@ -206,17 +206,8 @@ export function PressureTest({ s }: { s: ConsoleStore }) {
     })();
   }, [s.cfg, enqueue, nCrew]);
 
-  if (!summary) {
-    return (
-      <div className="panel p-4 text-[12px] text-ash">
-        No batch has been run. The pressure test needs a completed fuzz to describe.
-      </div>
-    );
-  }
-
-  const spectrum = Object.entries(summary.outcomeCounts).sort((a, b) => b[1] - a[1]);
-  const hovered = hover ? summary.outcomeCounts[hover] ?? 0 : null;
-
+  // every hook above and below this line stays unconditional: the recorded tail
+  // is derived from the traced shifts, which exist whether or not a summary does
   const recorded = useMemo(() => {
     const twin = s.run_config.procedure.twin;
     const product = s.run_config.plant.product ?? 'default';
@@ -227,6 +218,17 @@ export function PressureTest({ s }: { s: ConsoleStore }) {
       costEur: costOf(twin, sh.outcome as OutcomeClass, sh.peak, product).totalEur,
     })).sort((a, b) => b.costEur - a.costEur);
   }, [s.traced, s.run_config]);
+
+  if (!summary) {
+    return (
+      <div className="panel p-4 text-[12px] text-ash">
+        No batch has been run. The pressure test needs a completed fuzz to describe.
+      </div>
+    );
+  }
+
+  const spectrum = Object.entries(summary.outcomeCounts).sort((a, b) => b[1] - a[1]);
+  const hovered = hover ? summary.outcomeCounts[hover] ?? 0 : null;
 
   const engine = engineLine(s.where, s.device, s.health?.backends.amd.reachable ?? false);
 
@@ -355,9 +357,9 @@ export function PressureTest({ s }: { s: ConsoleStore }) {
         <h3 className="text-[12px] uppercase tracking-[0.18em] text-bone">Distribution of loss</h3>
         <p className="mt-1 max-w-[1000px] text-[11px] leading-relaxed text-ash">
           Per-shift consequence cost, recomputed from the {recorded.length} shifts the batch returned for
-          replay. Those are the most expensive shifts in the batch by construction, so they sit far to the
-          right of the mean; the aggregate figures below are computed over all{' '}
-          {summary.n.toLocaleString('en-US')} shifts.
+          replay. Those are the most expensive shifts in the batch by construction - a shift that cost nothing
+          is not kept for replay - so this is the tail, not a sample of the batch. The aggregate figures below
+          are computed over all {summary.n.toLocaleString('en-US')} shifts.
         </p>
 
         <Histogram recorded={recorded} />
@@ -468,15 +470,27 @@ export function PressureTest({ s }: { s: ConsoleStore }) {
             <>
               <span className="text-bone">The point:</span> the absolute level moves with the method -{' '}
               {pct(Math.min(...levels))} to {pct(Math.max(...levels))}, {(levelSpread * 100).toFixed(2)} points
-              {levelRatio ? `, ${levelRatio.toFixed(1)} times` : ''} - but{' '}
-              {sameWorst ? (
-                <>the worst step is <span className="text-vermillion">{worst[0]}</span> under all three methods and{' '}
-                  {sharedTop.length} of its top three steps are common to all three. A ranking that survives a
-                  change of method is a finding; the level underneath it is still only order-of-magnitude.</>
+              {levelRatio ? `, ${levelRatio.toFixed(1)} times` : ''}
+              {hasRanking ? (
+                <>
+                  {' '} - but{' '}
+                  {sameWorst ? (
+                    <>the worst step is <span className="text-vermillion">{worst[0]}</span> under all three methods and{' '}
+                      {sharedTop.length} of its top three steps are common to all three. A ranking that survives a
+                      change of method is a finding; the level underneath it is still only order-of-magnitude.</>
+                  ) : (
+                    <>the worst step is <span className="text-vermillion">{worst.join(' / ')}</span> depending on the
+                      method, with only {sharedTop.length} of the top three in common. On this procedure the ranking
+                      is method-dependent and should be reconciled against site data before anyone acts on it.</>
+                  )}
+                </>
               ) : (
-                <>the worst step is <span className="text-vermillion">{worst.join(' / ')}</span> depending on the
-                  method, with only {sharedTop.length} of the top three in common. On this procedure the ranking
-                  is method-dependent and should be reconciled against site data before anyone acts on it.</>
+                <>
+                  {' '} - but this batch attributed no causal failure to any step under{' '}
+                  {rankByMethod.map((r) => METHOD_LABEL[r.method]).join(', ')}
+                  , so there is no ranking to compare yet. Raise the batch size or pick a harsher crew or plant
+                  state; no ranking is claimed here on empty evidence.
+                </>
               )}
             </>
           ) : (
