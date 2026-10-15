@@ -19,7 +19,7 @@ Continuous state (index = wire position):
 Scenario state:
    0 V1 | 1 V2 | 2 V3 | 3 V4 | 4 PUMP | 5 LAH | 6 PIS | 7 RACK | 8 STOP
    9 PISFAIL | 10 gaugeBias m | 11 flowScale | 12 V3LEAK | 13 BUND_HEADROOM
-  14 BOND_OK | 15 HAMMER | 16 HOSE_SPILL
+  14 BOND_OK | 15 HAMMER | 16 HOSE_SPILL | 17 AUTO_TRIP
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ VARS = [
 ]
 DISCS = [
     "V1", "V2", "V3", "V4", "PUMP", "LAH", "PIS", "RACK", "STOP", "PISFAIL", "gaugeBias", "flowScale",
-    "V3LEAK", "BUND_HEADROOM", "BOND_OK", "HAMMER", "HOSE_SPILL",
+    "V3LEAK", "BUND_HEADROOM", "BOND_OK", "HAMMER", "HOSE_SPILL", "AUTO_TRIP",
 ]
 
 N_VARS = len(VARS)
@@ -152,6 +152,8 @@ def init(
     variation therefore has to be applied *after* init, which is what the
     kernel does.
     """
+    isolated = set(pre_isolated or ())
+    prot = protection or {}
     p = params or PARAMS
     batch, device = state.shape[0], state.device
     frac = _broadcast(start_level_frac, batch, device)
@@ -165,7 +167,6 @@ def init(
     state[:, I["secsSinceAl"]] = -1.0
     state[:, I["oneShotDone"]] = 0.0
 
-    isolated = set(pre_isolated or ())
     disc[:, D["V1"]] = 0.0
     disc[:, D["V2"]] = 0.0
     disc[:, D["V3"]] = 0.0
@@ -183,6 +184,9 @@ def init(
     disc[:, D["BOND_OK"]] = 1.0
     disc[:, D["HAMMER"]] = 0.0
     disc[:, D["HOSE_SPILL"]] = 0.0
+    # an independent hard-wired stop that a permit cannot leave isolated, so it
+    # is a property of the configuration rather than something a step can spoil
+    disc[:, D["AUTO_TRIP"]] = 1.0 if prot.get("autoTrip") is True else 0.0
 
     if "V4" in isolated:
         disc[:, D["V4"]] = 0.0
@@ -208,6 +212,10 @@ def advance(
     """
     p = params
     s, d = state, disc
+    # one code path for a fixed step and a per-scenario one: the batched kernel
+    # integrates rows that are waiting with dt = 0
+    if not isinstance(dt, torch.Tensor):
+        dt = torch.full((state.shape[0],), float(dt), dtype=torch.float64, device=state.device)
 
     pump = d[:, D["PUMP"]] * (1.0 - d[:, D["STOP"]])
     v1 = d[:, D["V1"]]
@@ -234,7 +242,10 @@ def advance(
     target = torch.where(
         pump == 0, 0.0, torch.where(deadhead == 1, float(p["pDead"]), float(p["pRun"]))
     )
-    s[:, I["lineP"]] = s[:, I["lineP"]] + (target - s[:, I["lineP"]]) * min(max(dt / p["tauP"], 0.0), 1.0)
+    # torch.clamp rather than python min/max so `dt` may be a per-scenario tensor
+    s[:, I["lineP"]] = s[:, I["lineP"]] + (target - s[:, I["lineP"]]) * torch.clamp(
+        dt / p["tauP"], 0.0, 1.0
+    )
     s[:, I["peakLineP"]] = torch.maximum(s[:, I["peakLineP"]], s[:, I["lineP"]])
 
     s[:, I["stress"]] = s[:, I["stress"]] + torch.where(s[:, I["lineP"]] > p["pRating"], dt, 0.0)
@@ -250,7 +261,7 @@ def advance(
     compress = torch.where(
         (v4 == 0) & (to_tank > 0), (to_tank / space) * p["pRoof"] * dt, 0.0
     )
-    vent_relief = (0.0 - s[:, I["tankP"]]) * min(max(dt / p["tauVent"], 0.0), 1.0)
+    vent_relief = (0.0 - s[:, I["tankP"]]) * torch.clamp(dt / p["tauVent"], 0.0, 1.0)
     s[:, I["tankP"]] = s[:, I["tankP"]] + torch.where(v4 == 0, compress, vent_relief)
 
     roof = (s[:, I["tankP"]] > p["pRoof"]) & (s[:, I["roofFailed"]] == 0)
@@ -263,7 +274,16 @@ def advance(
     s[:, I["overflowed"]] = torch.where(above == 1, 1.0, s[:, I["overflowed"]])
     over_spill = above * to_tank * dt
 
-    armed = (s[:, I["oneShotDone"]] == 0) & ((d[:, D["HAMMER"]] + d[:, D["HOSE_SPILL"]]) > 0)
+    # one-shot releases tied to a specific field action. Gated on the tick having
+    # actually elapsed: the batched kernel advances rows that are waiting at dt = 0,
+    # and a release that does not depend on dt would otherwise fire early for a
+    # scenario that is not on this tick in the reference.
+    ticking = dt > 0 if isinstance(dt, torch.Tensor) else True
+    armed = (
+        (s[:, I["oneShotDone"]] == 0)
+        & ((d[:, D["HAMMER"]] + d[:, D["HOSE_SPILL"]]) > 0)
+        & ticking
+    )
     one_shot = torch.where(
         armed,
         torch.where(d[:, D["HAMMER"]] == 1, float(p["hammerM3"]), 0.0)
@@ -293,9 +313,11 @@ def advance(
     s[:, I["secsSinceAl"]] = torch.where(counting, secs + dt, secs)
 
     tripped = (s[:, I["level"]] >= p["hAh"]) & (s[:, I["ahLatched"]] == 0)
-    acts = d[:, D["PIS"]] * (1.0 - d[:, D["PISFAIL"]])
+    # the independent switch and the hard-wired auto trip are alternative means
+    # of acting on the same demand, so either one stops the transfer
+    acts = d[:, D["PIS"]] * (1.0 - d[:, D["PISFAIL"]]) + d[:, D["AUTO_TRIP"]]
     s[:, I["ahLatched"]] = torch.where(tripped, 1.0, s[:, I["ahLatched"]])
-    d[:, D["STOP"]] = torch.where(tripped & (acts == 1), 1.0, d[:, D["STOP"]])
+    d[:, D["STOP"]] = torch.where(tripped & (acts >= 1), 1.0, d[:, D["STOP"]])
 
     return state, disc
 

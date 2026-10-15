@@ -228,6 +228,11 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
   let planned = 0;
   let hazardSeconds = 0;
   const target = p[iface.target];
+  const tick = iface.tickS ?? MAX_TICK_S;
+  const runout = iface.runoutFactor ?? 1.6;
+  // the run-out is sized by the physics, not by a magic constant: enough ticks
+  // to reach the completion target plus sixty per cent, whatever the asset
+  const closingTicks = Math.min(3000, Math.max(60, Math.ceil((target * runout) / Math.max(1e-9, p[iface.rate] * tick))));
 
   log({
     tS: 0, kind: 'clock', label: 'Shift start',
@@ -244,7 +249,7 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
   };
 
   const integrateFor = (durS: number, tickCap = MAX_TICKS) => {
-    const n = Math.max(1, Math.min(tickCap, Math.ceil(durS / MAX_TICK_S)));
+    const n = Math.max(1, Math.min(tickCap, Math.ceil(durS / tick)));
     const dt = durS / n;
     const every = opts.trace ? Math.max(1, Math.round((opts.sampleEveryS ?? 10) / dt)) : 0;
     for (let i = 0; i < n; i++) {
@@ -268,7 +273,7 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
   };
 
   for (const step of steps) {
-    planned += step.durS;
+    const tStart = elapsed;
     const slipRatio = planned > 0 ? elapsed / planned : 1;
     if (step.guard && !condHolds(step.guard, read(step.guard.var))) {
       log({ tS: elapsed, kind: 'step', stepId: step.id, label: step.title, detail: 'Not required in this configuration', vars: { skipped: 1 } });
@@ -397,6 +402,14 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
       });
     }
 
+    // Schedule drift is the overrun, not the duration: a monitoring step that
+    // takes the time it was given has not made the crew late. Without this
+    // distinction a ten hour furnace cure stamps every following step as
+    // operating under extreme time pressure, which is a modelling error and not
+    // a finding.
+    const allowance = step.durS + (step.watch?.scheduledS ?? step.watch?.maxWaitS ?? 0);
+    planned += Math.max(step.durS, Math.min(allowance, elapsed - tStart));
+
     if (T(iface.hazard) > 0 && hazardSeconds > 240) break;
   }
 
@@ -404,7 +417,7 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
   let emergencyRolled = false;
   let guard = 0;
   while (d[twin.discIndex(iface.runFlag)] === 1 && d[twin.discIndex(iface.stopFlag)] === 0
-    && guard++ < 240 && T(iface.progress) < target * 1.6) {
+    && guard++ < closingTicks && T(iface.progress) < target * runout) {
     const em = steps.find((x) => x.emergency !== undefined);
     if (em && T(iface.hazard) > 0 && !emergencyRolled) {
       emergencyRolled = true;
@@ -433,7 +446,7 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
         });
       }
     }
-    integrateFor(MAX_TICK_S, 1);
+    integrateFor(tick, 1);
   }
 
   const mag = twin.magnitudes(s, 0, d, 0);
@@ -523,7 +536,7 @@ function runWatch(
       acted = true;
       break;
     }
-    ctx.integrateFor(MAX_TICK_S, 1);
+    ctx.integrateFor(twin.iface.tickS ?? MAX_TICK_S, 1);
     if (d[twin.discIndex(iface.stopFlag)] === 1) { acted = true; break; }
     if (ctx.T(iface.hazard) > 0 && ctx.elapsed() - t0 > 400) break;
   }

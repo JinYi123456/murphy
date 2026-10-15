@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { runRepairLoop } from '../../lib/fuzz';
-import type { ConsoleConfig } from '../../lib/registry';
-import { gpuConfigured, gpuHealth } from '../../lib/gpu';
+import { runRepairLoop } from '../../../lib/fuzz';
+import type { ConsoleConfig } from '../../../lib/registry';
+import { gpuConfigured, gpuHealth } from '../../../lib/gpu';
 
 export const runtime = 'nodejs';
 

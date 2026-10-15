@@ -59,7 +59,7 @@ const BINDINGS: Record<ConditionId, Binding[]> = {
     { psf: 'HCI', at: [2, 1, 0], why: 'the information needed is not present at the point of action' },
   ],
   poor_procedure: [
-    { psf: 'PRU', at: [2, 1, 1], why: 'no checkable artefact, so the step cannot be proved to have been done' },
+    { psf: 'PRU', at: [2, 2, 1], why: 'no checkable artefact, so the step cannot be proved to have been done' },
   ],
   timing_critical: [
     { psf: 'AVL', at: [2, 1, 1], why: 'the outcome depends on acting inside a short window' },

@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { gpuHealth } from '../../lib/gpu';
-import { llmStatus } from '../../lib/llm/client';
-import { listTwins } from '../../engine/twins/index';
-import { HRA_METHODS } from '../../engine/hra';
-import { CONDITION_LABELS } from '../../engine/conditions';
-import { CONTROL_CATALOGUE } from '../../lib/registry';
-import { PROCEDURES, PERSONAS, PLANTS } from '../../lib/registry';
-import { inspectModel } from '../../engine/model';
+import { gpuHealth } from '../../../lib/gpu';
+import { llmStatus } from '../../../lib/llm/client';
+import { listTwins } from '../../../engine/twins/index';
+import { HRA_METHODS } from '../../../engine/hra';
+import { CONDITION_LABELS } from '../../../engine/conditions';
+import { CONTROL_CATALOGUE } from '../../../lib/registry';
+import { PROCEDURES, PERSONAS, PLANTS } from '../../../lib/registry';
+import { inspectModel } from '../../../engine/model';
 
 export const runtime = 'nodejs';
 

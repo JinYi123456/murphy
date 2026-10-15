@@ -49,11 +49,13 @@ def _mul32x32(k: int, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
 def _round(c0, c1, c2, c3, k0, k1):
     hi0, lo0 = _mul32x32(M0, c0)
     hi1, lo1 = _mul32x32(M1, c2)
+    # every lane mixes the *pre-round* counter, so the four reads below are the
+    # old values as the reference's array literal evaluates them
     return (
         hi0 ^ c1 ^ k0,
-        lo0,
+        lo0 ^ c3,
         hi1 ^ c0 ^ k1,
-        lo1,
+        lo1 ^ c1,
     )
 
 

@@ -75,6 +75,8 @@ export interface WatchSpec {
   alt?: { var: string; atLeast: number };
   /** what the operator does when they see it */
   onHit?: Record<string, number>;
+  /** what the crew was scheduled to spend on the watch, for schedule drift */
+  scheduledS?: number;
   /** give up watching after this many seconds */
   maxWaitS?: number;
   /** how late an operator who misses the cue can be, seconds; drawn per scenario */

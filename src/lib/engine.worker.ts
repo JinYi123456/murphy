@@ -23,8 +23,12 @@ export type WorkerReply =
   | { kind: 'sweep'; id: number; rows: { seed: string; failureRate: number; meanCostEur: number }[] }
   | { kind: 'error'; id: number; message: string };
 
-// eslint-disable-next-line no-restricted-globals
-const ctx = self as unknown as DedicatedWorkerGlobalScope;
+interface WorkerScope {
+  postMessage: (message: unknown, transfer?: Transferable[]) => void;
+  addEventListener: (type: 'message', listener: (ev: MessageEvent<WorkerRequest>) => void) => void;
+}
+
+const ctx = globalThis as unknown as WorkerScope;
 
 function post(msg: WorkerReply, transfer: Transferable[] = []) {
   ctx.postMessage(msg, transfer);

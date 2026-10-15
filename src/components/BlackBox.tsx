@@ -135,7 +135,7 @@ export function BlackBox({ s }: { s: ConsoleStore }) {
       ) : (
         <>
           <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <Plant face twin={twin.id} frame={frame} outcome={shift.outcome} />
+            <Plant twin={twin.id} frame={frame} outcome={shift.outcome} />
 
             <div className="flex min-h-[300px] flex-col border border-rule bg-graphite">
               <div className="flex items-center justify-between border-b border-rule px-3 py-2">

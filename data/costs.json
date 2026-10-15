@@ -1,11 +1,36 @@
 {
   "note": "Every unit rate carries a source basis. These are order-of-magnitude planning figures drawn from published incident cost data and contractor rate ranges, not quotations. Change them to match a site's own numbers; the engine re-derives everything downstream.",
   "products": {
-    "toluene": { "eurPerM3": 940, "recoveryContained": 0.7, "recoveryEscaped": 0.1, "flammable": true },
-    "diesel": { "eurPerM3": 870, "recoveryContained": 0.75, "recoveryEscaped": 0.15, "flammable": true },
-    "sulphuric_acid": { "eurPerM3": 130, "recoveryContained": 0.4, "recoveryEscaped": 0.0, "flammable": false },
-    "ethanol": { "eurPerM3": 780, "recoveryContained": 0.65, "recoveryEscaped": 0.1, "flammable": true },
-    "default": { "eurPerM3": 800, "recoveryContained": 0.7, "recoveryEscaped": 0.1, "flammable": true }
+    "toluene": {
+      "eurPerM3": 940,
+      "recoveryContained": 0.7,
+      "recoveryEscaped": 0.1,
+      "flammable": true
+    },
+    "diesel": {
+      "eurPerM3": 870,
+      "recoveryContained": 0.75,
+      "recoveryEscaped": 0.15,
+      "flammable": true
+    },
+    "sulphuric_acid": {
+      "eurPerM3": 130,
+      "recoveryContained": 0.4,
+      "recoveryEscaped": 0,
+      "flammable": false
+    },
+    "ethanol": {
+      "eurPerM3": 780,
+      "recoveryContained": 0.65,
+      "recoveryEscaped": 0.1,
+      "flammable": true
+    },
+    "default": {
+      "eurPerM3": 800,
+      "recoveryContained": 0.7,
+      "recoveryEscaped": 0.1,
+      "flammable": true
+    }
   },
   "productSources": {
     "eurPerM3": "ex-terminal bulk price per cubic metre at delivery",
@@ -29,17 +54,17 @@
     "abortedBatchEur": "tanker demurrage and re-dispatch when a transfer has to be stopped and re-planned"
   },
   "furnace": {
-    "deflagrationRepairEur": 480000,
-    "deflagrationOutageH": 1440,
-    "refractoryRepairEur": 62000,
-    "refractoryOutageH": 264,
+    "deflagrationRepairEur": 620000,
+    "deflagrationOutageH": 480,
+    "refractoryRepairEur": 78000,
+    "refractoryOutageH": 336,
     "hotspotRepairEur": 21000,
     "hotspotOutageH": 72,
     "inspectionFlatEur": 14000,
     "inspectionOutageH": 16,
     "repeatHeatupEur": 6800,
     "tripRestartEur": 3900,
-    "lineIdleEurPerHour": 9500
+    "lineIdleEurPerHour": 3800
   },
   "furnaceSources": {
     "deflagrationRepairEur": "rebuild of furnace shell, burner blocks and lining after an internal deflagration",
@@ -49,7 +74,7 @@
     "repeatHeatupEur": "fuel and crew for an aborted cure cycle that has to be restarted from cold"
   },
   "fines": {
-    "reportableThresholdM3": 1.0,
+    "reportableThresholdM3": 1,
     "fixedEur": 24000,
     "perEscapedM3Eur": 18000,
     "capEur": 900000

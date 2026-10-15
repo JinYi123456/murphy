@@ -1,6 +1,6 @@
-import { buildRunConfig } from '../../lib/registry';
-import type { ConsoleConfig } from '../../lib/registry';
-import { replayLocal } from '../../lib/fuzz';
+import { buildRunConfig } from '../../../lib/registry';
+import type { ConsoleConfig } from '../../../lib/registry';
+import { replayLocal } from '../../../lib/fuzz';
 
 export const runtime = 'nodejs';
 

@@ -1,6 +1,4 @@
 import costs from '../../data/costs.json';
-import type { OutcomeClass } from './types';
-
 /**
  * Consequence economics.
  *
@@ -27,7 +25,7 @@ const C = costs as unknown as {
   escalation: { ignitionProbabilityPerEvent: number; catastrophicEur: number; catastrophicFurnaceEur: number; byClass: Record<string, number> };
 };
 
-export function costTank(outcome: OutcomeClass, mag: Record<string, number>, product: string): CostBreakdown {
+export function costTank(outcome: string, mag: Record<string, number>, product: string): CostBreakdown {
   const pr = C.products[product] ?? C.products.toluene;
   const release = mag.releaseM3 ?? 0;
   const escaped = mag.escapedM3 ?? 0;
@@ -72,7 +70,7 @@ export function costTank(outcome: OutcomeClass, mag: Record<string, number>, pro
   };
 }
 
-export function costFurnace(outcome: OutcomeClass, mag: Record<string, number>): CostBreakdown {
+export function costFurnace(outcome: string, mag: Record<string, number>): CostBreakdown {
   const items: CostBreakdown['items'] = [];
   const add = (label: string, eur: number, source: string) => {
     if (eur > 0.5) items.push({ label, eur, source });
@@ -111,7 +109,7 @@ export function costFurnace(outcome: OutcomeClass, mag: Record<string, number>):
   };
 }
 
-export function costOf(twin: string, outcome: OutcomeClass, mag: Record<string, number>, product: string): CostBreakdown {
+export function costOf(twin: string, outcome: string, mag: Record<string, number>, product: string): CostBreakdown {
   if (twin === 'furnace_lightoff') return costFurnace(outcome, mag);
   return costTank(outcome, mag, product);
 }

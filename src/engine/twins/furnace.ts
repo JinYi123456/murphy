@@ -48,7 +48,7 @@ const VARS = [
   'zoneT', 'shellT', 'gasAccum', 'moisture', 'damage', 't', 'fuel', 'peakZone', 'peakShell',
   'alarm', 'sinceAl', 'hazardMJ', 'deflagrated', 'liningFailed', 'purgeS', 'cmdT', 'rampCmd',
 ];
-const DISCS = ['FAN', 'DAMPER', 'PILOT', 'MAINGAS', 'GASLEAK', 'BMS', 'BMSFAIL', 'STOP', 'tcBias', 'scale', 'leakM3s'];
+const DISCS = ['FAN', 'DAMPER', 'PILOT', 'MAINGAS', 'GASLEAK', 'BMS', 'BMSFAIL', 'STOP', 'tcBias', 'scale', 'leakM3s', 'purgeFrac'];
 
 const P: TwinParams = {
   tAmbient: 25,
@@ -78,7 +78,9 @@ const P: TwinParams = {
   /** damage rate coefficient for over-ramping, per second per unit excess */
   damageK: 0.00022,
   /** drying coefficient, % per second at full drive-out */
-  dryK: 0.00035,
+  dryK: 0.0009,
+  /** gas admitted to a chamber with no flame in it, m3/s - a full burner train */
+  admitM3s: 0.05,
   progressRate: 60 / 3600,
   /** nominal purge time the procedure requires, s */
   purgeRequired: 900,
@@ -105,9 +107,11 @@ export const furnaceTwin: TwinDef = {
     alarm: 'alarm',
     hazard: 'hazardMJ',
     clock: 't',
+    runoutFactor: 1.02,
     bias: 'tcBias',
     scale: 'scale',
     failOnDemand: 'BMSFAIL',
+    tickS: 60,
   },
   display: {
     zoneT: { label: 'Zone temperature', unit: 'C', danger: 1200 },
@@ -124,21 +128,24 @@ export const furnaceTwin: TwinDef = {
     s[o + 0] = p.tAmbient + (p.cureTop - p.tAmbient) * cfg.startLevelFrac * 0.2;
     s[o + 1] = p.tAmbient + 8;
     s[o + 2] = 0;
-    s[o + 3] = 8 * (cfg.extra?.moistureStart ?? 1);
+    s[o + 3] = 4 * (cfg.extra?.moistureStart ?? 1);
     s[o + 4] = 0; s[o + 5] = 0; s[o + 6] = 0; s[o + 7] = s[o + 0]; s[o + 8] = s[o + 1];
     s[o + 9] = 0; s[o + 10] = -1; s[o + 11] = 0; s[o + 12] = 0; s[o + 13] = 0;
     s[o + 14] = 0;
     s[o + 15] = p.tAmbient;
-    s[o + 16] = p.rampWet;
+    s[o + 16] = p.rampDry;
 
-    d[k + 0] = 0; d[k + 1] = 1; d[k + 2] = 0; d[k + 3] = 0;
+    d[k + 0] = 0; d[k + 1] = 0; d[k + 2] = 0; d[k + 3] = 0;
     d[k + 4] = cfg.preIsolated.includes('GASLEAK') ? 1 : 0;
     d[k + 5] = cfg.preIsolated.includes('BMS') ? 0 : 1;
     d[k + 6] = 0;
     d[k + 7] = 0;
     d[k + 8] = cfg.indicatorBias;
     d[k + 9] = 1;
-    d[k + 10] = 0;
+    // a valve that passes while shut leaks litres per minute, not a burner train
+    d[k + 10] = cfg.preIsolated.includes('GASLEAK') ? (cfg.extra?.leakM3s ?? 0.0015) : 0;
+    // fraction of the required purge the crew actually stands there for
+    d[k + 11] = 1;
   },
 
   advance(s, o, d, k, p, dt) {
@@ -151,10 +158,10 @@ export const furnaceTwin: TwinDef = {
     // unburnt gas: admitted but not burning - no flame, or no combustion air -
     // plus whatever a gas valve that is shut is still passing
     const burning = gas * pilot * fan;
-    const unburntFlow = (gas * (1 - burning) + d[k + 4] * (1 - gas)) * d[k + 10];
+    const unburntFlow = gas * (1 - burning) * p.admitM3s + d[k + 4] * (1 - gas) * d[k + 10];
     s[o + 2] = s[o + 2] + unburntFlow * dt;
     if (fan === 1 && damper === 1) {
-      const removed = p.purgeRate * dt * (gas === 0 ? 1 : 0.2);
+      const removed = p.purgeRate * dt * d[k + 11] * (gas === 0 ? 1 : 0.2);
       s[o + 2] = s[o + 2] - removed;
       if (s[o + 2] < 0) s[o + 2] = 0;
       s[o + 14] = s[o + 14] + dt;
@@ -177,7 +184,7 @@ export const furnaceTwin: TwinDef = {
     // firing: the lining follows the commanded ramp through a first-order lag
     const firing = gas * pilot * fan;
     if (firing === 1) {
-      s[o + 15] = s[o + 15] + (s[o + 16] / 3600) * dt;
+      s[o + 15] = Math.min(p.tOperating, s[o + 15] + (s[o + 16] / 3600) * dt);
       const approach = (s[o + 15] - s[o + 0]) * clamp(dt / p.tauZone, 0, 1);
       s[o + 0] = s[o + 0] + approach;
       const burned = Math.min(s[o + 2], p.burnRate * dt);
@@ -196,7 +203,7 @@ export const furnaceTwin: TwinDef = {
     const limit = s[o + 3] > p.moistureDry && s[o + 0] < p.cureTop ? p.rampWet : p.rampDry;
     const rampActual = s[o + 16];
     const excess = rampActual > limit ? (rampActual - limit) / limit : 0;
-    if (excess > 0 && s[o + 3] > p.moistureDry * 0.5) {
+    if (excess > 0 && s[o + 3] > p.moistureDry * 0.5 && firing === 1) {
       s[o + 4] = Math.min(1.5, s[o + 4] + excess * p.damageK * dt);
     }
     if (s[o + 4] >= 1 && s[o + 13] === 0) {

@@ -68,6 +68,16 @@ export class Accounting {
     if (this.calls > 1) p.calls = this.calls;
     return p;
   }
+
+  /**
+   * The model was consulted, spent tokens, and its answer was not used.
+   *
+   * `used` is an authorship claim, not a traffic claim: a panel that says "model"
+   * over a rule-generated artefact is the exact failure this field exists to prevent.
+   */
+  decline(reason: string): LlmProvenance {
+    return { ...this.provenance(reason), used: false };
+  }
 }
 
 export interface AgentOutcome<T> {
@@ -203,29 +213,43 @@ Output one JSON object only.`;
 export async function parseProcedure(markdown: string): Promise<AgentOutcome<ParseResult>> {
   const acc = new Accounting();
   const doc = markdown.trim();
-  if (!doc) {
-    return { result: { ...offlineParse(markdown), corrections: 0 }, llm: acc.provenance('nothing to parse') };
-  }
+  let corrections = 0;
+
+  /**
+   * Degrade to the rule compiler.
+   *
+   * `used` is forced false even when the model answered: it was consulted and
+   * spent tokens, but the procedure on screen is not its work. Authorship and
+   * traffic are different claims and the panel has to be able to say either.
+   */
+  const fallback = (reason: string): AgentOutcome<ParseResult> => {
+    const offline = offlineParse(markdown);
+    return {
+      result: { ...offline, corrections, dropped: [...offline.dropped, `fallback: ${reason}`] },
+      llm: acc.decline(reason),
+    };
+  };
+
+  if (!doc) return fallback('the request carried no document');
 
   const gate = await availability();
-  if (!gate.ok) {
-    return { result: { ...offlineParse(markdown), corrections: 0 }, llm: acc.provenance(`offline path: ${gate.reason}`) };
-  }
+  if (!gate.ok) return fallback(`offline path: ${gate.reason}`);
 
+  // a compiled procedure is one artefact per printed step, so the 900 token default
+  // truncates it mid-document; the answer is worthless in pieces
   const budget = Math.max(2400, Number(process.env.AMD_VLLM_MAX_TOKENS?.trim() ?? 0) || 900);
   const messages: ChatMessage[] = [
     { role: 'system', content: PARSE_SYSTEM },
     { role: 'user', content: `Compile this controlled document.\n\n${doc}` },
   ];
 
-  let corrections = 0;
   let lastErrors: string[] = [];
   for (let round = 0; round < 2; round++) {
     let res: ChatResult;
     try {
       res = await chat(messages, { json: true, maxTokens: budget, temperature: 0 });
     } catch (e) {
-      return { result: { ...offlineParse(markdown), corrections }, llm: acc.provenance(`served model failed: ${(e as Error).message}`) };
+      return fallback(`served model failed: ${(e as Error).message}`);
     }
     acc.record(res);
     const value = parseBlock(res.text);
@@ -236,8 +260,7 @@ export async function parseProcedure(markdown: string): Promise<AgentOutcome<Par
       corrections++;
       continue;
     }
-    const twin = resolveTwin(value);
-    const { procedure, dropped } = compileProcedure(value, twin);
+    const { procedure, dropped } = compileProcedure(value, resolveTwin(value));
     const report = inspectModel(procedure);
     if (report.ok) {
       return {
@@ -255,10 +278,7 @@ export async function parseProcedure(markdown: string): Promise<AgentOutcome<Par
     }
   }
 
-  return {
-    result: { ...offlineParse(markdown), corrections, dropped: [`model output still failed the gate: ${lastErrors.slice(0, 4).join('; ')}`] },
-    llm: acc.provenance('offline path: model output did not pass inspectModel()'),
-  };
+  return fallback(`model output still failed the gate: ${lastErrors.slice(0, 4).join('; ')}`);
 }
 
 function parseBlock(text: string): Record<string, unknown> | null {
@@ -413,7 +433,6 @@ export function compileProcedure(raw: Record<string, unknown>, twin: TwinDef): {
   if (!procedure.roles.length) procedure.roles = ['field operator'];
   if (!procedure.summary) procedure.summary = procedure.title;
   if (warnings.length) procedure.warnings = warnings;
-  if (!steps.length) procedure.steps = offlineSteps(twin);
 
   return { procedure, dropped };
 }
@@ -436,7 +455,7 @@ function compileErrors(raw: unknown, stepId: string, twin: TwinDef, dropped: str
     while (usedIds.has(id)) id = `${id}_`;
     usedIds.add(id);
     const weight = typeof e.weight === 'number' && Number.isFinite(e.weight) ? Math.max(0, e.weight) : 25;
-    const alt: ErrorAlternative = { id, kind: e.kind as ErrorKind, weight, text, source: SOURCES.includes(e.source as ErrorAlternative['source']) ? (e.source as ErrorAlternative['source']) : 'model' };
+    const alt: ErrorAlternative = { id, kind: e.kind as ErrorKind, weight, text, patch: {}, source: SOURCES.includes(e.source as ErrorAlternative['source']) ? (e.source as ErrorAlternative['source']) : 'model' };
     const patch = dropUnknownKeys(twin, (e.patch as Record<string, unknown> | undefined)?.set, `${stepId}/${id} patch`, dropped);
     if (Object.keys(patch).length) alt.patch = { set: patch } satisfies DiscretePatch;
     if (e.alsoApplies === true) alt.alsoApplies = true;
@@ -460,39 +479,48 @@ function compileErrors(raw: unknown, stepId: string, twin: TwinDef, dropped: str
 export function offlineParse(markdown: string): Omit<ParseResult, 'corrections'> {
   const twin = getTwin(/furnace|refractory|burner|light-off|fuel gas/i.test(markdown) ? 'furnace_lightoff' : 'tank_transfer');
   const numbered = [...markdown.matchAll(/^\s*(\d{1,3})[.)]\s+(.+)$/gm)];
-  const rawSteps = numbered.length ? numbered.map((m) => m[2].replace(/\s+/g, ' ').trim()) : fallbackLines(markdown);
+  const items: { text: string; recover: boolean }[] = numbered.length
+    ? numbered.map((m) => ({ text: m[2].replace(/\s+/g, ' ').trim(), recover: false }))
+    : fallbackLines(markdown).map((t) => ({ text: t, recover: false }));
 
-  const steps: Step[] = rawSteps.map((text, i) => {
-    const emergency = /^\s*[-*]\s+if\b/i.test(text) || /emergency/i.test(text);
-    const kind: ActionKind = emergency ? 'recover' : inferKind(text);
-    const cue = inferCue(text);
-    const clean = text.replace(/^\s*[-*]\s+/, '');
+  // an "If something goes wrong" section is unnumbered in most real documents, and
+  // a procedure compiled without its recovery action will overstate the hazard
+  if (numbered.length) {
+    for (const m of markdown.matchAll(/^\s*[-*]\s+(If\b[^\n]{19,})$/gm)) items.push({ text: m[1].replace(/\s+/g, ' ').trim(), recover: true });
+  }
+
+  let seq = 0;
+  let rec = 0;
+  const steps: Step[] = items.map((item) => {
+    const kind: ActionKind = item.recover ? 'recover' : inferKind(item.text);
+    const cue = inferCue(item.text);
+    const clean = item.text.replace(/^\s*[-*]\s+/, '');
     const step: Step = {
-      id: emergency ? `e${i + 1}` : `d${i + 1}`,
+      id: item.recover ? `e${++rec}` : `d${++seq}`,
       title: clean.split(/[.,;](?:\s|$)/)[0].slice(0, 72),
       text: clean,
-      role: /control room/.test(clean) ? 'control room' : 'field operator',
+      role: /control room/.test(clean) && !/call the control room/.test(clean) ? 'control room' : 'field operator',
       cue,
       kind,
       durS: DEFAULT_DUR[kind],
     };
     const cond: ConditionId[] = [];
     if (kind === 'monitor') cond.push('timing_critical');
+    if (kind === 'recover') cond.push('unprepared_exception');
     if (cue === 'verbal') cond.push('teamwork');
     if (cue === 'memory') cond.push('memory_load');
     if (/if in doubt|approximately|if possible|as expected|if necessary/i.test(clean)) cond.push('ambiguous_wording');
     if (/isolation|returned to service|last \d+ days|bench test|instrument work/i.test(clean)) cond.push('post_maintenance_state');
     if (cond.length) step.cond = cond;
 
+    if (item.recover && (twin.discIndex(twin.iface.stopFlag) >= 0 || twin.varIndex(twin.iface.stopFlag) >= 0)) {
+      step.emergency = { maxResponseS: 120, onHit: { [twin.iface.stopFlag]: 1, [twin.iface.runFlag]: 0 } };
+    }
+
     const errors = offlineSurface(kind, cue, step).map((alt, n) => ({ ...alt, id: `${step.id}e${n + 1}` }));
     if (errors.length) step.errors = errors;
     return step;
   });
-
-  const emergencyStep = steps.find((s) => s.kind === 'recover');
-  if (emergencyStep) {
-    emergencyStep.emergency = { maxResponseS: 120, onHit: { [twin.iface.stopFlag]: 1, [twin.iface.runFlag]: 0 } };
-  }
 
   const heading = /^\s*#\s+(.+)$/m.exec(markdown)?.[1]?.trim();
   const procedure: Procedure = {
@@ -524,7 +552,7 @@ export function offlineParse(markdown: string): Omit<ParseResult, 'corrections'>
  * a skeleton that reads like research is worse than no surface at all.
  */
 function offlineSurface(kind: ActionKind, cue: Step['cue'], step: Step): Omit<ErrorAlternative, 'id'>[] {
-  const at = (k: ErrorKind, w: number, t: string): Omit<ErrorAlternative, 'id'> => ({ kind: k, weight: w, text: t, source: 'analyst' });
+  const at = (k: ErrorKind, w: number, t: string): Omit<ErrorAlternative, 'id'> => ({ kind: k, weight: w, text: t, patch: {}, source: 'analyst' });
   const done = `The crew acts on the state it believes the previous ${step.role} left, not on the state in front of it.`;
   switch (kind) {
     case 'actuate':
@@ -567,21 +595,6 @@ function fallbackLines(markdown: string): string[] {
     .map((l) => l.replace(/[#*>`_-]+/g, ' ').replace(/\s+/g, ' ').trim())
     .filter((l) => l.length > 24 && /^(open|close|confirm|check|start|stop|record|walk|enter|hold|obtain|drain|if|call|update|the )/i.test(l));
   return lines.length ? lines.slice(0, 40) : ['Confirm the plant is in the state the document assumes before energy is introduced.'];
-}
-
-export function offlineSteps(twin: TwinDef): Step[] {
-  const step: Step = {
-    id: 'd1',
-    title: 'Confirm the assumed state',
-    text: 'Before starting, confirm on the plant that the equipment is in the state the document assumes.',
-    role: 'field operator',
-    cue: 'physical',
-    kind: 'verify',
-    durS: DEFAULT_DUR.verify,
-    errors: [{ id: 'd1e1', kind: 'omission', weight: 60, text: 'Confirmed from the status board rather than from the device.', source: 'analyst' }],
-  };
-  if (twin.discIndex('STOP') >= 0) step.applies = {};
-  return [step];
 }
 
 /* ------------------------------------------------ b) scenario author (human factors) */
@@ -638,8 +651,9 @@ const CONDITION_KEYS: Partial<Record<ConditionId, string[]>> = {
 
 export async function writeErrorScenario(step: Step, persona: PersonaTraits, plant: PlantConfig, kind?: ErrorKind): Promise<AgentOutcome<ScenarioResult>> {
   const acc = new Accounting();
-  const twinId = plant.twin ?? step.applies ?? undefined;
-  const twin = safeTwin(typeof twinId === 'string' ? twinId : undefined);
+  // the twin is a property of the configuration under test, never of the step:
+  // a scenario about a furnace cannot be instantiated against a tank
+  const twin = safeTwin(plant.twin);
   const chosen = normaliseKind(kind ?? step.errors?.[0]?.kind ?? 'omission', step);
   const gate = await availability();
   if (!gate.ok) {
@@ -683,7 +697,7 @@ export async function writeErrorScenario(step: Step, persona: PersonaTraits, pla
       llm: acc.provenance(rejected.length ? `rejected ${rejected.length} variable name(s) not on ${twin.id}: ${rejected.join(', ')}` : undefined),
     };
   } catch (e) {
-    return { result: offlineScenario(step, persona, plant, chosen, twin), llm: acc.provenance(`offline path: ${(e as Error).message}`) };
+    return { result: offlineScenario(step, persona, plant, chosen, twin), llm: acc.decline(`offline path: ${(e as Error).message}`) };
   }
 }
 
@@ -842,25 +856,41 @@ export async function reviewFinding(finding: Finding): Promise<AgentOutcome<Revi
       llm: acc.provenance(),
     };
   } catch (e) {
-    return { result: ruleReview(finding), llm: acc.provenance(`offline path: ${(e as Error).message}`) };
+    return { result: ruleReview(finding), llm: acc.decline(`offline path: ${(e as Error).message}`) };
   }
 }
 
 export async function reviewFindings(findings: Finding[]): Promise<AgentOutcome<{ verdicts: ReviewVerdict[]; reviewed: number }>> {
-  const acc = new Accounting();
-  const out: ReviewVerdict[] = [];
+  const verdicts: ReviewVerdict[] = [];
+  let used = 0;
+  let prompt = 0;
+  let completion = 0;
+  let latency = 0;
+  let model: string | undefined;
+  let endpoint: string | undefined;
+  let reason: string | undefined;
+
+  // sequential on purpose: one served model on one GPU is a single lane, and
+  // fanning four reviews at it makes every latency number in the panel a lie
   for (const f of findings) {
     const { result, llm } = await reviewFinding(f);
-    out.push(result);
-    if (llm.used && llm.tokens && llm.endpoint) {
-      acc.record({ text: '', promptTokens: llm.tokens.prompt, completionTokens: llm.tokens.completion, latencyMs: llm.latencyMs ?? 0, model: llm.model ?? '', endpoint: llm.endpoint });
+    verdicts.push(result);
+    if (llm.used && llm.tokens) {
+      used++;
+      prompt += llm.tokens.prompt;
+      completion += llm.tokens.completion;
+      latency += llm.latencyMs ?? 0;
+      model = llm.model;
+      endpoint = llm.endpoint;
+    } else if (llm.reason) {
+      reason = llm.reason;
     }
   }
-  const first = findings.length ? (await reviewFinding(findings[0])).llm : undefined;
-  return {
-    result: { verdicts: out, reviewed: out.length },
-    llm: acc.provenance(first && !first.used ? first.reason : undefined),
-  };
+
+  const llm: LlmProvenance = used
+    ? { used: true, model, endpoint, tokens: { prompt, completion }, latencyMs: latency, calls: used }
+    : { used: false, reason: reason ?? 'offline path' };
+  return { result: { verdicts, reviewed: verdicts.length }, llm };
 }
 
 /** One render of the derivation, so the reviewer is shown the arithmetic and not a summary of it. */
@@ -1011,10 +1041,10 @@ export function changeOrderFacts(loop: RepairLoopResult): ChangeOrderFacts {
   const pct = (x: number) => `${(x * 100).toFixed(2)}`;
   const eur = (x: number) => Math.round(x).toLocaleString('en-US');
   const controls = (stacked?.controls ?? []).flatMap((id) => {
-    const int = interventionById(id);
+    const iv = interventionById(id);
     const trial = loop.trials.find((t) => t.control.id === id);
-    if (!int) return [];
-    return [{ id, label: int.label, tier: int.tier, describe: int.describe, annualCostEur: int.effect.annualCostEur ?? 0, addedSeconds: int.effect.addedSeconds ?? 0, targets: trial?.targets ?? [] }];
+    if (!iv) return [];
+    return [{ id, label: iv.label, tier: iv.tier, describe: iv.describe, annualCostEur: iv.effect.annualCostEur ?? 0, addedSeconds: iv.effect.addedSeconds ?? 0, targets: trial?.targets ?? [] }];
   });
   const rejected = loop.trials
     .filter((t) => !controls.some((c) => c.id === t.control.id))
@@ -1072,7 +1102,10 @@ export async function draftChangeOrder(loop: RepairLoopResult): Promise<AgentOut
   const tokens = factTokens(facts);
   const gate = await availability();
   if (!gate.ok) {
-    return { result: { markdown: renderOrder(facts, offlineNarrative(facts), tokens, []).facts ? renderOrder(facts, offlineNarrative(facts), tokens, []) : '', scrubbed: [], facts, author: 'offline' }, llm: acc.provenance(`offline path: ${gate.reason}`) };
+    return {
+      result: { markdown: renderOrder(facts, offlineNarrative(facts)), scrubbed: [], facts, author: 'offline' },
+      llm: acc.provenance(`offline path: ${gate.reason}`),
+    };
   }
 
   const messages: ChatMessage[] = [
@@ -1099,10 +1132,10 @@ export async function draftChangeOrder(loop: RepairLoopResult): Promise<AgentOut
     for (const key of ['scope', 'whatChanged', 'rationale', 'tested', 'rejected', 'residualRisk', 'verification'] as const) {
       narrative[key] = scrub(str(value[key]), tokens, scrubbed, key);
     }
-    return { result: { markdown: renderOrder(facts, narrative, tokens, scrubbed), facts, scrubbed, author: 'model' }, llm: acc.provenance(scrubbed.length ? `removed ${scrubbed.length} figure(s) that are not in the evidence` : undefined) };
+    return { result: { markdown: renderOrder(facts, narrative, scrubbed), facts, scrubbed, author: 'model' }, llm: acc.provenance(scrubbed.length ? `removed ${scrubbed.length} figure(s) that are not in the evidence` : undefined) };
   } catch (e) {
     return {
-      result: { markdown: renderOrder(facts, offlineNarrative(facts), tokens, []), facts, scrubbed: [], author: 'offline' },
+      result: { markdown: renderOrder(facts, offlineNarrative(facts)), scrubbed: [], author: 'offline', facts },
       llm: acc.provenance(`offline path: ${(e as Error).message}`),
     };
   }
@@ -1146,7 +1179,7 @@ function offlineNarrative(f: ChangeOrderFacts): Record<string, string> {
 }
 
 /** The order itself. Every figure in this document is interpolated here, from `facts`. */
-function renderOrder(f: ChangeOrderFacts, narrative: Record<string, string>, _tokens: Record<string, string>, scrubbed: string[]): string {
+function renderOrder(f: ChangeOrderFacts, narrative: Record<string, string>, scrubbed: string[] = []): string {
   const controlRows = f.controls.length
     ? f.controls.map((c) => `| ${c.label} | ${c.tier} | ${c.describe} | ${c.targets.join(', ') || 'configuration'} | ${c.annualCostEur.toLocaleString('en-US')} | ${c.addedSeconds} |`).join('\n')
     : '| none adopted | - | the loop rejected every candidate | - | - | - |';
@@ -1218,6 +1251,3 @@ ${narrative.rationale}
 Drafted by MURPHY under ${f.order}. The model that produced the prose is recorded in the API response, not asserted here${scrubbed.length ? `; ${scrubbed.length} figure(s) absent from the evidence were removed before issue` : ''}.
 `;
 }
-
-export type { TwinKey };
-                                        

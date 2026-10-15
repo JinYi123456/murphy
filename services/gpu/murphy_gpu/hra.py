@@ -251,35 +251,164 @@ def apply_conditions(
     level: torch.Tensor,
     severity: torch.Tensor,
     conditions: dict[str, torch.Tensor],
-    order: list[str],
-) -> torch.Tensor:
+) -> None:
     """Move each factor only in the error-prone direction.
 
     `conditions` maps a condition id to a per-scenario severity in 0..3, 0 being
-    inactive. `order` is the insertion order of the reference's condition object
-    and is preserved because the record keeps the first binding that improved a
-    factor, not the last.
+    inactive, and is walked in the reference's insertion order because the
+    worksheet keeps the first binding that improved a factor, not the last.
     """
     cur_mult = gather_mult(level, diagnosis=False)
-    for cond in order:
-        sev = conditions.get(cond)
-        if sev is None or not BINDINGS.get(cond):
+    for cond, sev in conditions.items():
+        bindings = BINDINGS.get(cond)
+        if not bindings:
             continue
         # bind() clamps severity into 1..3 before choosing the row
         clamped = torch.clamp(torch.round(sev), min=1, max=3).to(torch.int64)
-        for psf, at in BINDINGS[cond]:
+        active = sev > 0
+        for psf, at in bindings:
             k = PSF_INDEX[psf]
-            new_idx = torch.where(clamped == 1, torch.full_like(clamped, at[0]),
-                                  torch.where(clamped == 2, torch.full_like(clamped, at[1]),
-                                              torch.full_like(clamped, at[2])))
+            new_idx = torch.where(
+                clamped == 1,
+                torch.full_like(clamped, at[0]),
+                torch.where(clamped == 2, torch.full_like(clamped, at[1]), torch.full_like(clamped, at[2])),
+            )
             table = ACTION[k].to(new_idx.device)
             new_mult = table[torch.clamp(new_idx, min=0, max=_WIDTH - 1)]
-            active = sev > 0
             take = active & (new_mult > cur_mult[:, k])
             level[:, k] = torch.where(take, new_idx, level[:, k])
             severity[:, k] = torch.where(take, clamped, severity[:, k])
-            cur_mult = gather_mult(level, diagnosis=False)
-    return level, severity
+            cur_mult[:, k] = torch.where(take, new_mult, cur_mult[:, k])
+
+
+class ConditionBag:
+    """Ordered condition set: `add` keeps the strongest severity and the
+    original position, exactly like the reference's `out[c] = max(...)`."""
+
+    def __init__(self, batch: int, device) -> None:
+        self.items: dict[str, torch.Tensor] = {}
+        self.batch = batch
+        self.device = device
+
+    def add(self, cond: str, level) -> None:
+        if isinstance(level, torch.Tensor):
+            value = level.to(torch.int64)
+        else:
+            value = torch.full((self.batch,), int(level), dtype=torch.int64, device=self.device)
+        if cond in self.items:
+            self.items[cond] = torch.maximum(self.items[cond], value)
+        else:
+            self.items[cond] = value
+
+
+def conditions_for(
+    step: dict,
+    persona: dict,
+    plant: dict,
+    ctx: dict,
+    warnings: list[dict] | None = None,
+    batch: int = 1,
+    device=None,
+) -> dict[str, torch.Tensor]:
+    """Error producing conditions active for one performance of one step.
+
+    Partly the analyst's annotation, partly the persona, partly earned by the
+    shift so far: schedule slip and an alarm ringing mid-action are nowhere in
+    the procedure. Cue quality is deliberately not injected as a condition here
+    because it is already scored in the ergonomics row - counting it twice would
+    double one cause.
+
+    `ctx` carries the emergent state, either as a python scalar (a static
+    worksheet, as the HEP fixture asks for) or as a [B] tensor (mid-shift, as the
+    kernel does); both are normalised to tensors of the batch shape.
+    """
+    bag = ConditionBag(batch, device)
+    zero = torch.zeros(batch, dtype=torch.int64, device=device)
+
+    def level(value: int) -> torch.Tensor:
+        return torch.full((batch,), int(value), dtype=torch.int64, device=device)
+
+    def mask(value) -> torch.Tensor:
+        if isinstance(value, torch.Tensor):
+            return value.to(torch.bool).reshape(batch)
+        return torch.full((batch,), bool(value), dtype=torch.bool, device=device)
+
+    def number(value) -> torch.Tensor:
+        if isinstance(value, torch.Tensor):
+            return value.to(torch.float64).reshape(batch)
+        return torch.full((batch,), float(value), dtype=torch.float64, device=device)
+
+    for c in step.get("cond") or []:
+        bag.add(c, 1)
+    if step["cue"] == "verbal":
+        bag.add("teamwork", 1)
+    alarm_fatigued = bool((plant.get("protection") or {}).get("alarmFrequentFalse") is True)
+    if step["cue"] == "light" and alarm_fatigued:
+        bag.add("mistrust", 1)
+
+    exp_y = float(persona["experienceY"])
+    if exp_y < 1.5 or not persona["qualificationCurrent"]:
+        bag.add("low_experience", 2)
+    elif exp_y < 4 or float(persona["runsBefore"]) < 3:
+        bag.add("low_experience", 1)
+    if float(persona["hoursIntoShift"]) > 10 or float(persona["shiftStartHour"]) < 5:
+        bag.add("fatigue", 2)
+    elif float(persona["hoursIntoShift"]) > 8 or float(persona["shiftStartHour"]) < 7:
+        bag.add("fatigue", 1)
+    if float(persona["languageFriction"]) > 0.4:
+        bag.add("language_barrier", 2)
+    if float(persona["concurrency"]) >= 2:
+        bag.add("distraction", 2)
+    elif float(persona["concurrency"]) >= 1:
+        bag.add("distraction", 1)
+    if float(persona["teamReadiness"]) < 0.5:
+        bag.add("teamwork", 2)
+    elif float(persona["teamReadiness"]) < 0.8:
+        bag.add("teamwork", 1)
+    if float(persona["deadlinePressure"]) > 0.6:
+        bag.add("time_pressure", 1)
+
+    slip = number(ctx["slipRatio"])
+    bag.add("time_pressure", torch.where(slip > 1.4, level(3), torch.where(slip > 1.2, level(2), torch.where(slip > 1.05, level(1), zero))))
+
+    bag.add("situation_awareness", torch.where(mask(ctx["alarmRinging"]), level(2), zero))
+    bag.add("unprepared_exception", torch.where(mask(ctx["hazardSeen"]), level(2), zero))
+
+    # a permit that left something isolated is sampled per scenario; a plant that
+    # starts the shift that way is a property of the configuration
+    standing = mask(True) if (plant.get("preIsolated") or []) else mask(False)
+    bag.add(
+        "post_maintenance_state",
+        torch.where(standing | mask(ctx["permitLeftSomethingIsolated"]), level(2), zero),
+    )
+    if not plant["provenRecent"]:
+        bag.add("incomplete_function_test", 1)
+    bag.add("mistrust", torch.where(number(ctx["instrumentDrift"]).abs() > 0.15, level(1), zero))
+    if alarm_fatigued:
+        bag.add("mistrust", 1)
+
+    for w in warnings or []:
+        if step["id"] in w["steps"]:
+            bag.add(w["cond"], w["level"])
+
+    return bag.items
+
+
+def assess(
+    step: dict,
+    persona: dict,
+    plant: dict,
+    conditions: dict[str, torch.Tensor],
+    batch: int,
+    device=None,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Fill the shaping-factor worksheet for one performance of one step."""
+    base = baseline_levels(step, persona, plant)
+    level = torch.tensor(base, dtype=torch.int64, device=device).repeat(batch, 1)
+    severity = torch.zeros(batch, N_PSFS, dtype=torch.int64, device=device)
+    apply_conditions(level, severity, conditions)
+    level, suppressed = limit_negative_psfs(level)
+    return level, severity, suppressed
 
 
 def limit_negative_psfs(level: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
@@ -350,14 +479,18 @@ def compute_hep(
     severity: torch.Tensor,
     method: str,
     kind: str,
-    step: dict,
+    *,
+    gtt: str | None = None,
+    similarity: float | None = None,
+    inside_procedure: bool = False,
     epc_max: float = HEART_EPC_MAX,
 ) -> dict:
     """HEP for every scenario at once. `level`/`severity` are [B, N_PSFS]."""
     device = level.device
     batch = level.shape[0]
-    nominal = nominal_for(method, dict(step) | {"insideProcedure": bool(step.get("applies"))}
-                          if method == "therp" else dict(step), kind)
+    nominal = nominal_for(
+        method, kind, gtt=gtt, similarity=similarity, inside_procedure=inside_procedure
+    )
     idx = torch.clamp(level, min=0, max=_WIDTH - 1)
     psf_rows = torch.arange(N_PSFS, device=device, dtype=torch.int64).expand(batch, N_PSFS)
 
@@ -365,12 +498,17 @@ def compute_hep(
     unachievable = (FAILS.to(device)[psf_rows, idx] == 1).any(dim=1) if method == "sparh" else None
 
     if method == "heart":
+        # HEART scales each condition by its own maximum factor, taken from the
+        # published 1.2 - 30 band, times its assumed probabilistic impact on the
+        # task (APOA). Treating every condition as a x30 one is how a method ends
+        # up reporting 100%.
         apoa_idx = torch.clamp(torch.round(severity).to(torch.int64), min=1, max=4)
         apoa_table = torch.tensor(APOA_BY_LEVEL, dtype=torch.float64, device=device)
         apoa = apoa_table[apoa_idx]
+        own = torch.clamp(gather_mult(level, diagnosis=False), min=1.2, max=epc_max)
         f = torch.ones(batch, dtype=torch.float64, device=device)
         for k in range(N_PSFS):
-            f = f * ((epc_max - 1) * apoa[:, k] + 1)
+            f = f * ((own[:, k] - 1) * apoa[:, k] + 1)
         p = torch.clamp(nominal * f, max=1.0)
         c = f
         adjusted = torch.zeros(batch, dtype=torch.bool, device=device)
@@ -380,8 +518,7 @@ def compute_hep(
             c = c * mult[:, k]
         negatives = (mult > 1).sum(dim=1)
         use_adj = (negatives >= 3) & (c > 1)
-        raw = nominal * c
-        p = torch.where(use_adj, spar_adjustment(nominal, c), raw)
+        p = torch.where(use_adj, spar_adjustment(nominal, c), nominal * c)
         if method == "sparh":
             p = torch.clamp(torch.clamp(p, max=0.98), min=SPAR_FLOOR)
         else:
@@ -389,6 +526,8 @@ def compute_hep(
         adjusted = use_adj
 
     if method == "sparh":
+        # a factor at its bottom level makes the action unachievable, so it is
+        # scored as a failure rather than as a large multiplier
         p = torch.where(unachievable, torch.full_like(p, 0.99), p)
         c = torch.where(unachievable, torch.ones_like(c), c)
         adjusted = adjusted & ~unachievable
@@ -406,28 +545,55 @@ def compute_hep(
     }
 
 
-def detection_probability(level: torch.Tensor, severity: torch.Tensor, method: str, kind: str, step: dict) -> torch.Tensor:
+def detection_probability(
+    level: torch.Tensor,
+    severity: torch.Tensor,
+    method: str,
+    kind: str,
+    *,
+    gtt: str | None = None,
+    similarity: float | None = None,
+    inside_procedure: bool = True,
+) -> torch.Tensor:
     """How likely an independent check is to spot a deviation that is present.
 
     Modelled as an action in its own right, so "get it checked" is only ever as
     good as the checker.
     """
-    miss = compute_hep(level, severity, method, kind, step)
+    miss = compute_hep(
+        level, severity, method, kind, gtt=gtt, similarity=similarity,
+        inside_procedure=inside_procedure,
+    )
     return torch.clamp(1.0 - miss["p"], min=0.05, max=0.999)
+
+
+def js_number(x: float) -> str:
+    """Format a double the way `String(number)` does in the reference.
+
+    Only used for the audit strings the HEP fixture stores, so `1` has to come
+    back as `1` and not `1.0` for a comparison to mean anything.
+    """
+    if x == int(x) and abs(x) < 1e15:
+        return str(int(x))
+    return repr(float(x))
 
 
 def level_labels(level: torch.Tensor, method: str, severity: torch.Tensor, epc_max: float = HEART_EPC_MAX) -> list[list[str]]:
     """`PSF:level name:multiplier` per scenario, for the fixture's audit trail."""
     mult = gather_mult(level, diagnosis=False)
-    out: list[list[str]] = []
     cpu = level.cpu()
+    sev = severity.cpu()
+    out: list[list[str]] = []
     if method == "heart":
-        sev = severity.cpu()
+        mults = mult.cpu().tolist()
         for b in range(cpu.shape[0]):
             row = []
             for k in range(N_PSFS):
+                own = min(epc_max, max(1.2, mults[b][k]))
                 apoa = APOA_BY_LEVEL[min(4, max(1, int(round(float(sev[b, k])))))]
-                row.append(f"{PSF_ORDER[k]}:EPC at APOA {apoa:.2f}:{(epc_max - 1) * apoa + 1}")
+                row.append(
+                    f"{PSF_ORDER[k]}:EPC max {js_number(own)} at APOA {apoa:.2f}:{js_number((own - 1) * apoa + 1)}"
+                )
             out.append(row)
         return out
     names = cpu.tolist()
@@ -435,7 +601,7 @@ def level_labels(level: torch.Tensor, method: str, severity: torch.Tensor, epc_m
     for b in range(len(names)):
         out.append(
             [
-                f"{PSF_ORDER[k]}:{SPAR_PSFS[PSF_ORDER[k]][min(names[b][k], len(SPAR_PSFS[PSF_ORDER[k]]) - 1)][0]}:{mults[b][k]}"
+                f"{PSF_ORDER[k]}:{SPAR_PSFS[PSF_ORDER[k]][min(names[b][k], len(SPAR_PSFS[PSF_ORDER[k]]) - 1)][0]}:{js_number(mults[b][k])}"
                 for k in range(N_PSFS)
             ]
         )

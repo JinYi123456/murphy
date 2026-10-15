@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { buildRunConfig, variantLabel } from '../../lib/registry';
-import type { ConsoleConfig } from '../../lib/registry';
-import { runBatch } from '../../engine/batch';
-import { toShiftDto, toSummaryDto } from '../../lib/dto';
-import { gpuConfigured, gpuRun } from '../../lib/gpu';
+import { buildRunConfig, variantLabel } from '../../../lib/registry';
+import type { ConsoleConfig } from '../../../lib/registry';
+import { runBatch } from '../../../engine/batch';
+import { toShiftDto, toSummaryDto } from '../../../lib/dto';
+import { gpuConfigured, gpuRun } from '../../../lib/gpu';
 
 export const runtime = 'nodejs';
 

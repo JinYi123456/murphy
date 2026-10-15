@@ -59,10 +59,26 @@ export interface TwinIface {
   alarm: string;
   hazard: string;
   clock: string;
+  /**
+   * How far past the completion target the run-out loop is allowed to go
+   * before it gives up. A transfer must keep integrating past 55 m3, because
+   * the hazard only appears if the pump was never stopped; a furnace ramp
+   * programme terminates at its setpoint, and letting it run to 160% of
+   * temperature would invent a shell failure that no controller allows.
+   */
+  runoutFactor?: number;
   /** scenario-vector keys the runner may write; absent keys are ignored */
   bias?: string;
   scale?: string;
   failOnDemand?: string;
+  /**
+   * Largest integration step the model tolerates. A transfer tank breathes in
+   * seconds; a furnace cures for ten hours. Without this the kernel would
+   * either miss crossings on the fast plant or waste a hundred thousand ticks
+   * on the slow one, and the same scenario would cost wildly different compute
+   * depending on which asset was under test.
+   */
+  tickS?: number;
 }
 
 export interface TwinDef {

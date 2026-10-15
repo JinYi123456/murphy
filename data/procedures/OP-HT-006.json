@@ -1,0 +1,762 @@
+{
+  "id": "OP-HT-006",
+  "title": "Heat-up of reheat furnace 4 after refractory repair",
+  "twin": "furnace_lightoff",
+  "revision": "3",
+  "language": "en",
+  "roles": [
+    "field operator",
+    "shop engineer",
+    "permit authority"
+  ],
+  "summary": "Prove the furnace safe to fire after a lining repair, light off, hold the mandatory cure schedule, and hand the unit to the mill at 1150 C.",
+  "sourceDocument": "data/sop/OP-HT-006.md",
+  "warnings": [
+    {
+      "id": "W1",
+      "label": "Step 6 records a pass or fail but the procedure never says what a failed proven test is worth, so the crew can sign a line it did not pump up",
+      "cond": "poor_procedure",
+      "level": 2,
+      "steps": [
+        "h5"
+      ]
+    },
+    {
+      "id": "W2",
+      "label": "The purge is written as a duration, not as a demonstrated condition, so nothing in the procedure proves the chamber is free of gas before the pilot is lit",
+      "cond": "timing_critical",
+      "level": 3,
+      "steps": [
+        "h4",
+        "h8"
+      ]
+    },
+    {
+      "id": "W3",
+      "label": "Step 11 says to confirm the rate on the controller face but the two furnaces share a panel and the faceplates were swapped during the retrofit",
+      "cond": "confusable_device",
+      "level": 2,
+      "steps": [
+        "h11"
+      ]
+    },
+    {
+      "id": "W4",
+      "label": "Step 12 puts the cure schedule in direct conflict with a mill that is waiting for slabs, and the procedure does not say who wins",
+      "cond": "time_pressure",
+      "level": 3,
+      "steps": [
+        "h12"
+      ]
+    },
+    {
+      "id": "W5",
+      "label": "The shell survey is the only barrier against a hot spot, and it is performed by the same person running the whole heat-up",
+      "cond": "absent_cue",
+      "level": 2,
+      "steps": [
+        "h13"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "h1",
+      "title": "Confirm the completion certificate and that the permit is closed",
+      "text": "Confirm the refractory contractor's completion certificate for the repaired area, and that the work permit is closed and the scaffolding is out.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "authorise",
+      "cond": [
+        "ambiguous_wording",
+        "post_maintenance_state"
+      ],
+      "durS": 180,
+      "errors": [
+        {
+          "id": "h1e1",
+          "kind": "omission",
+          "weight": 35,
+          "text": "The certificate is in the office upstairs and the permit was closed by phone. Nobody looked at the scaffold",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h1e2",
+          "kind": "misread",
+          "weight": 35,
+          "text": "Signed off the certificate for furnace 5, whose repair finished in the same week on the same paperwork stack",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h1e3",
+          "kind": "incomplete",
+          "weight": 30,
+          "text": "Permit closed by the authority, but the scaffold was still standing when he looked",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h2",
+      "title": "Walk the peeking ports and confirm nothing is left inside",
+      "text": "Confirm no tools, timber or shuttering left inside the chamber. Walk the peeking ports with a torch.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "cond": [
+        "absent_cue",
+        "memory_load"
+      ],
+      "durS": 300,
+      "errors": [
+        {
+          "id": "h2e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "Looked in one port from the platform. The far end of the chamber is not visible from any port",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h2e2",
+          "kind": "incomplete",
+          "weight": 35,
+          "text": "Torch battery was flat, so he did the quick version",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h2e3",
+          "kind": "commission",
+          "weight": 25,
+          "text": "Satisfied because the contractor said they had cleaned up",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h3",
+      "title": "Open the flue damper to the purge position",
+      "text": "Open the flue damper to the purge position.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "confusable_device"
+      ],
+      "durS": 90,
+      "applies": {
+        "DAMPER": 1
+      },
+      "errors": [
+        {
+          "id": "h3e1",
+          "kind": "wrong_target",
+          "weight": 45,
+          "text": "Moved the recirculation damper, which is on the same shaft and has the same handle",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h3e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Assumed the night shift left it open because the furnace was already cold",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h3e3",
+          "kind": "incomplete",
+          "weight": 25,
+          "text": "The mechanism is stiff and it came up three quarters of the way. The handle looks open",
+          "patch": {
+            "DAMPER": 0.6
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h4",
+      "title": "Start the combustion air fan and purge for not less than fifteen minutes",
+      "text": "Start the combustion air fan and purge the chamber for not less than fifteen minutes with the damper open to atmosphere.",
+      "role": "field operator",
+      "cue": "light",
+      "kind": "actuate",
+      "cond": [
+        "timing_critical",
+        "time_pressure"
+      ],
+      "durS": 900,
+      "applies": {
+        "FAN": 1
+      },
+      "errors": [
+        {
+          "id": "h4e1",
+          "kind": "premature",
+          "weight": 40,
+          "text": "Ran the fan, went to check the gas train, came back at seven minutes and called the purge done",
+          "patch": {
+            "purgeFrac": 0.48
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h4e2",
+          "kind": "omission",
+          "weight": 20,
+          "text": "Started the fan from the panel and left for the pilot. Nobody confirmed the air was actually moving at the damper",
+          "patch": {
+            "FAN": 0
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h4e3",
+          "kind": "commission",
+          "weight": 25,
+          "text": "The mill had two heats waiting, so he took five minutes as good enough for a cold chamber",
+          "patch": {
+            "purgeFrac": 0.3
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h4e4",
+          "kind": "out_of_sequence",
+          "weight": 15,
+          "text": "Purged with the damper still in the run position instead of the purge position",
+          "patch": {
+            "purgeFrac": 0.55,
+            "DAMPER": 0.6
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h5",
+      "title": "Prove the main burner gas valve tight",
+      "text": "Carry out the gas valve proven test on the main burner train per MSR-11 section 4: isolate, pressurise to 100 mbar, observe the decay for two minutes. Record the result on the heat-up sheet.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "verify",
+      "cond": [
+        "incomplete_function_test",
+        "post_maintenance_state",
+        "timing_critical"
+      ],
+      "durS": 420,
+      "applies": {
+        "GASLEAK": 0
+      },
+      "errors": [
+        {
+          "id": "h5e1",
+          "kind": "omission",
+          "weight": 30,
+          "text": "The train was already pressurised from the night shift, so he signed the line without pumping it up or timing the decay",
+          "patch": {
+            "GASLEAK": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h5e2",
+          "kind": "misread",
+          "weight": 25,
+          "text": "The test gauge needle was stuck at zero. A decay from 100 to 40 mbar looked like no movement at all",
+          "patch": {
+            "GASLEAK": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h5e3",
+          "kind": "incomplete",
+          "weight": 25,
+          "text": "Proved the block valve, which is the one the interlock watches, and not the burner valve that faces the furnace",
+          "patch": {
+            "GASLEAK": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h5e4",
+          "kind": "wrong_target",
+          "weight": 20,
+          "text": "Ran the test on the furnace 5 train, whose panel tag was moved in the retrofit",
+          "patch": {
+            "GASLEAK": 1
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h6",
+      "title": "Confirm the flame supervision scanner on burner 1 is clear and proven",
+      "text": "Confirm the flame supervision UV scanner on burner 1 is clear and proven.",
+      "role": "field operator",
+      "cue": "light",
+      "kind": "verify",
+      "cond": [
+        "mistrust",
+        "incomplete_function_test"
+      ],
+      "durS": 180,
+      "errors": [
+        {
+          "id": "h6e1",
+          "kind": "omission",
+          "weight": 45,
+          "text": "The scanner has been noisy for months and the panel lamp is dim, so it reads the same as always",
+          "patch": {
+            "BMSFAIL": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h6e2",
+          "kind": "incomplete",
+          "weight": 35,
+          "text": "Wiped the sight glass, did not run the prove test because it trips the burner lockout timer",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h6e3",
+          "kind": "commission",
+          "weight": 20,
+          "text": "Covered the sight glass to stop it alarming and forgot to uncover it",
+          "patch": {
+            "BMSFAIL": 1
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h7",
+      "title": "Check the shell survey points are reachable and the pyrometer is ready",
+      "text": "Confirm the shell temperature survey points on the repaired roof are reachable and that the pyrometer battery is good.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "cond": [
+        "absent_cue"
+      ],
+      "durS": 240,
+      "errors": [
+        {
+          "id": "h7e1",
+          "kind": "omission",
+          "weight": 50,
+          "text": "The scaffold to the roof is signed out to another trade, so the survey will not happen tonight",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h7e2",
+          "kind": "incomplete",
+          "weight": 50,
+          "text": "Battery checked, emissivity tape not, so the readings will be meaningless",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h8",
+      "title": "Light the pilot on burner 1 and confirm flame on the scanner",
+      "text": "Light the pilot on burner 1 and confirm the flame on the scanner.",
+      "role": "field operator",
+      "cue": "light",
+      "kind": "actuate",
+      "cond": [
+        "timing_critical",
+        "situation_awareness"
+      ],
+      "durS": 120,
+      "applies": {
+        "PILOT": 1
+      },
+      "errors": [
+        {
+          "id": "h8e1",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Pilot did not light, he did not wait for the scanner, and he went on to the main gas anyway",
+          "patch": {
+            "PILOT": 0,
+            "MAINGAS": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h8e2",
+          "kind": "commission",
+          "weight": 40,
+          "text": "Cracked the main gas at the same time as the pilot to save a trip back to the panel",
+          "patch": {
+            "MAINGAS": 1
+          },
+          "alsoApplies": true,
+          "source": "analyst"
+        },
+        {
+          "id": "h8e3",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Took the standing scanner lamp for a flame indication",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h9",
+      "title": "Admit main gas at the minimum firing position",
+      "text": "Admit main gas at the minimum firing position.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "timing_critical",
+        "confusable_device"
+      ],
+      "durS": 120,
+      "applies": {
+        "MAINGAS": 1
+      },
+      "errors": [
+        {
+          "id": "h9e1",
+          "kind": "omission",
+          "weight": 25,
+          "text": "The burner lit on the pilot alone and he never opened the main, then set a ramp that the pilot cannot hold",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h9e2",
+          "kind": "wrong_target",
+          "weight": 40,
+          "text": "Opened the bypass train, which has no flame supervision behind it",
+          "patch": {
+            "BMS": 0
+          },
+          "alsoApplies": true,
+          "source": "analyst"
+        },
+        {
+          "id": "h9e3",
+          "kind": "premature",
+          "weight": 35,
+          "text": "Admitted gas before the fan interlock had settled, and the train tripped the burner management shut with the valve already open",
+          "patch": {
+            "MAINGAS": 1,
+            "GASLEAK": 1
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h10",
+      "title": "If the burner does not light, lock off and re-purge for fifteen minutes",
+      "text": "If the burner does not light on the first attempt, lock off, re-purge for fifteen minutes.",
+      "role": "field operator",
+      "cue": "checklist",
+      "kind": "actuate",
+      "gtt": "B",
+      "cond": [
+        "unprepared_exception",
+        "situation_awareness",
+        "time_pressure"
+      ],
+      "durS": 900,
+      "guard": {
+        "var": "gasAccum",
+        "op": "gte",
+        "value": 5
+      },
+      "applies": {
+        "MAINGAS": 0,
+        "FAN": 1,
+        "purgeFrac": 1
+      },
+      "errors": [
+        {
+          "id": "h10e1",
+          "kind": "omission",
+          "weight": 55,
+          "text": "A second purge is forty minutes he does not have, so he tried the pilot again instead",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h10e2",
+          "kind": "delayed_response",
+          "weight": 45,
+          "text": "Went to find the shop engineer first, and the gas kept coming while he was on the radio",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h11",
+      "title": "Set the ramp rate to 60 C/h and confirm the controller shows it",
+      "text": "Set the ramp rate to 60 C/h on controller TRC-4C and confirm the rate shown on the controller face matches the rate you entered.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "confusable_device",
+        "ambiguous_wording",
+        "absent_cue"
+      ],
+      "durS": 150,
+      "applies": {
+        "rampCmd": 60
+      },
+      "errors": [
+        {
+          "id": "h11e1",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Entered 60 in the field the manual page calls degrees per minute. The controller accepted 3600 C/h and the furnace took it",
+          "patch": {
+            "rampCmd": 360
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h11e2",
+          "kind": "wrong_target",
+          "weight": 35,
+          "text": "Set it on TRC-5C. The faceplates came back from the retrofit the wrong way round and nobody has reported it",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h11e3",
+          "kind": "omission",
+          "weight": 20,
+          "text": "Confirmed the number on the face but the profile was already running from the previous heat",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h11e4",
+          "kind": "incomplete",
+          "weight": 15,
+          "text": "Typed 60, hit enter, and the controller was still in cascade manual so it ignored him",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h12",
+      "title": "Hold 60 C/h until the lining moisture is below one per cent",
+      "text": "Hold the ramp at 60 C/h until the zone reaches 300 C. Watch the lining moisture readout; above 1% the rate is not to be increased whatever the mill asks for.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "cond": [
+        "time_pressure",
+        "poor_procedure",
+        "fatigue"
+      ],
+      "durS": 90,
+      "watch": {
+        "var": "moisture",
+        "atMost": 1,
+        "alt": {
+          "var": "zoneT",
+          "atLeast": 300
+        },
+        "onHit": {
+          "rampCmd": 150
+        },
+        "maxWaitS": 6000,
+        "lateMaxS": 900,
+        "scheduledS": 6000
+      },
+      "errors": [
+        {
+          "id": "h12e1",
+          "kind": "commission",
+          "weight": 40,
+          "text": "The mill wanted three slabs by the end of the shift, so he moved the rate to 300 C/h with the moisture still at two per cent",
+          "patch": {
+            "rampCmd": 300
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "h12e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Left the cure to the controller profile and walked away",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h12e3",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Read the moisture from the previous entry on the sheet because the readout was stuck",
+          "patch": {
+            "rampCmd": 220
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h13",
+      "title": "Survey the shell at the four points and stop the ramp above 260 C",
+      "text": "Record the shell temperature at the four survey points every thirty minutes. A reading over 260 C is a hot spot: stop the ramp and call the shop engineer. Do not cover a hot spot by increasing the air.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "cond": [
+        "absent_cue",
+        "fatigue",
+        "mistrust"
+      ],
+      "durS": 120,
+      "watch": {
+        "var": "indicated:shellT",
+        "atLeast": 260,
+        "onHit": {
+          "rampCmd": 0
+        },
+        "maxWaitS": 5400,
+        "lateMaxS": 1500,
+        "scheduledS": 5400
+      },
+      "errors": [
+        {
+          "id": "h13e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "Took the readings through the insulation blanket on the roof, so the repair patch itself was never surveyed",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h13e2",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Pyrometer emissivity was still set for the old painted shell, and the true temperature was 60 C above what he wrote down",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h13e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Found a hot spot and opened the cooling air over it instead of stopping the ramp, exactly as the procedure forbids",
+          "patch": {
+            "scale": 1.2
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "h14",
+      "title": "Notify the mill and record the heat-up sheet",
+      "text": "Notify the mill that furnace 4 is at temperature and record the finish time, the cure curve and your initials on the heat-up sheet.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "communicate",
+      "cond": [
+        "ambiguous_wording"
+      ],
+      "durS": 180,
+      "verify": {
+        "of": [
+          "h12",
+          "h13"
+        ],
+        "via": "document",
+        "kind": "verify"
+      },
+      "errors": [
+        {
+          "id": "h14e1",
+          "kind": "omission",
+          "weight": 45,
+          "text": "Sheet filled in the next day from memory, so a skipped cure stage never appears on the record",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h14e2",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Recorded the controller setpoint as the zone temperature, hiding a twenty degree lag behind the thermocouple",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "h14e3",
+          "kind": "commission",
+          "weight": 25,
+          "text": "Told the mill it was at temperature to get the slabs moving, at 1050 C",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "title": "Emergency: stop firing on a bang or a lifted roof",
+      "text": "If you hear a bang or see the roof lift, stop firing at the local emergency stop, close the main gas valve, and evacuate the front of the furnace. Do not open a peeking port.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "recover",
+      "gtt": "C",
+      "cond": [
+        "unprepared_exception",
+        "timing_critical",
+        "situation_awareness"
+      ],
+      "durS": 30,
+      "emergency": {
+        "maxResponseS": 120,
+        "onHit": {
+          "MAINGAS": 0,
+          "PILOT": 0,
+          "STOP": 1,
+          "FAN": 1,
+          "DAMPER": 1
+        }
+      },
+      "errors": [
+        {
+          "id": "e1e1",
+          "kind": "delayed_response",
+          "weight": 100,
+          "text": "The bang was attributed to the refractory ticking over as it dries, which is a thing crews say",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    }
+  ]
+}
