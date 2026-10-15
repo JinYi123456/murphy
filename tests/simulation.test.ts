@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { getTwin } from '../src/engine/twins/index';
 import { simulateShift, runBatch } from '../src/engine/index';
+import { inspectModel } from '../src/engine/model';
+import { SEVERITY } from '../src/engine/types';
 import { buildRunConfig } from '../src/lib/registry';
-import { DEFAULT_CONFIG } from '../src/lib/registry';
+import { DEFAULT_CONFIG, procedureById } from '../src/lib/registry';
 import type { ConsoleConfig } from '../src/lib/registry';
 import { INTERVENTIONS } from '../src/engine/repair';
 import type { TwinConfig } from '../src/engine/twins/twin';
@@ -329,5 +331,289 @@ describe('furnace twin portability', () => {
     const r = runBatch(run, 200).summary;
     expect(r.n).toBe(200);
     expect(Number.isFinite(r.failureRate)).toBe(true);
+  });
+});
+
+/**
+ * The operating reheater. These are twin-level tests of the physics and of the
+ * rate-of-change guardrails the operating procedure quotes: the point is to prove
+ * that a violation is punished by the model rather than by a rule in the checker,
+ * and that a plant record and its compiled procedure still pass the integrity gate.
+ */
+describe('operating reheat furnace twin', () => {
+  const ot = getTwin('furnace_operating');
+  const Q = ot.params;
+
+  const state = (disc: Record<string, number> = {}) => {
+    const s = new Float64Array(ot.vars.length);
+    const d = new Float64Array(ot.discs.length);
+    ot.init(s, 0, d, 0, Q, {
+      startLevelFrac: 0.4, protection: { interlock: true, pis: true, lah: true }, provenRecent: true,
+      preIsolated: [], indicatorBias: 0, product: 'natural_gas', extra: {},
+    });
+    for (const [k, v] of Object.entries(disc)) d[ot.discIndex(k)] = v;
+    return { s, d };
+  };
+
+  const step = (s: Float64Array, d: Float64Array, seconds: number) => {
+    for (let t = 0; t < seconds; t += 60) ot.advance(s, 0, d, 0, Q, 60);
+    return ot.magnitudes(s, 0, d, 0);
+  };
+
+  const cmd = (s: Float64Array, name: string, v: number) => { s[ot.varIndex(name)] = v; };
+  const read = (s: Float64Array, name: string) => s[ot.varIndex(name)];
+
+  it('delivers the scheduled heat inside the rolling window when the moves are guarded', () => {
+    const { s, d } = state();
+    // the line-up the procedure asks for: 20 C at a time, with the settle between them
+    for (let i = 0; i < 3; i++) {
+      cmd(s, 'cmdSoak1', read(s, 'cmdSoak1') + 20);
+      step(s, d, 420);
+    }
+    const m = step(s, d, 3600);
+    expect(m.exitTempC).toBeGreaterThan(Q.tCold);
+    expect(m.exitTempC).toBeLessThan(Q.tHot);
+    expect(m.tonnesGood).toBeGreaterThan(60);
+    expect(m.coldScrapT).toBe(0);
+    expect(m.hotScrapT).toBe(0);
+    expect(m.scrapPct).toBeLessThan(1);
+    // the reference specific energy is a claim about a well-run furnace, so a
+    // well-run furnace has to sit inside it
+    expect(m.gasAboveRefM3).toBe(0);
+    expect(m.hazardT).toBe(0);
+    expect(ot.classify(s, 0, d, 0, Q)).toBe('normal');
+  });
+
+  it('scraps more metal for a 60 C movement than for a 20 C movement', () => {
+    const guarded = state();
+    cmd(guarded.s, 'cmdSoak1', 1235);
+    const g = step(guarded.s, guarded.d, 2400);
+
+    const forced = state();
+    cmd(forced.s, 'cmdSoak1', 1275);
+    const f = step(forced.s, forced.d, 2400);
+
+    expect(g.hotScrapT).toBe(0);
+    expect(f.hotScrapT).toBeGreaterThan(g.hotScrapT);
+    expect(f.tonnesScrap).toBeGreaterThan(g.tonnesScrap);
+    // the chamber went above what anybody commanded, because the loop was made to
+    // carry a step it was never allowed to take in one movement
+    expect(f.windUpC).toBeGreaterThan(0);
+    expect(read(forced.s, 'soak1T')).toBeGreaterThan(1275);
+    expect(ot.classify(forced.s, 0, forced.d, 0, Q)).toBe('overheat_scrap');
+  });
+
+  it('lifts taken inside the settling interval wind the loop up and scrap the metal', () => {
+    // Three 20 C lifts, the last of which puts the soak into the top of the
+    // rolling window - the situation the procedure's waiting rule exists for. The
+    // punishment is the chamber overshooting into the metal, not a rulebook fine,
+    // so the only thing separating the two crews is the interval between moves.
+    const lifts = [1235, 1255, 1275];
+
+    const patient = state();
+    for (const target of lifts) {
+      cmd(patient.s, 'cmdSoak1', target);
+      step(patient.s, patient.d, 420);
+    }
+    const p = step(patient.s, patient.d, 2400);
+
+    const rushed = state();
+    for (const target of lifts) {
+      cmd(rushed.s, 'cmdSoak1', target);
+      step(rushed.s, rushed.d, 120);
+    }
+    const r = step(rushed.s, rushed.d, 2400);
+
+    expect(p.windUpC).toBe(0);
+    expect(p.hotScrapT).toBe(0);
+    expect(r.windUpC).toBeGreaterThan(0);
+    expect(r.tonnesScrap).toBeGreaterThan(p.tonnesScrap);
+    expect(r.hotScrapT).toBeGreaterThan(0);
+    expect(ot.classify(rushed.s, 0, rushed.d, 0, Q)).toBe('overheat_scrap');
+    expect(ot.classify(patient.s, 0, patient.d, 0, Q)).not.toBe('overheat_scrap');
+  });
+
+  it('fuel trim past the plus twelve per cent limit costs specific energy', () => {
+    const within = state();
+    cmd(within.s, 'cmdTrim', 12);
+    const a = step(within.s, within.d, 3600);
+
+    const over = state();
+    cmd(over.s, 'cmdTrim', 30);
+    const b = step(over.s, over.d, 3600);
+
+    const clean = state();
+    const c = step(clean.s, clean.d, 3600);
+
+    expect(a.gjPerTonne).toBeGreaterThan(c.gjPerTonne);
+    expect(b.gjPerTonne).toBeGreaterThan(a.gjPerTonne);
+    expect(b.gasAboveRefM3).toBeGreaterThan(a.gasAboveRefM3);
+    expect(ot.magnitudes(clean.s, 0, clean.d, 0).gasAboveRefM3).toBe(0);
+  });
+
+  it('a stuck damper lifts the roof pressure and blows combustion off the burners', () => {
+    const { s, d } = state({ damperStuck: 1 });
+    cmd(s, 'cmdTrim', 30);
+    const m = step(s, d, 1800);
+    expect(m.peakPressMbar).toBeGreaterThan(Q.pressFlame);
+    expect(m.flameOut).toBe(1);
+    expect(m.hazardT).toBeGreaterThan(0);
+    // the flame supervision function closes the trains whether the operator does or not
+    expect(d[ot.discIndex('STOP')]).toBe(1);
+    expect(ot.classify(s, 0, d, 0, Q)).toBe('flame_out');
+  });
+
+  it('a positive furnace with nothing proved back has no barrier left', () => {
+    const { s, d } = state({ damperStuck: 1, TRIP: 0, HARDTRIP: 0 });
+    cmd(s, 'cmdTrim', 30);
+    const m = step(s, d, 2400);
+    expect(m.flameOut).toBe(1);
+    expect(m.deflagrated).toBe(1);
+    expect(ot.classify(s, 0, d, 0, Q)).toBe('deflagration');
+    // what is condemned is the charge standing in the chamber, not merely the
+    // metal that has already been judged off-spec at the table
+    expect(m.hazardT).toBeGreaterThan(m.tonnesScrap);
+  });
+
+  it('a cold charge from the yard puts metal under the window, and slowing the hearth is the answer', () => {
+    const running = state({ coldBatch: 1 });
+    const hot = step(running.s, running.d, 3600);
+
+    const slowed = state({ coldBatch: 1 });
+    cmd(slowed.s, 'cmdSpeed', 18);
+    const cool = step(slowed.s, slowed.d, 3600);
+
+    const clean = state();
+    const warm = step(clean.s, clean.d, 3600);
+
+    expect(hot.exitTempC).toBeLessThan(warm.exitTempC);
+    expect(hot.coldScrapT).toBeGreaterThan(0);
+    expect(hot.coldScrapT).toBeGreaterThan(warm.coldScrapT);
+    expect(cool.coldScrapT).toBeLessThan(hot.coldScrapT);
+    expect(cool.exitTempC).toBeGreaterThan(hot.exitTempC);
+    expect(ot.classify(running.s, 0, running.d, 0, Q)).toBe('cold_slab_scrap');
+  });
+
+  it('a pyrometer that reads high lets the operator keep acting on metal that is already too cold', () => {
+    const lying = state({ coldBatch: 1, tcBias: 45 });
+    step(lying.s, lying.d, 2400);
+    const indicated = ot.indication(lying.s, 0, lying.d, 0, 'exitT');
+    const actual = read(lying.s, 'exitT');
+    // the instrument reports the slab inside the window while the metal is below it,
+    // so nothing the crew looks at invites the correction
+    expect(indicated).toBeGreaterThan(actual);
+    expect(indicated).toBeGreaterThanOrEqual(Q.tCold);
+    expect(actual).toBeLessThan(Q.tCold);
+    // and the corrective step, which is cued on the reading, does not fire
+    expect(indicated >= 1185).toBe(true);
+  });
+
+  it('moving two levers in one action is a control fight the furnace charges for', () => {
+    const together = state();
+    cmd(together.s, 'cmdSoak1', 1235);
+    cmd(together.s, 'cmdTrim', 14);
+    const a = step(together.s, together.d, 3600);
+
+    const inTurn = state();
+    cmd(inTurn.s, 'cmdSoak1', 1235);
+    step(inTurn.s, inTurn.d, 420);
+    cmd(inTurn.s, 'cmdTrim', 14);
+    const b = step(inTurn.s, inTurn.d, 3180);
+
+    expect(a.twoLeverMoves).toBeGreaterThan(0);
+    expect(b.twoLeverMoves).toBe(0);
+    expect(a.peakPressMbar).toBeGreaterThan(b.peakPressMbar);
+    expect(a.gjPerTonne).toBeGreaterThan(b.gjPerTonne);
+  });
+
+  it('burning on a stopped mill is downtime, not production', () => {
+    const { s, d } = state({ MILL: 0 });
+    const m = step(s, d, 1800);
+    expect(m.downtimeMin).toBeGreaterThan(20);
+    expect(m.tonnesCharged).toBeLessThan(2);
+    expect(m.gjPerTonne).toBeGreaterThan(Q.refGjPerT * 5);
+    expect(ot.classify(s, 0, d, 0, Q)).toBe('production_hold');
+  });
+
+  it('conserves mass: everything charged is good, scrapped or burned off', () => {
+    const { s, d } = state({ coldBatch: 1, burnClog: 0.4, tcBias: 30 });
+    cmd(s, 'cmdSoak1', 1300);
+    cmd(s, 'cmdSpeed', 30);
+    const m = step(s, d, 3600);
+    expect(m.tonnesCharged).toBeGreaterThan(10);
+    expect(m.tonnesGood + m.tonnesScrap + m.burnoffT).toBeCloseTo(m.tonnesCharged, 8);
+    expect(m.tonnesGood).toBeGreaterThanOrEqual(0);
+    expect(m.burnoffT).toBeGreaterThan(0);
+    expect(m.hotScrapT + m.coldScrapT).toBeCloseTo(m.tonnesScrap, 8);
+  });
+
+  it('ends every trajectory in a class the outcome sheet recognises', () => {
+    const cases: Record<string, number>[] = [
+      {}, { coldBatch: 1 }, { damperStuck: 1 }, { MILL: 0 }, { burnClog: 0.5 }, { MIX: 0 }, { tcBias: 45 },
+    ];
+    for (const disc of cases) {
+      const { s, d } = state(disc);
+      step(s, d, 4200);
+      const cls = ot.classify(s, 0, d, 0, Q);
+      expect(typeof cls).toBe('string');
+      expect(SEVERITY[cls]).toBeDefined();
+      expect(['normal', 'upset', 'incident']).toContain(SEVERITY[cls]);
+    }
+    // and a deliberate over-temperature is reported as damage, not as a schedule problem
+    const hot = state();
+    cmd(hot.s, 'cmdSoak1', 1330);
+    step(hot.s, hot.d, 5400);
+    expect(SEVERITY[ot.classify(hot.s, 0, hot.d, 0, Q)]).toBe('incident');
+  });
+
+  it('accepts the controlled document and its compiled model', () => {
+    const report = inspectModel(procedureById('OP-HT-021'));
+    expect(report.ok).toBe(true);
+    expect(report.errors).toEqual([]);
+    expect(report.procedure?.twin).toBe('furnace_operating');
+    expect(report.notes.join(' ')).toMatch(/operates \d+ distinct plant variables on furnace_operating/);
+    const steps = report.procedure!.steps;
+    expect(steps.length).toBeGreaterThanOrEqual(14);
+    expect(steps.length).toBeLessThanOrEqual(18);
+    expect(steps.filter((s) => (s.errors?.length ?? 0) > 0).length).toBe(steps.length);
+    expect(steps.some((s) => s.watch?.scheduledS !== undefined)).toBe(true);
+    expect(steps.some((s) => s.until !== undefined)).toBe(true);
+    expect(steps.some((s) => s.guard !== undefined)).toBe(true);
+    expect(steps.some((s) => s.emergency !== undefined)).toBe(true);
+    expect(steps.some((s) => s.verify !== undefined)).toBe(true);
+    // every document defect names the stations it actually lights up
+    for (const w of report.procedure!.warnings ?? []) {
+      expect(w.steps.length).toBeGreaterThan(0);
+      for (const sid of w.steps) expect(steps.some((s) => s.id === sid)).toBe(true);
+    }
+  });
+
+  it('a furnace that is asked for hotter slabs in one movement loses the heat, and the money follows the metal', () => {
+    const run: RunConfig = {
+      ...cfg({ seed: 'ops', n: 200 }),
+      procedure: procedureById('OP-HT-021'),
+      plant: (plants as PlantConfig[]).find((x) => x.id === 'fn_production_clean')!,
+    };
+    const r = runBatch(run, 200).summary;
+    expect(r.n).toBe(200);
+    expect(r.failureRate).toBeGreaterThan(0);
+    expect(r.failureRate).toBeLessThan(0.9);
+    expect(r.meanCostEur).toBeGreaterThan(0);
+    expect(r.incidentRate).toBeLessThanOrEqual(r.failureRate);
+  });
+
+  it('a competent crew on a clean furnace does better than a rushed one on the degraded plant', () => {
+    const build = (personaId: string, plantId: string): RunConfig => buildRunConfig({
+      ...DEFAULT_CONFIG, procedureId: 'OP-HT-021', personaId, plantId,
+      method: 'sparh', controls: [], n: 400, seed: 'ops-crew-' + plantId,
+    });
+    for (const plantId of ['fn_production_clean', 'fn_after_pyrometer_change', 'fn_cold_charge_mill_waiting', 'fn_damper_sticking']) {
+      const careful = runBatch(build('daytime_competent', plantId), 400).summary;
+      const rushed = runBatch(build('rushed_turnaround', plantId), 400).summary;
+      expect(careful.failureRate).toBeGreaterThan(0);
+      expect(rushed.failureRate).toBeLessThan(0.9);
+      expect(careful.failureRate).toBeLessThan(rushed.failureRate);
+      expect(careful.meanCostEur).toBeLessThan(rushed.meanCostEur);
+    }
   });
 });

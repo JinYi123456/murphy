@@ -73,6 +73,42 @@
     "lineIdleEurPerHour": "contribution margin lost per hour a reheat furnace is off line ahead of the rolling mill",
     "repeatHeatupEur": "fuel and crew for an aborted cure cycle that has to be restarted from cold"
   },
+  "furnaceOperating": {
+    "scrapEurPerTonne": 560,
+    "goodEurPerTonne": 72,
+    "burnOffEurPerTonne": 610,
+    "gasEurPerKwh": 0.062,
+    "gasKwhPerM3": 10.5,
+    "lineIdleEurPerHour": 3800,
+    "flameOutRepairEur": 19000,
+    "flameOutHoldH": 8,
+    "deflagrationRepairEur": 260000,
+    "deflagrationHoldH": 120,
+    "refractoryRepairEur": 64000,
+    "refractoryHoldH": 168,
+    "surveyFlatEur": 12000,
+    "surveyHoldH": 10,
+    "reheatFlatEur": 5200,
+    "reheatHoldH": 3
+  },
+  "furnaceOperatingSources": {
+    "scrapEurPerTonne": "loss of a reheated slab: cast product and energy already invested, net of scrap credit",
+    "goodEurPerTonne": "contribution margin per tonne of rolled product the mill does not make when a heat arrives short",
+    "burnOffEurPerTonne": "yield lost to scale and burn-off, valued slightly above scrap because the metal is gone rather than downgraded",
+    "gasEurPerKwh": "industrial gas tariff at the meter per kWh of net calorific value",
+    "gasKwhPerM3": "net calorific value of natural gas, kWh per cubic metre",
+    "lineIdleEurPerHour": "contribution margin lost per hour the reheat furnace cannot feed the rolling mill",
+    "flameOutRepairEur": "inspect, dry out and re-set the burner trains after combustion has lifted off a positive furnace",
+    "flameOutHoldH": "hours out of production to cool, inspect the chamber and hand a reheater back to the mill after a blow-out",
+    "deflagrationRepairEur": "rebuild of shell, burner blocks and lining after an internal deflagration in an operating furnace",
+    "deflagrationHoldH": "unscheduled outage to make safe and re-line after a chamber that has popped",
+    "refractoryRepairEur": "cut-out and re-gun of a soak roof panel that has been run above its design temperature",
+    "refractoryHoldH": "outage for a partial roof re-line and dry-out on an operating reheater",
+    "surveyFlatEur": "ultrasonic and thermal survey campaign on a lining suspect after an over-temperature excursion",
+    "surveyHoldH": "hours held for the survey and its interpretation before the furnace is handed back",
+    "reheatFlatEur": "returning rejected slab to the furnace or the yard and re-scheduling the heat",
+    "reheatHoldH": "hours of furnace and mill time lost re-working a rejected charge"
+  },
   "fines": {
     "reportableThresholdM3": 1,
     "fixedEur": 24000,
@@ -105,7 +141,12 @@
       "refractory_damage": 0.02,
       "shell_hotspot": 0.05,
       "hot_start": 0.01,
-      "no_light_off": 0
+      "no_light_off": 0,
+      "cold_slab_scrap": 0,
+      "overheat_scrap": 0.01,
+      "refractory_overtemp": 0.03,
+      "flame_out": 0.06,
+      "production_hold": 0
     }
   },
   "escalationSources": {

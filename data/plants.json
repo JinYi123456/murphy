@@ -1,158 +1,246 @@
 [
-  {
-    "id": "tk_asdesigned",
-    "twin": "tank_transfer",
-    "label": "As designed: protections in service and proved",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "driftRate": 0.12,
-      "shiftsPerYear": 420
-    },
-    "provenRecent": true,
-    "preIsolated": [],
-    "product": "toluene",
-    "freeboardPct": 0.47,
-    "notes": "What the procedure assumes. The failure rate here is the cost of the human action alone."
+ {
+  "id": "tk_asdesigned",
+  "twin": "tank_transfer",
+  "label": "As designed: protections in service and proved",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.12,
+   "shiftsPerYear": 420
   },
-  {
-    "id": "tk_after_instrument_work",
-    "twin": "tank_transfer",
-    "label": "Two weeks after bench testing LT-101 and LSHH-101",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "driftRate": 0.3,
-      "shiftsPerYear": 35
-    },
-    "provenRecent": false,
-    "preIsolated": [
-      "PIS",
-      "LAH",
-      "V4"
-    ],
-    "product": "toluene",
-    "freeboardPct": 0.49,
-    "notes": "The realistic state of a tank that has had work on it: loops isolated, return to service recorded somewhere else, and the vent line shut after the roof inspection."
+  "provenRecent": true,
+  "preIsolated": [],
+  "product": "toluene",
+  "freeboardPct": 0.47,
+  "notes": "What the procedure assumes. The failure rate here is the cost of the human action alone."
+ },
+ {
+  "id": "tk_after_instrument_work",
+  "twin": "tank_transfer",
+  "label": "Two weeks after bench testing LT-101 and LSHH-101",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.3,
+   "shiftsPerYear": 35
   },
-  {
-    "id": "tk_alarm_fatigue",
-    "twin": "tank_transfer",
-    "label": "Rack with a noisy level transmitter and a crowded bund",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "alarmFrequentFalse": true,
-      "driftRate": 0.35,
-      "shiftsPerYear": 180
-    },
-    "provenRecent": false,
-    "preIsolated": [],
-    "instrumentDrift": {
-      "level": -0.3
-    },
-    "product": "toluene",
-    "freeboardPct": 0.5,
-    "notes": "The crew has learned to discount the alarm, and the indicator reads low. Both of those are conditions the procedure never mentions."
+  "provenRecent": false,
+  "preIsolated": [
+   "PIS",
+   "LAH",
+   "V4"
+  ],
+  "product": "toluene",
+  "freeboardPct": 0.49,
+  "notes": "The realistic state of a tank that has had work on it: loops isolated, return to service recorded somewhere else, and the vent line shut after the roof inspection."
+ },
+ {
+  "id": "tk_alarm_fatigue",
+  "twin": "tank_transfer",
+  "label": "Rack with a noisy level transmitter and a crowded bund",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "alarmFrequentFalse": true,
+   "driftRate": 0.35,
+   "shiftsPerYear": 180
   },
-  {
-    "id": "tk_uprated",
-    "twin": "tank_transfer",
-    "label": "Tank uprated for throughput, freeboard reduced, bund partially full",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "driftRate": 0.2,
-      "shiftsPerYear": 260,
-      "alarmFrequentFalse": true
-    },
-    "provenRecent": true,
-    "preIsolated": [
-      "V4"
-    ],
-    "product": "toluene",
-    "freeboardPct": 0.49,
-    "notes": "Capacity was added by shortening the margin rather than by building a tank: the batch now ends 3.5 cm below the high level alarm, the vent line is shut after the roof inspection, and part of the bund capacity has been taken up by the previous shift. Every barrier is thin at the same time."
+  "provenRecent": false,
+  "preIsolated": [],
+  "instrumentDrift": {
+   "level": -0.3
   },
-  {
-    "id": "fn_after_lining_repair",
-    "twin": "furnace_lightoff",
-    "label": "Furnace 4, first light-off after a partial re-line",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "driftRate": 0.25,
-      "shiftsPerYear": 2
-    },
-    "provenRecent": false,
-    "preIsolated": [
-      "GASLEAK"
-    ],
-    "instrumentDrift": {
-      "level": 30
-    },
-    "product": "natural_gas",
-    "freeboardPct": 0.15,
-    "notes": "Thermocouple reads high after replacement, one burner management valve is passing, and the lining still holds water."
+  "product": "toluene",
+  "freeboardPct": 0.5,
+  "notes": "The crew has learned to discount the alarm, and the indicator reads low. Both of those are conditions the procedure never mentions."
+ },
+ {
+  "id": "tk_uprated",
+  "twin": "tank_transfer",
+  "label": "Tank uprated for throughput, freeboard reduced, bund partially full",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.2,
+   "shiftsPerYear": 260,
+   "alarmFrequentFalse": true
   },
-  {
-    "id": "fn_cold_restart",
-    "twin": "furnace_lightoff",
-    "label": "Furnace 4, cold restart after a planned outage",
-    "protection": {
-      "independent": true,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": true,
-      "driftRate": 0.12,
-      "shiftsPerYear": 60
-    },
-    "provenRecent": true,
-    "preIsolated": [],
-    "product": "natural_gas",
-    "freeboardPct": 0.1,
-    "notes": "Clean configuration. The residual risk is the ramp schedule and the purge, both of which are human timed."
+  "provenRecent": true,
+  "preIsolated": [
+   "V4"
+  ],
+  "product": "toluene",
+  "freeboardPct": 0.49,
+  "notes": "Capacity was added by shortening the margin rather than by building a tank: the batch now ends 3.5 cm below the high level alarm, the vent line is shut after the roof inspection, and part of the bund capacity has been taken up by the previous shift. Every barrier is thin at the same time."
+ },
+ {
+  "id": "fn_after_lining_repair",
+  "twin": "furnace_lightoff",
+  "label": "Furnace 4, first light-off after a partial re-line",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.25,
+   "shiftsPerYear": 2
   },
-  {
-    "id": "tk_buncefield_shape",
-    "twin": "tank_transfer",
-    "label": "Tank uprated without review, high-high switch bypassed since installation",
-    "protection": {
-      "independent": false,
-      "pis": true,
-      "lah": true,
-      "containment": true,
-      "interlock": false,
-      "alarmFrequentFalse": true,
-      "driftRate": 0.4,
-      "shiftsPerYear": 120
-    },
-    "provenRecent": false,
-    "preIsolated": [
-      "PIS",
-      "LAH"
-    ],
-    "instrumentDrift": {
-      "level": -0.9
-    },
-    "product": "toluene",
-    "freeboardPct": 0.47,
-    "notes": "The shape that produced a real overfill: the display had flat-lined low, the independent high-high switch was never in service since installation, and the level alarm shared the failed measurement. The crew did every step the procedure asked for, on an instrument that was lying to them."
-  }
+  "provenRecent": false,
+  "preIsolated": [
+   "GASLEAK"
+  ],
+  "instrumentDrift": {
+   "level": 30
+  },
+  "product": "natural_gas",
+  "freeboardPct": 0.15,
+  "notes": "Thermocouple reads high after replacement, one burner management valve is passing, and the lining still holds water."
+ },
+ {
+  "id": "fn_cold_restart",
+  "twin": "furnace_lightoff",
+  "label": "Furnace 4, cold restart after a planned outage",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.12,
+   "shiftsPerYear": 60
+  },
+  "provenRecent": true,
+  "preIsolated": [],
+  "product": "natural_gas",
+  "freeboardPct": 0.1,
+  "notes": "Clean configuration. The residual risk is the ramp schedule and the purge, both of which are human timed."
+ },
+ {
+  "id": "tk_buncefield_shape",
+  "twin": "tank_transfer",
+  "label": "Tank uprated without review, high-high switch bypassed since installation",
+  "protection": {
+   "independent": false,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": false,
+   "alarmFrequentFalse": true,
+   "driftRate": 0.4,
+   "shiftsPerYear": 120
+  },
+  "provenRecent": false,
+  "preIsolated": [
+   "PIS",
+   "LAH"
+  ],
+  "instrumentDrift": {
+   "level": -0.9
+  },
+  "product": "toluene",
+  "freeboardPct": 0.47,
+  "notes": "The shape that produced a real overfill: the display had flat-lined low, the independent high-high switch was never in service since installation, and the level alarm shared the failed measurement. The crew did every step the procedure asked for, on an instrument that was lying to them."
+ },
+ {
+  "id": "fn_production_clean",
+  "twin": "furnace_operating",
+  "label": "Furnace 4 on production, charge hot from the caster, protections in service",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.1,
+   "shiftsPerYear": 320
+  },
+  "provenRecent": true,
+  "preIsolated": [],
+  "product": "natural_gas",
+  "freeboardPct": 0.4,
+  "notes": "What the procedure assumes: a reheater already at temperature, hot slab at the charge face, roof pressure on setpoint and every loop signed back. The failure rate here is the price of the rate-of-change rules being broken by a competent crew."
+ },
+ {
+  "id": "fn_after_pyrometer_change",
+  "twin": "furnace_operating",
+  "label": "Furnace 4, discharge pyrometer replaced last week and burner train 2 sluggish",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.35,
+   "shiftsPerYear": 18
+  },
+  "provenRecent": false,
+  "preIsolated": [
+   "ALARM",
+   "BURNER_CLOG",
+   "TC_SOAK"
+  ],
+  "instrumentDrift": {
+   "level": 40
+  },
+  "product": "natural_gas",
+  "freeboardPct": 0.4,
+  "notes": "The new pyrometer reads 40 C high and took the high slab temperature alarm out of service with it, and the cleaned burner train was never proved back, so the crew is asked to hold a rolling window on an instrument that is telling them the metal is in it when it is not."
+ },
+ {
+  "id": "fn_cold_charge_mill_waiting",
+  "twin": "furnace_operating",
+  "label": "Furnace 4, cold charge railed in from the yard with the mill waiting",
+  "protection": {
+   "independent": true,
+   "pis": true,
+   "lah": true,
+   "containment": true,
+   "interlock": true,
+   "driftRate": 0.15,
+   "shiftsPerYear": 60
+  },
+  "provenRecent": true,
+  "preIsolated": [
+   "COLD_CHARGE"
+  ],
+  "product": "natural_gas",
+  "freeboardPct": 0.35,
+  "notes": "Slabs at 160 C instead of 420 C, a grade change asked for on top of that, and a delivery slot that has not moved. The furnace can still hold the window if the hearth is slowed, and everything in the schedule is against doing it."
+ },
+ {
+  "id": "fn_damper_sticking",
+  "twin": "furnace_operating",
+  "label": "Furnace 4, flue damper sticking with the burner management function still signed off",
+  "protection": {
+   "independent": false,
+   "pis": false,
+   "lah": true,
+   "containment": true,
+   "interlock": false,
+   "driftRate": 0.3,
+   "shiftsPerYear": 24
+  },
+  "provenRecent": false,
+  "preIsolated": [
+   "TRIP",
+   "DAMPER_STUCK"
+  ],
+  "product": "natural_gas",
+  "freeboardPct": 0.4,
+  "notes": "The damper link was freed and never proved back, so the flue path is part-width, and the burner management function is still signed off from the permit. This furnace has no hard-wired independent stop: what stands between a positive chamber and a deflagration is the crew reading the pressure and taking fuel out."
+ }
 ]

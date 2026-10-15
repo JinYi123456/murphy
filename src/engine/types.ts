@@ -204,7 +204,11 @@ export type OutcomeClass =
   | 'shell_hotspot'
   | 'no_light_off'
   | 'scrap_batch'
-  | 'scrap_batch'
+  | 'cold_slab_scrap'
+  | 'overheat_scrap'
+  | 'refractory_overtemp'
+  | 'flame_out'
+  | 'production_hold'
   | 'hot_start';
 
 /**
@@ -231,6 +235,18 @@ export const SEVERITY: Record<string, 'normal' | 'upset' | 'incident'> = {
   shell_hotspot: 'incident',
   hot_start: 'incident',
   scrap_batch: 'upset',
+  /**
+   * An operating reheat furnace reports to two different sheets. Metal that is
+   * too cold to roll is a production upset the mill absorbs; metal that is
+   * over-heated has left the rolling window in the direction that cannot be
+   * recovered by re-heating it, and it usually means the refractory saw the same
+   * temperature the slab did. That is damage, not a schedule problem.
+   */
+  cold_slab_scrap: 'upset',
+  overheat_scrap: 'incident',
+  production_hold: 'upset',
+  flame_out: 'incident',
+  refractory_overtemp: 'incident',
 };
 
 export function severityOf(outcome: string): 'normal' | 'upset' | 'incident' {

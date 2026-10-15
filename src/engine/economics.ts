@@ -21,6 +21,24 @@ const C = costs as unknown as {
   products: Record<string, { eurPerM3: number; recoveryContained: number; recoveryEscaped: number; flammable: boolean }>;
   terminal: Record<string, number>;
   furnace: Record<string, number>;
+  furnaceOperating: {
+    scrapEurPerTonne: number;
+    goodEurPerTonne: number;
+    burnOffEurPerTonne: number;
+    gasEurPerKwh: number;
+    gasKwhPerM3: number;
+    lineIdleEurPerHour: number;
+    flameOutRepairEur: number;
+    flameOutHoldH: number;
+    deflagrationRepairEur: number;
+    deflagrationHoldH: number;
+    refractoryRepairEur: number;
+    refractoryHoldH: number;
+    surveyFlatEur: number;
+    surveyHoldH: number;
+    reheatFlatEur: number;
+    reheatHoldH: number;
+  };
   fines: { reportableThresholdM3: number; fixedEur: number; perEscapedM3Eur: number; capEur: number };
   escalation: { ignitionProbabilityPerEvent: number; catastrophicEur: number; catastrophicFurnaceEur: number; byClass: Record<string, number> };
 };
@@ -109,8 +127,74 @@ export function costFurnace(outcome: string, mag: Record<string, number>): CostB
   };
 }
 
+/**
+ * An operating reheat furnace loses money in four ways only: metal the mill will
+ * not take, metal burned off as scale, gas burned above what the schedule should
+ * have needed, and hours the mill sat waiting for slab. Nothing here is a
+ * judgement about safety; the incident rows are repair and hold costs the plant
+ * actually books.
+ */
+export function costFurnaceOperating(outcome: string, mag: Record<string, number>): CostBreakdown {
+  const O = C.furnaceOperating;
+  const items: CostBreakdown['items'] = [];
+  const add = (label: string, eur: number, source: string) => {
+    if (eur > 0.5) items.push({ label, eur, source });
+  };
+  let downtimeH = (mag.downtimeMin ?? 0) / 60;
+
+  const scrap = mag.tonnesScrap ?? 0;
+  const burnOff = mag.burnoffT ?? 0;
+  const shortfall = mag.heatShortfallT ?? 0;
+  const gasAbove = mag.gasAboveRefM3 ?? 0;
+
+  if (scrap > 0) {
+    add('Scrapped slab', scrap * O.scrapEurPerTonne, 'revert value of a reheated slab: metal, cast product and yard handling, net of scrap credit');
+  }
+  if (burnOff > 0) {
+    add('Burn-off and scale loss', burnOff * O.burnOffEurPerTonne, 'lost yield valued at the hot-delivery price of the tonne the mill did not receive');
+  }
+  if (shortfall > 0) {
+    add('Heat not delivered to the mill', shortfall * O.goodEurPerTonne, 'contribution margin per tonne of rolled product lost when the schedule misses its heat');
+  }
+  if (gasAbove > 0) {
+    add('Gas above the scheduled specific energy', gasAbove * O.gasKwhPerM3 * O.gasEurPerKwh, 'industrial gas tariff at the meter, per kWh of net calorific value');
+  }
+
+  if (outcome === 'deflagration') {
+    add('Chamber, burner blocks and lining rebuild', O.deflagrationRepairEur, 'rebuild after an internal deflagration in an operating reheat furnace');
+    downtimeH += O.deflagrationHoldH;
+  } else if (outcome === 'flame_out') {
+    add('Burner train and chamber inspection after a blow-out', O.flameOutRepairEur, 'inspect, dry out and re-set the burners after combustion lifted off');
+    downtimeH += O.flameOutHoldH;
+  } else if (outcome === 'refractory_overtemp') {
+    add('Roof panel cut-out and re-gun', O.refractoryRepairEur, 'refractory contractor rate for the patch a soak roof needs after an over-temperature excursion');
+    downtimeH += O.refractoryHoldH;
+  } else if (outcome === 'overheat_scrap' || outcome === 'refractory_damage' || outcome === 'shell_hotspot') {
+    add('Ultrasonic lining survey and thermal monitoring', O.surveyFlatEur, 'NDT campaign on a lining that has been run above its design temperature');
+    downtimeH += O.surveyHoldH;
+  } else if (outcome === 'cold_slab_scrap' || outcome === 'scrap_batch') {
+    add('Re-heat of the rejected charge and yard handling', O.reheatFlatEur, 'cost of returning rejected slab to the furnace or the yard and re-scheduling the heat');
+    downtimeH += O.reheatHoldH;
+  }
+
+  if (downtimeH > 0) add('Line idle', downtimeH * O.lineIdleEurPerHour, 'contribution margin lost per hour the reheat furnace cannot feed the rolling mill');
+
+  const total = items.reduce((a, b) => a + b.eur, 0);
+  const escProb = C.escalation.byClass[outcome] ?? 0;
+  return {
+    totalEur: total,
+    items,
+    downtimeH,
+    escalationEur: escProb * C.escalation.catastrophicFurnaceEur,
+    // no reheat outcome is a release to the environment; a chamber that pops is
+    // reported as damage and as an injury near-miss, not as a spill
+    reportable: outcome === 'deflagration',
+  };
+}
+
 export function costOf(twin: string, outcome: string, mag: Record<string, number>, product: string): CostBreakdown {
   if (twin === 'furnace_lightoff') return costFurnace(outcome, mag);
+  if (twin === 'furnace_operating') return costFurnaceOperating(outcome, mag);
   return costTank(outcome, mag, product);
 }
 

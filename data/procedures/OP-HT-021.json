@@ -1,0 +1,1008 @@
+{
+  "id": "OP-HT-021",
+  "title": "Production grade change and heat run-out on reheat furnace 4",
+  "twin": "furnace_operating",
+  "revision": "4",
+  "language": "en",
+  "roles": [
+    "field operator",
+    "control room",
+    "verifier"
+  ],
+  "summary": "Raise SOAK-1 for a harder grade on a furnace that is already charging, hold the slab inside the rolling window, and hand the mill a heat of 96 t without putting the chamber into positive pressure.",
+  "sourceDocument": "data/sop/OP-HT-021.md",
+  "warnings": [
+    {
+      "id": "W1",
+      "label": "Step 5 asks for a six minute wait but gives no criterion for when the chamber has answered, so the wait can be closed on a trend that has not started to move",
+      "cond": "ambiguous_wording",
+      "level": 3,
+      "steps": [
+        "p5"
+      ]
+    },
+    {
+      "id": "W2",
+      "label": "Step 7 conditions the last setpoint movement on a single oxygen reading from an analyser whose response time the procedure never states",
+      "cond": "timing_critical",
+      "level": 3,
+      "steps": [
+        "p6",
+        "p7"
+      ]
+    },
+    {
+      "id": "W3",
+      "label": "SOAK-1 and SOAK-2 share one panel, and the fuel trim is a single train-wide signal the sheet writes as if it belonged to one zone",
+      "cond": "confusable_device",
+      "level": 2,
+      "steps": [
+        "p4",
+        "p7",
+        "p8"
+      ]
+    },
+    {
+      "id": "W4",
+      "label": "Section 3 says change one lever and wait, section 4 says slow the hearth on a cold charge, and the procedure does not say which of the two wins when the delivery slot is closing",
+      "cond": "time_pressure",
+      "level": 3,
+      "steps": [
+        "p8",
+        "p10"
+      ]
+    },
+    {
+      "id": "W5",
+      "label": "Step 9 requires the reading to be stable for two consecutive checks and never states how far apart the two checks have to be",
+      "cond": "absent_cue",
+      "level": 2,
+      "steps": [
+        "p9"
+      ]
+    },
+    {
+      "id": "W6",
+      "label": "Step 2 requires the isolation register to be obtained rather than reconciled line by line against the fitter's sign-back",
+      "cond": "post_maintenance_state",
+      "level": 2,
+      "steps": [
+        "p2"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "p1",
+      "title": "Confirm the grade change and the delivery slot with the mill",
+      "text": "Confirm with the mill the soak condition being asked for, the scheduled tonnage of 96 t and the time the delivery slot closes. Write the slot time on the heat sheet.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "communicate",
+      "cond": [
+        "ambiguous_wording",
+        "teamwork"
+      ],
+      "durS": 120,
+      "applies": {
+        "MILL": 1
+      },
+      "errors": [
+        {
+          "id": "p1e1",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Worked from what the previous shift said the mill wanted. Nobody has the slot time written down",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p1e2",
+          "kind": "misread",
+          "weight": 40,
+          "text": "The grade sheet asks for 1255 C at the table and he has written 1275, because the mill phrased it as an increase on the last heat",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p1e3",
+          "kind": "wrong_target",
+          "weight": 30,
+          "text": "Confirmed the slot with the delivery roller, which is taking slab, rather than with the crew who own the schedule",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Reconcile the instrument register after the pyrometer change",
+      "text": "If the discharge pyrometer or any soak thermocouple has been changed in the last 14 days, reconcile the instrument register with the control room and confirm the high slab temperature alarm and the burner management interlock have been returned to service and signed back by the fitter.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "verify",
+      "gtt": "F",
+      "cond": [
+        "post_maintenance_state",
+        "incomplete_function_test",
+        "ambiguous_wording"
+      ],
+      "durS": 300,
+      "applies": {
+        "ALARM": 1,
+        "TRIP": 1
+      },
+      "errors": [
+        {
+          "id": "p2e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "The register is in the control room and the mill is waiting. Assumed the fitter signed the loops back like he always does",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p2e2",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Confirmed the row for the soak-1 thermocouple. The isolation that matters is the next row down, the discharge pyrometer the alarm shares a measurement with",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p2e3",
+          "kind": "incomplete",
+          "weight": 30,
+          "text": "Both loops confirmed in service. Nobody ran the interlock function test after the thermocouple went in, so it is proved on paper only",
+          "patch": {
+            "TRIPFAIL": 1
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "Set the air trim to the reference position for this grade",
+      "text": "Set the air trim to the reference position for this grade and confirm the flue gas oxygen analyser is reading live rather than frozen.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "confusable_device",
+        "mistrust"
+      ],
+      "durS": 180,
+      "applies": {
+        "cmdAir": 1
+      },
+      "errors": [
+        {
+          "id": "p3e1",
+          "kind": "wrong_target",
+          "weight": 35,
+          "text": "Moved the general excess air for the whole furnace instead of the trim for the zone being fired, which puts the oxygen reading above the limit for every movement that follows",
+          "patch": {
+            "cmdAir": 1.3
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p3e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Left the trim where the last heat had it because the oxygen looked steady",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p3e3",
+          "kind": "wrong_direction",
+          "weight": 35,
+          "text": "Turned it the wrong way and leaned the furnace down to 0.8, which reads as a healthy low oxygen number and burns gas for nothing",
+          "patch": {
+            "cmdAir": 0.8
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "title": "Raise SOAK-1 to 1235 C, one lever only",
+      "text": "Raise SOAK-1 to 1235 C. One lever only.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "confusable_device",
+        "time_pressure"
+      ],
+      "durS": 180,
+      "applies": {
+        "cmdSoak1": 1235
+      },
+      "errors": [
+        {
+          "id": "p4e1",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Gave SOAK-1 the whole 60 C the grade wanted in one movement, because the slot was closing and the chamber would get there eventually",
+          "patch": {
+            "cmdSoak1": 1275
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p4e2",
+          "kind": "out_of_sequence",
+          "weight": 25,
+          "text": "Moved SOAK-1 and the hearth speed in the same action to save a walk back to the panel",
+          "patch": {
+            "cmdSoak1": 1235,
+            "cmdSpeed": 30
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p4e3",
+          "kind": "wrong_target",
+          "weight": 25,
+          "text": "Raised SOAK-2, whose faceplate sits next to SOAK-1 on the retrofit panel",
+          "patch": {
+            "cmdSoak2": 1282
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p4e4",
+          "kind": "omission",
+          "weight": 20,
+          "text": "Assumed the night shift had already started the raise and left the setpoint where it was",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "title": "Wait for the chamber to answer, then raise SOAK-1 to 1255 C",
+      "text": "Change one lever at a time and wait about six minutes between movements. While you wait, confirm the induced draft fan is in automatic and the roof pressure is holding. When the chamber has answered the movement you have already made, raise SOAK-1 to 1255 C.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "gtt": "D",
+      "cond": [
+        "timing_critical",
+        "poor_procedure",
+        "time_pressure"
+      ],
+      "durS": 60,
+      "applies": {
+        "IDF": 1
+      },
+      "watch": {
+        "var": "sinceMove",
+        "atLeast": 420,
+        "onHit": {
+          "cmdSoak1": 1255
+        },
+        "scheduledS": 360,
+        "maxWaitS": 1200,
+        "lateMaxS": 420
+      },
+      "errors": [
+        {
+          "id": "p5e1",
+          "kind": "premature",
+          "weight": 35,
+          "text": "The chamber had not answered and the mill was on the radio about the slot, so he punched the next stage straight in",
+          "patch": {
+            "cmdSoak1": 1255
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p5e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Left the wait to the controller profile and went back to the pit to meet the next slab car",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p5e3",
+          "kind": "misread",
+          "weight": 20,
+          "text": "Called it settled because the number on the trend had stopped moving, which is also what a wound-up controller does while it holds",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p5e4",
+          "kind": "commission",
+          "weight": 15,
+          "text": "Filled the wait by trimming the fuel, which is a second lever and not a pause",
+          "patch": {
+            "cmdTrim": 8
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "title": "Confirm the oxygen reading is live and the roof pressure is on setpoint",
+      "text": "Confirm that the roof pressure is still between 8 and 20 mbar, that the flue gas oxygen has not risen, and that the analyser is responding. Take the fuel trim back to zero if it is not needed.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "verify",
+      "similarity": 2,
+      "cond": [
+        "mistrust",
+        "absent_cue",
+        "ambiguous_wording"
+      ],
+      "durS": 420,
+      "applies": {
+        "cmdTrim": 0
+      },
+      "verify": {
+        "of": [
+          "p3"
+        ],
+        "via": "gauge",
+        "kind": "verify"
+      },
+      "errors": [
+        {
+          "id": "p6e1",
+          "kind": "misread",
+          "weight": 40,
+          "text": "Took a frozen analyser reading as a live one. The number had not moved for an hour, which is exactly how a dead cell behaves",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p6e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Pressure and oxygen are not on the same page of the screen as the setpoints, so he did not look",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p6e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Opened the excess air to force a high oxygen reading down, against the reason the reading was high",
+          "patch": {
+            "cmdAir": 1.45
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "title": "Raise SOAK-1 to 1275 C by no more than 20 C, and only while O2 is below 5.5 per cent",
+      "text": "Raise SOAK-1 by no more than 20 C, and only while flue-gas O2 is below 5.5 per cent. If the oxygen is at or above the limit, correct the air first and leave this setpoint alone.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "timing_critical",
+        "time_pressure",
+        "mistrust",
+        "confusable_device"
+      ],
+      "durS": 420,
+      "applies": {
+        "cmdSoak1": 1275
+      },
+      "errors": [
+        {
+          "id": "p7e1",
+          "kind": "commission",
+          "weight": 35,
+          "text": "Raised the setpoint with the oxygen reading 6.8 per cent, because the analyser has been wrong before and the mill was waiting",
+          "patch": {
+            "cmdSoak1": 1275
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p7e2",
+          "kind": "commission",
+          "weight": 25,
+          "text": "Overshot the last stage to 1320 C to make up the time lost on the wait, taking 45 C off one movement",
+          "patch": {
+            "cmdSoak1": 1320
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p7e3",
+          "kind": "wrong_target",
+          "weight": 20,
+          "text": "Raised the preheat setpoint instead. The chamber answers it slowly and the mill never sees the difference, so the gas has gone somewhere nobody asked for",
+          "patch": {
+            "cmdPre": 1085
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p7e4",
+          "kind": "delayed_response",
+          "weight": 20,
+          "text": "Waited for the control room to confirm the oxygen over the radio, and the slot moved on while he waited",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "title": "If the band is not reached, fuel trim to a maximum of plus 12 per cent",
+      "text": "Fuel trim to any zone must not exceed plus 12 per cent, and a target temperature increase must not exceed 30 C in one movement. If the furnace has not reached the band with plus 12 per cent of trim, the answer is residence time and not more gas.",
+      "role": "field operator",
+      "cue": "label",
+      "kind": "actuate",
+      "similarity": 3,
+      "cond": [
+        "ambiguous_wording",
+        "time_pressure",
+        "confusable_device"
+      ],
+      "durS": 300,
+      "applies": {
+        "cmdTrim": 12
+      },
+      "errors": [
+        {
+          "id": "p8e1",
+          "kind": "commission",
+          "weight": 35,
+          "text": "Put thirty per cent of trim on the fired zone to get the band back inside the delivery slot",
+          "patch": {
+            "cmdTrim": 30
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p8e2",
+          "kind": "wrong_target",
+          "weight": 25,
+          "text": "Gave each of the two soak zones plus twelve, not knowing the trim on this furnace is one train-wide signal and not a per-zone one",
+          "patch": {
+            "cmdTrim": 24
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p8e3",
+          "kind": "commission",
+          "weight": 20,
+          "text": "Bought the missing degrees with pace instead of fuel and put the hearth up eight slabs an hour",
+          "patch": {
+            "cmdSpeed": 32
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p8e4",
+          "kind": "omission",
+          "weight": 20,
+          "text": "Left the trim off and told the mill the furnace could not make the band, which is a conversation nobody wants at the end of a shift",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p9",
+      "title": "Watch the slab temperature at the discharge table until it is stable in the band",
+      "text": "Watch the slab temperature at the discharge table until it is in the band the mill asked for. The metal is only on grade when the reading is stable for two consecutive checks, and the high slab temperature alarm has to be in front of you while you wait.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "gtt": "D",
+      "cond": [
+        "absent_cue",
+        "mistrust",
+        "situation_awareness"
+      ],
+      "durS": 120,
+      "applies": {
+        "ALARM": 1
+      },
+      "watch": {
+        "var": "indicated:exitT",
+        "atLeast": 1250,
+        "alt": {
+          "var": "hazardT",
+          "atLeast": 1
+        },
+        "scheduledS": 420,
+        "maxWaitS": 1500,
+        "lateMaxS": 420
+      },
+      "errors": [
+        {
+          "id": "p9e1",
+          "kind": "delayed_response",
+          "weight": 35,
+          "text": "Was at the pit when the table came into the band and did not see it, so the furnace sat on the new setpoint for another ten minutes",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p9e2",
+          "kind": "misread",
+          "weight": 35,
+          "text": "The new pyrometer reads high, so the table says the band has been reached while the metal is still under it",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p9e3",
+          "kind": "omission",
+          "weight": 30,
+          "text": "Took the second check a minute after the first, because the sheet never said how far apart they have to be",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "title": "If the charge is running cold at the table, slow the hearth to 18 slabs an hour",
+      "text": "If the metal is reading cold at the table, slow the hearth to 18 slabs an hour and hold it there. Slower means hotter. Do not buy the difference with fuel.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "absent_cue",
+        "situation_awareness",
+        "time_pressure"
+      ],
+      "durS": 240,
+      "applies": {
+        "cmdSpeed": 18
+      },
+      "guard": {
+        "var": "indicated:exitT",
+        "op": "lt",
+        "value": 1185
+      },
+      "deadline": {
+        "var": "scrapT",
+        "op": "lt",
+        "value": 12
+      },
+      "errors": [
+        {
+          "id": "p10e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "The table read 1206 C so there was nothing to correct. The pyrometer has been reading high since it went in",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p10e2",
+          "kind": "wrong_direction",
+          "weight": 30,
+          "text": "Sped the hearth up to catch the schedule, which takes residence time off metal that already has too little of it",
+          "patch": {
+            "cmdSpeed": 30
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p10e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Made up the missing heat with gas and put the trim well past the limit, which is the thing step 8 forbids",
+          "patch": {
+            "cmdTrim": 26
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "title": "If the flue gas is above 5.5 per cent oxygen, correct the air before anything else",
+      "text": "If the flue gas oxygen is at or above 5.5 per cent, correct the air trim back to reference and leave every setpoint alone until the reading is below the limit.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "mistrust",
+        "ambiguous_wording",
+        "timing_critical"
+      ],
+      "durS": 180,
+      "applies": {
+        "cmdAir": 1
+      },
+      "guard": {
+        "var": "o2",
+        "op": "gt",
+        "value": 5.5
+      },
+      "errors": [
+        {
+          "id": "p11e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "A high oxygen reading has never hurt anything, so he left it and got on with the setpoints",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p11e2",
+          "kind": "wrong_direction",
+          "weight": 35,
+          "text": "Corrected a high oxygen reading by leaning the furnace down to 0.8, which puts unburnt gas in the chamber to make the number look right",
+          "patch": {
+            "cmdAir": 0.8
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p11e3",
+          "kind": "incomplete",
+          "weight": 25,
+          "text": "Moved the fuel trim instead of the air, so the oxygen stayed where it was and more gas went in with it",
+          "patch": {
+            "cmdTrim": 18
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "title": "Walk the shell survey and confirm the cooling water is pumping",
+      "text": "Walk the shell survey points and confirm the hearth and roof cooling water pump and mixer are in service. A rising shell reading on a cold-charge heat is the lining being asked to hold heat the charge would not take.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "verify",
+      "gtt": "F",
+      "cond": [
+        "absent_cue",
+        "fatigue",
+        "poor_procedure"
+      ],
+      "durS": 300,
+      "applies": {
+        "MIX": 1
+      },
+      "errors": [
+        {
+          "id": "p12e1",
+          "kind": "incomplete",
+          "weight": 40,
+          "text": "Did the points reachable from the walkway. The patched roof panel is only visible from the ladder the scaffold came off",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p12e2",
+          "kind": "omission",
+          "weight": 30,
+          "text": "The cooling water manifold is behind the gas train and he was not going to crawl past it again",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p12e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Found the shell hot and switched the cooling pump to local, then left it in manual stop to clear the nuisance alarm it was making",
+          "patch": {
+            "MIX": 0
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p13",
+      "title": "Confirm on the radio that the mill is still taking slab",
+      "text": "Confirm on the radio, to the delivery roller, that the mill is still taking slab.",
+      "role": "field operator",
+      "cue": "verbal",
+      "kind": "verify",
+      "cond": [
+        "teamwork",
+        "situation_awareness",
+        "distraction"
+      ],
+      "durS": 120,
+      "applies": {
+        "MILL": 1
+      },
+      "errors": [
+        {
+          "id": "p13e1",
+          "kind": "omission",
+          "weight": 45,
+          "text": "Assumed the mill was taking slab because the furnace was still running, which is the wrong way round",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p13e2",
+          "kind": "misread",
+          "weight": 30,
+          "text": "The radio answer he got was for furnace 3 on the same channel, and it happened to be the answer he expected",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p13e3",
+          "kind": "commission",
+          "weight": 25,
+          "text": "Put the pusher back in automatic before anyone had confirmed the mill side was clear",
+          "patch": {
+            "PUSH": 1,
+            "MILL": 0
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p14",
+      "title": "If the mill has stopped, put the hearth in hold and stop the pusher",
+      "text": "If the line has stopped, put the hearth in hold and stop the pusher. Do not keep charging a furnace that is not discharging, and note the time: a furnace that has stood on a stopped mill for more than thirty minutes goes back to the standby firing position.",
+      "role": "field operator",
+      "cue": "light",
+      "kind": "actuate",
+      "similarity": 2,
+      "cond": [
+        "timing_critical",
+        "unprepared_exception",
+        "time_pressure"
+      ],
+      "durS": 180,
+      "applies": {
+        "PUSH": 0
+      },
+      "guard": {
+        "var": "lineSpeed",
+        "op": "lt",
+        "value": 14
+      },
+      "errors": [
+        {
+          "id": "p14e1",
+          "kind": "omission",
+          "weight": 45,
+          "text": "Left the pusher in automatic because the yard already had slab cars on the road, and the furnace filled up against a stopped mill",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p14e2",
+          "kind": "commission",
+          "weight": 30,
+          "text": "When the mill came back he picked the pace up to catch the schedule rather than bringing it back to reference",
+          "patch": {
+            "cmdSpeed": 32
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p14e3",
+          "kind": "premature",
+          "weight": 25,
+          "text": "Took the furnace off the burners on a mill stop that lasted four minutes, and the chamber fell far enough that the next metal was under the window",
+          "patch": {
+            "BURN": 0
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p15",
+      "title": "Run the heat to the scheduled tonnage and stop at 96 t",
+      "text": "Run the heat to the scheduled tonnage. Stop when the discharge meter reads 96 t.",
+      "role": "field operator",
+      "cue": "gauge",
+      "kind": "monitor",
+      "similarity": 2,
+      "cond": [
+        "confusable_device",
+        "memory_load",
+        "fatigue"
+      ],
+      "durS": 300,
+      "applies": {
+        "BURN": 1
+      },
+      "until": {
+        "var": "goodT",
+        "atLeast": 96
+      },
+      "errors": [
+        {
+          "id": "p15e1",
+          "kind": "premature",
+          "weight": 30,
+          "text": "Cut the heat short because the slot had gone, and left metal in the furnace the mill would have taken",
+          "patch": {
+            "STOP": 1
+          },
+          "source": "analyst"
+        },
+        {
+          "id": "p15e2",
+          "kind": "misread",
+          "weight": 35,
+          "text": "The discharge meter is a cumulative total and he worked the batch out from memory in the second hour of a long shift",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p15e3",
+          "kind": "omission",
+          "weight": 35,
+          "text": "Left the heat running to the meter and went to help discharge the yard",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p16",
+      "title": "Independent check of the setpoint movements against the grade sheet",
+      "text": "Have the second operator check the SOAK-1 movements, the trim used and the oxygen reading at each movement against the grade sheet, and confirm SOAK-1 is at 1275 C. Both of you sign.",
+      "role": "verifier",
+      "cue": "document",
+      "kind": "verify",
+      "gtt": "F",
+      "cond": [
+        "memory_load",
+        "teamwork",
+        "ambiguous_wording"
+      ],
+      "durS": 240,
+      "applies": {
+        "cmdSoak1": 1275
+      },
+      "xcheck": true,
+      "verify": {
+        "of": [
+          "p4",
+          "p5",
+          "p7"
+        ],
+        "via": "document",
+        "kind": "verify"
+      },
+      "errors": [
+        {
+          "id": "p16e1",
+          "kind": "omission",
+          "weight": 40,
+          "text": "Signed the sheet from the heat record without going to the panel to see what is actually set",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p16e2",
+          "kind": "misread",
+          "weight": 30,
+          "text": "Compared the sheet against the alarm log, which shows what announced and not what was moved",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p16e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Signed both names. There was no second operator free and the shift was ending",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "p17",
+      "title": "Take the trim off, tell the mill the heat is finished and record it",
+      "text": "Return the fuel trim to zero. Tell the mill the heat is finished and record the delivered tonnage, the scrap tonnage, the peak slab temperature and the gas burned on the heat sheet.",
+      "role": "field operator",
+      "cue": "document",
+      "kind": "communicate",
+      "cond": [
+        "ambiguous_wording",
+        "fatigue"
+      ],
+      "durS": 180,
+      "applies": {
+        "cmdTrim": 0
+      },
+      "verify": {
+        "of": [
+          "p13",
+          "p15"
+        ],
+        "via": "document",
+        "kind": "verify"
+      },
+      "errors": [
+        {
+          "id": "p17e1",
+          "kind": "omission",
+          "weight": 35,
+          "text": "Left the trim on for the next heat, which starts from a furnace already firing above its schedule",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p17e2",
+          "kind": "misread",
+          "weight": 35,
+          "text": "Recorded the setpoint as the slab temperature, carrying the pyrometer error into the heat record and into the next shift's starting position",
+          "patch": {},
+          "source": "analyst"
+        },
+        {
+          "id": "p17e3",
+          "kind": "commission",
+          "weight": 30,
+          "text": "Closed the burner trains to save the standby gas and did not tell the mill the furnace had gone off line",
+          "patch": {
+            "BURN": 0
+          },
+          "source": "analyst"
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "title": "Emergency: stop firing on a positive furnace or a blow-out",
+      "text": "If the furnace goes positive, if flame or gas comes back at an opening, or if the roof pressure reads above 35 mbar, stop firing at the local emergency stop, close the burner trains, leave the combustion air fan and the induced draft fan running, and call the control room on channel 2. Do not attempt to re-light until the chamber has been proved clear.",
+      "role": "field operator",
+      "cue": "physical",
+      "kind": "recover",
+      "gtt": "C",
+      "cond": [
+        "unprepared_exception",
+        "timing_critical",
+        "situation_awareness"
+      ],
+      "durS": 30,
+      "applies": {},
+      "emergency": {
+        "maxResponseS": 120,
+        "onHit": {
+          "BURN": 0,
+          "STOP": 1,
+          "FAN": 1,
+          "IDF": 1
+        }
+      },
+      "errors": [
+        {
+          "id": "e1e1",
+          "kind": "delayed_response",
+          "weight": 100,
+          "text": "The gas coming back at the peeking port was put down to the furnace breathing as a cold charge came in, which is a thing crews say",
+          "patch": {},
+          "source": "analyst"
+        }
+      ]
+    }
+  ]
+}
