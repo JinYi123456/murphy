@@ -161,6 +161,26 @@ function kernel(delta: number, sigma: number): number {
 }
 
 /**
+ * How many samples of a window count as independent evidence.
+ *
+ * A trajectory is not a set of independent readings: consecutive frames of the
+ * same curve carry the same information over and over, and multiplying them out
+ * as if they were independent would inflate the likelihood by the window length
+ * and make the confidence a function of how long you chose to look. Dividing by a
+ * decorrelation time of five samples (75 s at the historian's resolution) is a
+ * deliberate, stated approximation rather than a hidden one.
+ */
+const DECORR_SAMPLES = 5;
+
+/** exp-space addition without the underflow a 40-minute window produces. */
+function logSumExp(a: number, b: number): number {
+  if (!Number.isFinite(a)) return b;
+  if (!Number.isFinite(b)) return a;
+  const m = a > b ? a : b;
+  return m + Math.log(Math.exp(a - m) + Math.exp(b - m));
+}
+
+/**
  * Score every hypothesis against the observation and normalise with the priors.
  *
  * Each hypothesis is run forward `replicas` times from the same starting state
@@ -197,7 +217,7 @@ export function diagnose(
 
   for (const cand of cands) {
     const force = { stepId: cand.errorId === null ? '*' : cand.step.id, errorId: cand.errorId };
-    let score = 0;
+    const replicaScores: number[] = [];
     const resid: Record<string, number> = {};
     for (const c of channels) resid[c.name] = 0;
     for (let r = 0; r < replicas; r++) {
@@ -213,6 +233,10 @@ export function diagnose(
         if (!Number.isFinite(raw)) return 0;
         return indicated ? raw + (f.d.gaugeBias ?? f.d.tcBias ?? 0) : raw;
       };
+      // log-likelihoods add across channels; within a channel the mean log score
+      // is taken over samples and then scaled by the number of independent
+      // samples the window is worth
+      let ls = 0;
       for (const c of channels) {
         const series = obsDelta[c.name];
         const anchor = read(seg[0], c.name, c.indicated);
@@ -223,14 +247,21 @@ export function diagnose(
           if (obsIdx < 0) continue;
           const predDelta = read(seg[i], c.name, c.indicated) - anchor;
           const delta = series[obsIdx] - predDelta;
-          acc += kernel(delta, c.sigma);
+          acc += Math.log(Math.max(1e-12, kernel(delta, c.sigma)));
           resid[c.name] += Math.abs(delta);
           n++;
         }
-        if (n) score += acc / n;
+        if (!n) continue;
+        ls += (acc / n) * Math.max(1, Math.round(n / DECORR_SAMPLES));
       }
+      replicaScores.push(ls);
     }
-    const mean = score / Math.max(1, replicas * channels.length);
+    // replicas are alternative worlds that could have produced this one
+    // observation, so they mix: log(mean likelihood), not a sum
+    let logLik = -Infinity;
+    for (const v of replicaScores) logLik = logSumExp(logLik, v);
+    if (replicaScores.length) logLik -= Math.log(replicaScores.length);
+    if (!Number.isFinite(logLik)) logLik = -60;
     base.push({
       id: `${cand.step.id}/${cand.errorId ?? 'clean'}`,
       stepId: cand.step.id,
@@ -239,7 +270,7 @@ export function diagnose(
       errorKind: cand.kind,
       label: cand.label,
       prior: cand.prior,
-      logScore: Math.log(Math.max(1e-12, mean)),
+      logScore: logLik,
       posterior: 0,
       residual: Object.fromEntries(Object.entries(resid).map(([k, v]) => [k, v / Math.max(1, replicas * obs.tS.length)])),
     });

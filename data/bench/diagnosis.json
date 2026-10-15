@@ -48,10 +48,10 @@
     "e1/e1e1"
   ],
   "trials": 17,
-  "top1": 0.17647058823529413,
-  "top3": 0.5294117647058824,
+  "top1": 0.4117647058823529,
+  "top3": 0.9411764705882353,
   "chanceTop1": 0.058823529411764705,
-  "lift": 3.0000000000000004,
+  "lift": 7,
   "divergence": [
     {
       "id": "d1/d1e2",
@@ -334,103 +334,103 @@
     {
       "truth": "d1/d1e2",
       "rank": 0,
-      "posterior": 0.13924119136657853,
+      "posterior": 1,
       "top": "d1/d1e2"
     },
     {
       "truth": "d10/d10e1",
       "rank": 0,
-      "posterior": 0.09532223098765859,
+      "posterior": 0.35000000000000003,
       "top": "d10/d10e1"
     },
     {
       "truth": "d10/d10e2",
-      "rank": 5,
-      "posterior": 0.08170476941799301,
+      "rank": 2,
+      "posterior": 0.2999999999999998,
       "top": "d10/d10e1"
     },
     {
       "truth": "d10/d10e3",
       "rank": 1,
-      "posterior": 0.09532223098765859,
+      "posterior": 0.35000000000000003,
       "top": "d10/d10e1"
     },
     {
       "truth": "d8/d8e1",
       "rank": 0,
-      "posterior": 0.12311070698134156,
+      "posterior": 0.4500000000000002,
       "top": "d8/d8e1"
     },
     {
       "truth": "d8/d8e2",
-      "rank": 4,
-      "posterior": 0.06574919406157842,
+      "rank": 2,
+      "posterior": 0.24999999999999975,
       "top": "d8/d8e1"
     },
     {
       "truth": "d8/d8e3",
-      "rank": 3,
-      "posterior": 0.07852879514288162,
+      "rank": 1,
+      "posterior": 0.3000000000000001,
       "top": "d8/d8e1"
     },
     {
       "truth": "d12/d12e4",
-      "rank": 13,
-      "posterior": 0.04339301323248355,
-      "top": "d16/d16e1"
+      "rank": 0,
+      "posterior": 1,
+      "top": "d12/d12e4"
     },
     {
       "truth": "d15/d15e1",
-      "rank": 2,
-      "posterior": 0.07017382485938184,
-      "top": "d16/d16e1"
+      "rank": 0,
+      "posterior": 0.9790860061733693,
+      "top": "d15/d15e1"
     },
     {
       "truth": "d12/d12e1",
-      "rank": 2,
-      "posterior": 0.07761083716626693,
-      "top": "d6/d6e1"
+      "rank": 0,
+      "posterior": 0.41463414634142376,
+      "top": "d12/d12e1"
     },
     {
       "truth": "d12/d12e2",
-      "rank": 6,
-      "posterior": 0.055500666533344734,
-      "top": "d6/d6e1"
+      "rank": 1,
+      "posterior": 0.31682535006713686,
+      "top": "d12/d12e1"
     },
     {
       "truth": "d12/d12e3",
-      "rank": 13,
-      "posterior": 0.04372785404290261,
+      "rank": 5,
+      "posterior": 6.954977858647059e-13,
       "top": "d6/d6e1"
     },
     {
       "truth": "d16/d16e1",
       "rank": 1,
-      "posterior": 0.11505248103219104,
+      "posterior": 0.07121802635311375,
       "top": "d6/d6e1"
     },
     {
       "truth": "d4/d4e1",
-      "rank": 4,
-      "posterior": 0.06829449935221524,
-      "top": "d6/d6e1"
+      "rank": 0,
+      "posterior": 0.9999295103287313,
+      "top": "d4/d4e1"
     },
     {
       "truth": "d6/d6e1",
-      "rank": 1,
-      "posterior": 0.11488919788273425,
+      "rank": 2,
+      "posterior": 8.57533599739972e-11,
       "top": "d16/d16e1"
     },
     {
       "truth": "d14/d14e2",
-      "rank": 2,
-      "posterior": 0.0800293677790305,
+      "rank": 1,
+      "posterior": 0.15352299651617776,
       "top": "d6/d6e1"
     },
     {
       "truth": "d14/d14e3",
-      "rank": 5,
-      "posterior": 0.059361926651876736,
+      "rank": 2,
+      "posterior": 0.22983206243220805,
       "top": "d6/d6e1"
     }
   ]
