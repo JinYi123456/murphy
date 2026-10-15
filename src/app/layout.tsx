@@ -20,12 +20,14 @@ const serif = Instrument_Serif({
 export const metadata: Metadata = {
   title: 'MURPHY - procedural fuzzing for high-hazard operations',
   description:
-    'Software has fuzzing. Operating procedures have nothing. MURPHY runs thousands of error-prone simulated crews through a maintenance or transfer procedure against a physics twin of the plant, on AMD Instinct, and proves which edits actually reduce failure before anyone touches the real one.',
+    'Software has fuzzing. Operating procedures have nothing. MURPHY runs thousands of error-prone simulated crews through a maintenance or transfer procedure against a physics twin of the plant, in the browser or batched on a GPU, and proves which edits actually reduce failure before anyone touches the real one.',
   openGraph: {
     title: 'MURPHY - fuzz the procedure, not the plant',
     description:
-      'Human reliability analysis, a process twin and a GPU Monte-Carlo kernel, closed with a paired-statistics repair loop.',
-    images: ['/og.png'],
+      'Human reliability analysis, a process twin and a batched Monte-Carlo kernel, closed with a paired-statistics repair loop.',
+    // 1600x900, drawn by scripts/poster.py from a real fuzz run rather than
+    // illustrated, so the picture cannot disagree with what the app produces
+    images: ['/cover.png'],
   },
 };
 

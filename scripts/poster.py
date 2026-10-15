@@ -177,9 +177,12 @@ def main():
         d.text((x, 842), v, font=MONO, fill=col)
 
     os.makedirs("public", exist_ok=True)
+    os.makedirs(os.path.join("docs", "assets"), exist_ok=True)
     img.save("public/cover.png")
     img.convert("RGB").save("public/cover.jpg", quality=92)
-    print("wrote public/cover.png and cover.jpg")
+    # the README wants the line map on its own, at a size that stays legible
+    img.crop((40, 180, 830, 580)).save(os.path.join("docs", "assets", "line-map.png"))
+    print("wrote public/cover.png, cover.jpg and docs/assets/line-map.png")
 
 
 if __name__ == "__main__":
