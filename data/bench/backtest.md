@@ -10,22 +10,22 @@ This is a check on whether the model looks at the same mechanisms the investigat
 
 Model given: procedure **OP-TRF-014**, plant state **tk_buncefield_shape**, crews: daytime_competent, night_trainee, fatigued_relief, rushed_turnaround.
 
-Result: 9260 of 12000 simulated shifts ended in a loss (77.17%), mean EUR 3,070 per failed shift.
+Result: 673 of 12000 simulated shifts ended in a loss (5.61%), mean EUR 31,142 per failed shift.
 
 | published finding | recovered | rank | what the model said |
 | --- | --- | --- | --- |
-| The level instrument the crew relied on had failed in a way that produced no indication | yes | 4 | mistrust active at d9 for Day shift, competent operator |
-| The independent high-high function was present but bypassed, and nothing in the procedure proved it | yes | 3 | incomplete_function_test active at d9 for Day shift, competent operator |
-| The transfer relied on measurements that were not independent of one another | no | 15 | confusable_device active at d6 for Day shift, competent operator |
-| Crews had made a practice of working the batch down to the alarm band rather than keeping margin | yes | 7 | time_pressure active at d9 for Day shift, competent operator |
-| A change to the protection scheme went through without a management-of-change review | yes | 2 | post_maintenance_state active at d9 for Day shift, competent operator |
+| The level instrument the crew relied on had failed in a way that produced no indication | yes | 4 | mistrust active at d1 for Day shift, competent operator |
+| The independent high-high function was present but bypassed, and nothing in the procedure proved it | yes | 3 | incomplete_function_test active at d1 for Day shift, competent operator |
+| The transfer relied on measurements that were not independent of one another | no | 15 | confusable_device active at d15 for Day shift, competent operator |
+| Crews had made a practice of working the batch down to the alarm band rather than keeping margin | yes | 9 | time_pressure active at d2 for Day shift, competent operator |
+| A change to the protection scheme went through without a management-of-change review | yes | 2 | post_maintenance_state active at d1 for Day shift, competent operator |
 
 Top findings the model produced that the reports did not name:
-- (condition, rank 1) distraction active at d9 for Day shift, competent operator
+- (condition, rank 1) distraction active at d1 for Day shift, competent operator
 - (condition, rank 5) teamwork active at d3 for Night shift, two months in the job
-- (condition, rank 6) fatigue active at d12 for Day shift, competent operator
-- (condition, rank 8) absent_cue active at d3 for Day shift, competent operator
-- (condition, rank 9) ambiguous_wording active at d1 for Day shift, competent operator
+- (condition, rank 6) ambiguous_wording active at d1 for Day shift, competent operator
+- (condition, rank 7) low_experience active at d3 for Night shift, two months in the job
+- (condition, rank 8) fatigue active at d12 for Night shift, two months in the job
 
 ## CLC-GAS - Fuel gas accumulated in a furnace after an air-supply trip and ignited on re-light
 
@@ -33,21 +33,21 @@ Top findings the model produced that the reports did not name:
 
 Model given: procedure **OP-HT-006**, plant state **fn_after_lining_repair**, crews: daytime_competent, night_trainee, language_shift, rushed_turnaround.
 
-Result: 3002 of 12000 simulated shifts ended in a loss (25.02%), mean EUR 1,004,168 per failed shift.
+Result: 4103 of 12000 simulated shifts ended in a loss (34.19%), mean EUR 1,123,063 per failed shift.
 
 | published finding | recovered | rank | what the model said |
 | --- | --- | --- | --- |
-| Gas continued to enter an unlit chamber after the air supply was lost | no | 36 | Day shift, competent operator: Started the fan from the panel and left for the pilot. Nobody confirmed the air |
-| The indication that should have told the operator was on a screen he was not watching | yes | 9 | absent_cue active at h11 for Day shift, competent operator |
-| No step required the atmosphere to be proven clear again before re-ignition | no | 59 | Night shift, two months in the job: A second purge is forty minutes he does not have, so he tried the pilot ag |
+| Gas continued to enter an unlit chamber after the air supply was lost | no | 38 | Day shift, competent operator: Started the fan from the panel and left for the pilot. Nobody confirmed the air |
+| The indication that should have told the operator was on a screen he was not watching | yes | 7 | absent_cue active at h2 for Day shift, competent operator |
+| No step required the atmosphere to be proven clear again before re-ignition | no | 57 | Night shift, two months in the job: A second purge is forty minutes he does not have, so he tried the pilot ag |
 | The crew could not act inside the time the accumulation allowed | yes | 8 | timing_critical active at h5 for Day shift, competent operator |
 
 Top findings the model produced that the reports did not name:
-- (condition, rank 1) incomplete_function_test active at h5 for Day shift, competent operator
-- (condition, rank 2) post_maintenance_state active at h5 for Day shift, competent operator
-- (condition, rank 3) distraction active at h5 for Day shift, competent operator
+- (condition, rank 1) distraction active at h2 for Day shift, competent operator
+- (condition, rank 2) post_maintenance_state active at h2 for Day shift, competent operator
+- (condition, rank 3) incomplete_function_test active at h2 for Day shift, competent operator
 - (condition, rank 4) teamwork active at h4 for Night shift, two months in the job
-- (condition, rank 5) time_pressure active at h11 for Day shift, competent operator
+- (condition, rank 5) time_pressure active at h2 for Day shift, competent operator
 
 ## DKN-WORD - A purge procedure that did not say where the purge medium came from
 
@@ -55,21 +55,21 @@ Top findings the model produced that the reports did not name:
 
 Model given: procedure **OP-HT-006**, plant state **fn_cold_restart**, crews: daytime_competent, language_shift, night_trainee.
 
-Result: 1112 of 9000 simulated shifts ended in a loss (12.36%), mean EUR 789,762 per failed shift.
+Result: 1979 of 9000 simulated shifts ended in a loss (21.99%), mean EUR 1,060,326 per failed shift.
 
 | published finding | recovered | rank | what the model said |
 | --- | --- | --- | --- |
-| The procedure referenced another document for the details of a safety-critical step | no | 16 | ambiguous_wording active at h11 for Day shift, competent operator |
+| The procedure referenced another document for the details of a safety-critical step | no | 17 | Day shift, competent operator: Proved the block valve, which is the one the interlock watches, and not the bur |
 | The step could be completed and still leave the protective function unproved | yes | 10 | incomplete_function_test active at h5 for Day shift, competent operator |
-| Confusion between two nearly identical adjacent systems | no | 13 | Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way roun |
-| The hazard was invisible to the people downstream of the vent | yes | 9 | absent_cue active at h11 for Day shift, competent operator |
+| Confusion between two nearly identical adjacent systems | no | 19 | Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way roun |
+| The hazard was invisible to the people downstream of the vent | no | 11 | absent_cue active at h11 for Day shift, competent operator |
 
 Top findings the model produced that the reports did not name:
-- (condition, rank 1) distraction active at h4 for Day shift, competent operator
+- (condition, rank 1) distraction active at h12 for Day shift, competent operator
 - (condition, rank 2) teamwork active at h5 for Contracted crew, procedure not in the working language
-- (condition, rank 3) time_pressure active at h4 for Day shift, competent operator
-- (condition, rank 4) timing_critical active at h4 for Day shift, competent operator
-- (condition, rank 5) low_experience active at h4 for Night shift, two months in the job
+- (condition, rank 3) time_pressure active at h12 for Day shift, competent operator
+- (condition, rank 4) fatigue active at h12 for Day shift, competent operator
+- (condition, rank 5) low_experience active at h6 for Night shift, two months in the job
 
 ## Summary
 
@@ -78,7 +78,7 @@ Top findings the model produced that the reports did not name:
 | how far down the list you read | causes recovered | of total |
 | --- | --- | --- |
 | top 5 findings | 3 | 23% |
-| top 10 findings | 8 | 62% |
+| top 10 findings | 7 | 54% |
 | top 20 findings | 11 | 85% |
 | top 30 findings | 11 | 85% |
 | never raised at all | 0 | 0% |

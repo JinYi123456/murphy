@@ -1,124 +1,97 @@
 {
   "shiftsPerCrew": 3000,
   "topK": 10,
-  "recovered": 8,
+  "recovered": 7,
   "total": 13,
   "cases": [
     {
       "id": "BUN-TANK",
-      "failureRate": 0.7716666666666666,
+      "failureRate": 0.05608333333333333,
       "causes": [
         {
           "cause": "The level instrument the crew relied on had failed in a way that produced no indication",
           "rank": 4,
-          "evidence": "mistrust active at d9 for Day shift, competent operator",
+          "evidence": "mistrust active at d1 for Day shift, competent operator",
           "keyCount": 3
         },
         {
           "cause": "The independent high-high function was present but bypassed, and nothing in the procedure proved it",
           "rank": 3,
-          "evidence": "incomplete_function_test active at d9 for Day shift, competent operator",
+          "evidence": "incomplete_function_test active at d1 for Day shift, competent operator",
           "keyCount": 2
         },
         {
           "cause": "The transfer relied on measurements that were not independent of one another",
           "rank": 15,
-          "evidence": "confusable_device active at d6 for Day shift, competent operator",
+          "evidence": "confusable_device active at d15 for Day shift, competent operator",
           "keyCount": 3
         },
         {
           "cause": "Crews had made a practice of working the batch down to the alarm band rather than keeping margin",
-          "rank": 7,
-          "evidence": "time_pressure active at d9 for Day shift, competent operator",
+          "rank": 9,
+          "evidence": "time_pressure active at d2 for Day shift, competent operator",
           "keyCount": 3
         },
         {
           "cause": "A change to the protection scheme went through without a management-of-change review",
           "rank": 2,
-          "evidence": "post_maintenance_state active at d9 for Day shift, competent operator",
+          "evidence": "post_maintenance_state active at d1 for Day shift, competent operator",
           "keyCount": 3
         }
       ],
-      "candidateTotal": 61,
+      "candidateTotal": 59,
       "topFindings": [
         {
           "key": "condition:distraction",
           "kind": "condition",
-          "step": "d9",
-          "shifts": 5442,
-          "share": 0.5876889848812095,
+          "step": "d1",
+          "shifts": 673,
+          "share": 1,
           "meanCostEur": 0,
-          "detail": "distraction active at d9 for Day shift, competent operator"
+          "detail": "distraction active at d1 for Day shift, competent operator"
         },
         {
           "key": "condition:post_maintenance_state",
           "kind": "condition",
-          "step": "d9",
-          "shifts": 5442,
-          "share": 0.5876889848812095,
+          "step": "d1",
+          "shifts": 673,
+          "share": 1,
           "meanCostEur": 0,
-          "detail": "post_maintenance_state active at d9 for Day shift, competent operator"
+          "detail": "post_maintenance_state active at d1 for Day shift, competent operator"
         },
         {
           "key": "condition:incomplete_function_test",
           "kind": "condition",
-          "step": "d9",
-          "shifts": 5442,
-          "share": 0.5876889848812095,
+          "step": "d1",
+          "shifts": 673,
+          "share": 1,
           "meanCostEur": 0,
-          "detail": "incomplete_function_test active at d9 for Day shift, competent operator"
+          "detail": "incomplete_function_test active at d1 for Day shift, competent operator"
         },
         {
           "key": "condition:mistrust",
           "kind": "condition",
-          "step": "d9",
-          "shifts": 5442,
-          "share": 0.5876889848812095,
+          "step": "d1",
+          "shifts": 673,
+          "share": 1,
           "meanCostEur": 0,
-          "detail": "mistrust active at d9 for Day shift, competent operator"
+          "detail": "mistrust active at d1 for Day shift, competent operator"
         },
         {
           "key": "condition:teamwork",
           "kind": "condition",
           "step": "d3",
-          "shifts": 4564,
-          "share": 0.49287257019438446,
+          "shifts": 635,
+          "share": 0.9435364041604755,
           "meanCostEur": 0,
           "detail": "teamwork active at d3 for Night shift, two months in the job"
-        },
-        {
-          "key": "condition:fatigue",
-          "kind": "condition",
-          "step": "d12",
-          "shifts": 2880,
-          "share": 0.31101511879049676,
-          "meanCostEur": 0,
-          "detail": "fatigue active at d12 for Day shift, competent operator"
-        },
-        {
-          "key": "condition:time_pressure",
-          "kind": "condition",
-          "step": "d9",
-          "shifts": 2291,
-          "share": 0.24740820734341254,
-          "meanCostEur": 0,
-          "detail": "time_pressure active at d9 for Day shift, competent operator"
-        },
-        {
-          "key": "condition:absent_cue",
-          "kind": "condition",
-          "step": "d3",
-          "shifts": 2082,
-          "share": 0.22483801295896327,
-          "meanCostEur": 0,
-          "detail": "absent_cue active at d3 for Day shift, competent operator"
         },
         {
           "key": "condition:ambiguous_wording",
           "kind": "condition",
           "step": "d1",
-          "shifts": 1810,
-          "share": 0.19546436285097193,
+          "shifts": 372,
+          "share": 0.5527488855869243,
           "meanCostEur": 0,
           "detail": "ambiguous_wording active at d1 for Day shift, competent operator"
         },
@@ -126,122 +99,149 @@
           "key": "condition:low_experience",
           "kind": "condition",
           "step": "d3",
-          "shifts": 1776,
-          "share": 0.191792656587473,
+          "shifts": 320,
+          "share": 0.475482912332838,
           "meanCostEur": 0,
           "detail": "low_experience active at d3 for Night shift, two months in the job"
+        },
+        {
+          "key": "condition:fatigue",
+          "kind": "condition",
+          "step": "d12",
+          "shifts": 318,
+          "share": 0.4725111441307578,
+          "meanCostEur": 0,
+          "detail": "fatigue active at d12 for Night shift, two months in the job"
+        },
+        {
+          "key": "condition:time_pressure",
+          "kind": "condition",
+          "step": "d2",
+          "shifts": 242,
+          "share": 0.35958395245170877,
+          "meanCostEur": 0,
+          "detail": "time_pressure active at d2 for Day shift, competent operator"
+        },
+        {
+          "key": "error:d15/d15e1",
+          "kind": "error",
+          "step": "d15",
+          "shifts": 228,
+          "share": 0.3387815750371471,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Closed V1 before stopping the pump, so the trapped column hammered and the couplings wept"
+        },
+        {
+          "key": "error:d1/d1e2",
+          "kind": "error",
+          "step": "d1",
+          "shifts": 161,
+          "share": 0.23922734026745915,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Dispatch note and permit agree on product but name different tanks. The operator matches on product, not on tank"
+        },
+        {
+          "key": "error:d16/d16e1",
+          "kind": "error",
+          "step": "d16",
+          "shifts": 151,
+          "share": 0.22436849925705796,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Broke the coupling before the line had drained, so the contents of the hose went on the deck"
+        },
+        {
+          "key": "condition:absent_cue",
+          "kind": "condition",
+          "step": "d8",
+          "shifts": 112,
+          "share": 0.1664190193164933,
+          "meanCostEur": 0,
+          "detail": "absent_cue active at d8 for Day shift, competent operator"
         },
         {
           "key": "error:d9/d9e1",
           "kind": "error",
           "step": "d9",
-          "shifts": 1074,
-          "share": 0.11598272138228942,
+          "shifts": 95,
+          "share": 0.1411589895988113,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: Cleared the tray by pushing last shift's standing liquid over the weep hole into the bund drain, so the tray is empty for this transfer and the bund is not"
         },
         {
-          "key": "condition:memory_load",
-          "kind": "condition",
-          "step": "d7",
-          "shifts": 1020,
-          "share": 0.1101511879049676,
-          "meanCostEur": 0,
-          "detail": "memory_load active at d7 for Day shift, competent operator"
-        },
-        {
-          "key": "condition:situation_awareness",
-          "kind": "condition",
-          "step": "d12",
-          "shifts": 960,
-          "share": 0.10367170626349892,
-          "meanCostEur": 0,
-          "detail": "situation_awareness active at d12 for Day shift, competent operator"
-        },
-        {
-          "key": "error:d8/d8e1",
-          "kind": "error",
-          "step": "d8",
-          "shifts": 772,
-          "share": 0.08336933045356372,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: The vent was shut for the roof inspection. It is up the platform ladder, off the transfer walk, and nobody thought of it"
-        },
-        {
           "key": "condition:confusable_device",
           "kind": "condition",
-          "step": "d6",
-          "shifts": 693,
-          "share": 0.07483801295896328,
+          "step": "d15",
+          "shifts": 94,
+          "share": 0.13967310549777118,
           "meanCostEur": 0,
-          "detail": "confusable_device active at d6 for Day shift, competent operator"
+          "detail": "confusable_device active at d15 for Day shift, competent operator"
+        },
+        {
+          "key": "error:d2/d2e1",
+          "kind": "error",
+          "step": "d2",
+          "shifts": 73,
+          "share": 0.10846953937592868,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: The register is in the control room and the shift is behind. Assumed the fitter signed it back like he always does"
+        },
+        {
+          "key": "error:d2/d2e2",
+          "kind": "error",
+          "step": "d2",
+          "shifts": 72,
+          "share": 0.10698365527488855,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Confirmed the row for LT-101. The isolation that matters is the next row down, LSHH-101"
         },
         {
           "key": "error:d9/d9e2",
           "kind": "error",
           "step": "d9",
-          "shifts": 692,
-          "share": 0.07473002159827213,
+          "shifts": 64,
+          "share": 0.0950965824665676,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: Tray looked dry from above"
         },
         {
-          "key": "error:d8/d8e3",
+          "key": "error:d8/d8e1",
           "kind": "error",
           "step": "d8",
-          "shifts": 511,
-          "share": 0.055183585313174945,
+          "shifts": 64,
+          "share": 0.0950965824665676,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Climbed the ladder, found the handle stiff, forced it a quarter turn and assumed it was through"
+          "detail": "Day shift, competent operator: The vent was shut for the roof inspection. It is up the platform ladder, off the transfer walk, and nobody thought of it"
         },
         {
-          "key": "error:d8/d8e2",
+          "key": "error:d2/d2e3",
           "kind": "error",
-          "step": "d8",
-          "shifts": 471,
-          "share": 0.05086393088552916,
+          "step": "d2",
+          "shifts": 57,
+          "share": 0.08469539375928678,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Opened the nitrogen blanket valve next to the vent. The tank now pressurises instead of breathing, which looks like a healthy result on the status board"
-        },
-        {
-          "key": "error:d3/d3e1",
-          "kind": "error",
-          "step": "d3",
-          "shifts": 470,
-          "share": 0.05075593952483801,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Bond clip is on the painted chassis rail. It looks connected and measures nothing"
-        },
-        {
-          "key": "error:d7/d7e2",
-          "kind": "error",
-          "step": "d7",
-          "shifts": 397,
-          "share": 0.04287257019438445,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Confirmed the valves visible from the walkway, which does not include the tank bottom outlet"
+          "detail": "Day shift, competent operator: Transmitter confirmed in service. Nobody looked at whether the high-high switch loop was proved after the bench test"
         }
       ]
     },
     {
       "id": "CLC-GAS",
-      "failureRate": 0.25016666666666665,
+      "failureRate": 0.34191666666666665,
       "causes": [
         {
           "cause": "Gas continued to enter an unlit chamber after the air supply was lost",
-          "rank": 36,
+          "rank": 38,
           "evidence": "Day shift, competent operator: Started the fan from the panel and left for the pilot. Nobody confirmed the air was actually moving at the damper",
           "keyCount": 2
         },
         {
           "cause": "The indication that should have told the operator was on a screen he was not watching",
-          "rank": 9,
-          "evidence": "absent_cue active at h11 for Day shift, competent operator",
+          "rank": 7,
+          "evidence": "absent_cue active at h2 for Day shift, competent operator",
           "keyCount": 3
         },
         {
           "cause": "No step required the atmosphere to be proven clear again before re-ignition",
-          "rank": 59,
+          "rank": 57,
           "evidence": "Night shift, two months in the job: A second purge is forty minutes he does not have, so he tried the pilot again instead",
           "keyCount": 2
         },
@@ -255,155 +255,146 @@
       "candidateTotal": 60,
       "topFindings": [
         {
-          "key": "condition:incomplete_function_test",
+          "key": "condition:distraction",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 3002,
+          "step": "h2",
+          "shifts": 4103,
           "share": 1,
           "meanCostEur": 0,
-          "detail": "incomplete_function_test active at h5 for Day shift, competent operator"
+          "detail": "distraction active at h2 for Day shift, competent operator"
         },
         {
           "key": "condition:post_maintenance_state",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 3002,
+          "step": "h2",
+          "shifts": 4103,
           "share": 1,
           "meanCostEur": 0,
-          "detail": "post_maintenance_state active at h5 for Day shift, competent operator"
+          "detail": "post_maintenance_state active at h2 for Day shift, competent operator"
         },
         {
-          "key": "condition:distraction",
+          "key": "condition:incomplete_function_test",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 3002,
+          "step": "h2",
+          "shifts": 4103,
           "share": 1,
           "meanCostEur": 0,
-          "detail": "distraction active at h5 for Day shift, competent operator"
+          "detail": "incomplete_function_test active at h2 for Day shift, competent operator"
         },
         {
           "key": "condition:teamwork",
           "kind": "condition",
           "step": "h4",
-          "shifts": 2827,
-          "share": 0.941705529646902,
+          "shifts": 3690,
+          "share": 0.8993419449183524,
           "meanCostEur": 0,
           "detail": "teamwork active at h4 for Night shift, two months in the job"
         },
         {
           "key": "condition:time_pressure",
           "kind": "condition",
-          "step": "h11",
-          "shifts": 2424,
-          "share": 0.8074616922051966,
+          "step": "h2",
+          "shifts": 3285,
+          "share": 0.8006336826712162,
           "meanCostEur": 0,
-          "detail": "time_pressure active at h11 for Day shift, competent operator"
+          "detail": "time_pressure active at h2 for Day shift, competent operator"
         },
         {
           "key": "condition:fatigue",
           "kind": "condition",
-          "step": "h11",
-          "shifts": 1825,
-          "share": 0.6079280479680214,
+          "step": "h12",
+          "shifts": 2553,
+          "share": 0.6222276383134292,
           "meanCostEur": 0,
-          "detail": "fatigue active at h11 for Contracted crew, procedure not in the working language"
+          "detail": "fatigue active at h12 for Day shift, competent operator"
         },
         {
-          "key": "condition:language_barrier",
+          "key": "condition:absent_cue",
           "kind": "condition",
-          "step": "h11",
-          "shifts": 1366,
-          "share": 0.45502998001332445,
+          "step": "h2",
+          "shifts": 1662,
+          "share": 0.4050694613697295,
           "meanCostEur": 0,
-          "detail": "language_barrier active at h11 for Contracted crew, procedure not in the working language"
+          "detail": "absent_cue active at h2 for Day shift, competent operator"
         },
         {
           "key": "condition:timing_critical",
           "kind": "condition",
           "step": "h5",
-          "shifts": 1323,
-          "share": 0.4407061958694204,
+          "shifts": 1593,
+          "share": 0.3882524981720692,
           "meanCostEur": 0,
           "detail": "timing_critical active at h5 for Day shift, competent operator"
         },
         {
-          "key": "condition:absent_cue",
+          "key": "condition:language_barrier",
           "kind": "condition",
           "step": "h11",
-          "shifts": 1316,
-          "share": 0.43837441705529645,
+          "shifts": 1585,
+          "share": 0.3863027053375579,
           "meanCostEur": 0,
-          "detail": "absent_cue active at h11 for Day shift, competent operator"
+          "detail": "language_barrier active at h11 for Contracted crew, procedure not in the working language"
         },
         {
           "key": "condition:low_experience",
           "kind": "condition",
           "step": "h4",
-          "shifts": 1002,
-          "share": 0.33377748167888077,
+          "shifts": 1286,
+          "share": 0.3134291981476968,
           "meanCostEur": 0,
           "detail": "low_experience active at h4 for Night shift, two months in the job"
+        },
+        {
+          "key": "condition:mistrust",
+          "kind": "condition",
+          "step": "h2",
+          "shifts": 1249,
+          "share": 0.3044114062880819,
+          "meanCostEur": 0,
+          "detail": "mistrust active at h2 for Day shift, competent operator"
         },
         {
           "key": "condition:memory_load",
           "kind": "condition",
           "step": "h2",
-          "shifts": 967,
-          "share": 0.3221185876082612,
+          "shifts": 1242,
+          "share": 0.3027053375578845,
           "meanCostEur": 0,
           "detail": "memory_load active at h2 for Day shift, competent operator"
         },
         {
-          "key": "condition:mistrust",
-          "kind": "condition",
-          "step": "h11",
-          "shifts": 885,
-          "share": 0.29480346435709526,
-          "meanCostEur": 0,
-          "detail": "mistrust active at h11 for Day shift, competent operator"
-        },
-        {
-          "key": "error:h11/h11e2",
-          "kind": "error",
-          "step": "h11",
-          "shifts": 540,
-          "share": 0.1798800799467022,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way round and nobody has reported it"
-        },
-        {
           "key": "condition:poor_procedure",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 468,
-          "share": 0.1558960692871419,
+          "step": "h12",
+          "shifts": 1057,
+          "share": 0.2576163782598099,
           "meanCostEur": 0,
-          "detail": "poor_procedure active at h5 for Day shift, competent operator"
+          "detail": "poor_procedure active at h12 for Day shift, competent operator"
         },
         {
-          "key": "error:h4/h4e1",
+          "key": "error:h12/h12e1",
           "kind": "error",
-          "step": "h4",
-          "shifts": 467,
-          "share": 0.15556295802798134,
+          "step": "h12",
+          "shifts": 797,
+          "share": 0.19424811113819157,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Ran the fan, went to check the gas train, came back at seven minutes and called the purge done"
+          "detail": "Day shift, competent operator: The mill wanted three slabs by the end of the shift, so he moved the rate to 300 C/h with the moisture still at two per cent"
         },
         {
-          "key": "error:h11/h11e1",
+          "key": "error:h12/h12e3",
           "kind": "error",
-          "step": "h11",
-          "shifts": 457,
-          "share": 0.15223184543637575,
+          "step": "h12",
+          "shifts": 608,
+          "share": 0.14818425542286132,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Entered 60 in the field the manual page calls degrees per minute. The controller accepted 3600 C/h and the furnace took it"
+          "detail": "Day shift, competent operator: Read the moisture from the previous entry on the sheet because the readout was stuck"
         },
         {
           "key": "error:h7/h7e2",
           "kind": "error",
           "step": "h7",
-          "shifts": 430,
-          "share": 0.14323784143904064,
+          "shifts": 553,
+          "share": 0.1347794296855959,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: Battery checked, emissivity tape not, so the readings will be meaningless"
         },
@@ -411,39 +402,48 @@
           "key": "error:h2/h2e1",
           "kind": "error",
           "step": "h2",
-          "shifts": 419,
-          "share": 0.1395736175882745,
+          "shifts": 549,
+          "share": 0.13380453326834024,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: Looked in one port from the platform. The far end of the chamber is not visible from any port"
         },
         {
-          "key": "error:h7/h7e1",
+          "key": "error:h11/h11e2",
           "kind": "error",
-          "step": "h7",
-          "shifts": 409,
-          "share": 0.1362425049966689,
+          "step": "h11",
+          "shifts": 540,
+          "share": 0.131611016329515,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: The scaffold to the roof is signed out to another trade, so the survey will not happen tonight"
+          "detail": "Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way round and nobody has reported it"
         },
         {
           "key": "error:h6/h6e1",
           "kind": "error",
           "step": "h6",
-          "shifts": 405,
-          "share": 0.13491005996002664,
+          "shifts": 533,
+          "share": 0.12990494759931756,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: The scanner has been noisy for months and the panel lamp is dim, so it reads the same as always"
+        },
+        {
+          "key": "error:h7/h7e1",
+          "kind": "error",
+          "step": "h7",
+          "shifts": 528,
+          "share": 0.128686327077748,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: The scaffold to the roof is signed out to another trade, so the survey will not happen tonight"
         }
       ]
     },
     {
       "id": "DKN-WORD",
-      "failureRate": 0.12355555555555556,
+      "failureRate": 0.21988888888888888,
       "causes": [
         {
           "cause": "The procedure referenced another document for the details of a safety-critical step",
-          "rank": 16,
-          "evidence": "ambiguous_wording active at h11 for Day shift, competent operator",
+          "rank": 17,
+          "evidence": "Day shift, competent operator: Proved the block valve, which is the one the interlock watches, and not the burner valve that faces the furnace",
           "keyCount": 3
         },
         {
@@ -454,198 +454,198 @@
         },
         {
           "cause": "Confusion between two nearly identical adjacent systems",
-          "rank": 13,
+          "rank": 19,
           "evidence": "Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way round and nobody has reported it",
           "keyCount": 3
         },
         {
           "cause": "The hazard was invisible to the people downstream of the vent",
-          "rank": 9,
+          "rank": 11,
           "evidence": "absent_cue active at h11 for Day shift, competent operator",
           "keyCount": 2
         }
       ],
-      "candidateTotal": 59,
+      "candidateTotal": 60,
       "topFindings": [
         {
           "key": "condition:distraction",
           "kind": "condition",
-          "step": "h4",
-          "shifts": 1112,
+          "step": "h12",
+          "shifts": 1979,
           "share": 1,
           "meanCostEur": 0,
-          "detail": "distraction active at h4 for Day shift, competent operator"
+          "detail": "distraction active at h12 for Day shift, competent operator"
         },
         {
           "key": "condition:teamwork",
           "kind": "condition",
           "step": "h5",
-          "shifts": 1066,
-          "share": 0.9586330935251799,
+          "shifts": 1741,
+          "share": 0.8797372410308236,
           "meanCostEur": 0,
           "detail": "teamwork active at h5 for Contracted crew, procedure not in the working language"
         },
         {
           "key": "condition:time_pressure",
           "kind": "condition",
-          "step": "h4",
-          "shifts": 803,
-          "share": 0.7221223021582733,
+          "step": "h12",
+          "shifts": 1475,
+          "share": 0.7453259221829207,
           "meanCostEur": 0,
-          "detail": "time_pressure active at h4 for Day shift, competent operator"
-        },
-        {
-          "key": "condition:timing_critical",
-          "kind": "condition",
-          "step": "h4",
-          "shifts": 620,
-          "share": 0.5575539568345323,
-          "meanCostEur": 0,
-          "detail": "timing_critical active at h4 for Day shift, competent operator"
-        },
-        {
-          "key": "condition:low_experience",
-          "kind": "condition",
-          "step": "h4",
-          "shifts": 534,
-          "share": 0.4802158273381295,
-          "meanCostEur": 0,
-          "detail": "low_experience active at h4 for Night shift, two months in the job"
+          "detail": "time_pressure active at h12 for Day shift, competent operator"
         },
         {
           "key": "condition:fatigue",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 532,
-          "share": 0.4784172661870504,
+          "step": "h12",
+          "shifts": 1093,
+          "share": 0.5522991409802931,
           "meanCostEur": 0,
-          "detail": "fatigue active at h5 for Contracted crew, procedure not in the working language"
+          "detail": "fatigue active at h12 for Day shift, competent operator"
+        },
+        {
+          "key": "condition:low_experience",
+          "kind": "condition",
+          "step": "h6",
+          "shifts": 871,
+          "share": 0.4401212733703891,
+          "meanCostEur": 0,
+          "detail": "low_experience active at h6 for Night shift, two months in the job"
         },
         {
           "key": "condition:language_barrier",
           "kind": "condition",
           "step": "h5",
-          "shifts": 532,
-          "share": 0.4784172661870504,
+          "shifts": 870,
+          "share": 0.43961596766043454,
           "meanCostEur": 0,
           "detail": "language_barrier active at h5 for Contracted crew, procedure not in the working language"
         },
         {
-          "key": "condition:post_maintenance_state",
+          "key": "condition:timing_critical",
           "kind": "condition",
-          "step": "h4",
-          "shifts": 516,
-          "share": 0.46402877697841727,
+          "step": "h5",
+          "shifts": 866,
+          "share": 0.4375947448206165,
           "meanCostEur": 0,
-          "detail": "post_maintenance_state active at h4 for Day shift, competent operator"
+          "detail": "timing_critical active at h5 for Day shift, competent operator"
         },
         {
-          "key": "condition:absent_cue",
+          "key": "condition:poor_procedure",
           "kind": "condition",
-          "step": "h11",
-          "shifts": 391,
-          "share": 0.3516187050359712,
+          "step": "h12",
+          "shifts": 845,
+          "share": 0.4269833249115715,
           "meanCostEur": 0,
-          "detail": "absent_cue active at h11 for Day shift, competent operator"
+          "detail": "poor_procedure active at h12 for Day shift, competent operator"
+        },
+        {
+          "key": "condition:post_maintenance_state",
+          "kind": "condition",
+          "step": "h12",
+          "shifts": 845,
+          "share": 0.4269833249115715,
+          "meanCostEur": 0,
+          "detail": "post_maintenance_state active at h12 for Day shift, competent operator"
         },
         {
           "key": "condition:incomplete_function_test",
           "kind": "condition",
           "step": "h5",
-          "shifts": 323,
-          "share": 0.2904676258992806,
+          "shifts": 613,
+          "share": 0.3097524002021223,
           "meanCostEur": 0,
           "detail": "incomplete_function_test active at h5 for Day shift, competent operator"
         },
         {
-          "key": "condition:poor_procedure",
+          "key": "condition:absent_cue",
           "kind": "condition",
-          "step": "h5",
-          "shifts": 269,
-          "share": 0.24190647482014388,
+          "step": "h11",
+          "shifts": 593,
+          "share": 0.29964628600303184,
           "meanCostEur": 0,
-          "detail": "poor_procedure active at h5 for Day shift, competent operator"
+          "detail": "absent_cue active at h11 for Day shift, competent operator"
+        },
+        {
+          "key": "error:h12/h12e1",
+          "kind": "error",
+          "step": "h12",
+          "shifts": 566,
+          "share": 0.28600303183425974,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: The mill wanted three slabs by the end of the shift, so he moved the rate to 300 C/h with the moisture still at two per cent"
+        },
+        {
+          "key": "error:h12/h12e3",
+          "kind": "error",
+          "step": "h12",
+          "shifts": 431,
+          "share": 0.2177867609903992,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Read the moisture from the previous entry on the sheet because the readout was stuck"
         },
         {
           "key": "condition:memory_load",
           "kind": "condition",
           "step": "h2",
-          "shifts": 234,
-          "share": 0.210431654676259,
+          "shifts": 380,
+          "share": 0.19201616978271854,
           "meanCostEur": 0,
           "detail": "memory_load active at h2 for Day shift, competent operator"
+        },
+        {
+          "key": "error:h5/h5e1",
+          "kind": "error",
+          "step": "h5",
+          "shifts": 223,
+          "share": 0.11268317331985851,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: The train was already pressurised from the night shift, so he signed the line without pumping it up or timing the decay"
+        },
+        {
+          "key": "error:h5/h5e2",
+          "kind": "error",
+          "step": "h5",
+          "shifts": 217,
+          "share": 0.10965133906013137,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: The test gauge needle was stuck at zero. A decay from 100 to 40 mbar looked like no movement at all"
+        },
+        {
+          "key": "error:h5/h5e3",
+          "kind": "error",
+          "step": "h5",
+          "shifts": 207,
+          "share": 0.10459828196058615,
+          "meanCostEur": 0,
+          "detail": "Day shift, competent operator: Proved the block valve, which is the one the interlock watches, and not the burner valve that faces the furnace"
+        },
+        {
+          "key": "condition:mistrust",
+          "kind": "condition",
+          "step": "h12",
+          "shifts": 203,
+          "share": 0.10257705912076806,
+          "meanCostEur": 0,
+          "detail": "mistrust active at h12 for Day shift, competent operator"
         },
         {
           "key": "error:h11/h11e2",
           "kind": "error",
           "step": "h11",
           "shifts": 192,
-          "share": 0.17266187050359713,
+          "share": 0.09701869631126832,
           "meanCostEur": 0,
           "detail": "Day shift, competent operator: Set it on TRC-5C. The faceplates came back from the retrofit the wrong way round and nobody has reported it"
         },
         {
-          "key": "error:h8/h8e3",
+          "key": "error:h7/h7e2",
           "kind": "error",
-          "step": "h8",
-          "shifts": 173,
-          "share": 0.15557553956834533,
+          "step": "h7",
+          "shifts": 184,
+          "share": 0.09297625063163213,
           "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Took the standing scanner lamp for a flame indication"
-        },
-        {
-          "key": "error:h11/h11e1",
-          "kind": "error",
-          "step": "h11",
-          "shifts": 159,
-          "share": 0.14298561151079137,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Entered 60 in the field the manual page calls degrees per minute. The controller accepted 3600 C/h and the furnace took it"
-        },
-        {
-          "key": "condition:ambiguous_wording",
-          "kind": "condition",
-          "step": "h11",
-          "shifts": 153,
-          "share": 0.13758992805755396,
-          "meanCostEur": 0,
-          "detail": "ambiguous_wording active at h11 for Day shift, competent operator"
-        },
-        {
-          "key": "error:h5/h5e2",
-          "kind": "error",
-          "step": "h5",
-          "shifts": 141,
-          "share": 0.12679856115107913,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: The test gauge needle was stuck at zero. A decay from 100 to 40 mbar looked like no movement at all"
-        },
-        {
-          "key": "error:h8/h8e1",
-          "kind": "error",
-          "step": "h8",
-          "shifts": 139,
-          "share": 0.125,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Pilot did not light, he did not wait for the scanner, and he went on to the main gas anyway"
-        },
-        {
-          "key": "error:h5/h5e1",
-          "kind": "error",
-          "step": "h5",
-          "shifts": 137,
-          "share": 0.12320143884892086,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: The train was already pressurised from the night shift, so he signed the line without pumping it up or timing the decay"
-        },
-        {
-          "key": "error:h4/h4e1",
-          "kind": "error",
-          "step": "h4",
-          "shifts": 137,
-          "share": 0.12320143884892086,
-          "meanCostEur": 0,
-          "detail": "Day shift, competent operator: Ran the fan, went to check the gas train, came back at seven minutes and called the purge done"
+          "detail": "Day shift, competent operator: Battery checked, emissivity tape not, so the readings will be meaningless"
         }
       ]
     }

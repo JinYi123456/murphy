@@ -43,7 +43,7 @@ import type { TwinConfig, TwinDef, TwinParams } from './twin';
  *   8 STOP transfer stopped
  *   9 PISFAIL present but fails on demand
  *  10 gaugeBias m  error on the local level indicator
- *  11 flowScale   actual pump flow relative to rating
+ *  11 scale       actual pump flow relative to rating
  */
 
 const VARS = [
@@ -52,7 +52,7 @@ const VARS = [
   'roofFailed', 'secsSinceAl', 'oneShotDone',
 ];
 const DISCS = [
-  'V1', 'V2', 'V3', 'V4', 'PUMP', 'LAH', 'PIS', 'RACK', 'STOP', 'PISFAIL', 'gaugeBias', 'flowScale',
+  'V1', 'V2', 'V3', 'V4', 'PUMP', 'LAH', 'PIS', 'RACK', 'STOP', 'PISFAIL', 'gaugeBias', 'scale',
   'V3LEAK', 'BUND_HEADROOM', 'BOND_OK', 'HAMMER', 'HOSE_SPILL', 'AUTO_TRIP',
 ];
 
@@ -111,7 +111,7 @@ export const tankTwin: TwinDef = {
     hazard: 'spill',
     clock: 't',
     bias: 'gaugeBias',
-    scale: 'flowScale',
+    scale: 'scale',
     failOnDemand: 'PISFAIL',
   },
   display: {

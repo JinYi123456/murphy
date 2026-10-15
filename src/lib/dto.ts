@@ -12,6 +12,10 @@ export interface SummaryDto {
   n: number;
   failed: number;
   failureRate: number;
+  incidents: number;
+  incidentRate: number;
+  upsets: number;
+  upsetRate: number;
   nearMissRate: number;
   outcomeCounts: Record<string, number>;
   perStep: Record<string, StepStatDto>;
@@ -68,7 +72,7 @@ export interface RunEnvelope {
 
 export function toSummaryDto(s: BatchSummary): SummaryDto {
   return {
-    variantId: s.variantId, seed: s.seed, n: s.n, failed: s.failed, failureRate: s.failureRate,
+    variantId: s.variantId, seed: s.seed, n: s.n, failed: s.failed, failureRate: s.failureRate, incidents: s.incidents, incidentRate: s.incidentRate, upsets: s.upsets, upsetRate: s.upsetRate,
     nearMissRate: s.nearMissRate, outcomeCounts: s.outcomeCounts, perStep: s.perStep,
     meanCostEur: s.meanCostEur, costCi: s.costCi, p95CostEur: s.p95CostEur, cvarCostEur: s.cvarCostEur,
     meanReleaseM3: s.meanReleaseM3, meanElapsedS: s.meanElapsedS, meanHazardS: s.meanHazardS,

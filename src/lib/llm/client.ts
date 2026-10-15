@@ -118,9 +118,9 @@ const JSON_INSTRUCTION =
   'Answer with one JSON object only: no prose before or after it, no Markdown fence, no commentary.';
 
 function withJsonInstruction(messages: ChatMessage[], json: boolean, sendFormat: boolean): ChatMessage[] {
-  if (!json || sendFormat) return messages;
   const last = messages[messages.length - 1];
-  if (last?.content.includes(JSON_INSTRUCTION)) return messages;
+  if (!json || sendFormat || !last) return messages;
+  if (last.content.includes(JSON_INSTRUCTION)) return messages;
   return [...messages.slice(0, -1), { ...last, content: `${last.content}\n\n${JSON_INSTRUCTION}` }];
 }
 

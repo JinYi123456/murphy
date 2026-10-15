@@ -6,7 +6,7 @@ import { drawFrac, seedToKey } from './prng';
 import { getTwin } from './twins/index';
 import type { TwinConfig, TwinDef } from './twins/twin';
 import type {
-  Cond, DiscretePatch, ErrorAlternative, OutcomeClass, PersonaTraits, PlantConfig,
+  Cond, ErrorAlternative, OutcomeClass, PersonaTraits, PlantConfig, Patch,
   RunConfig, ShiftResult, Step, TraceEvent, WatchSpec,
 } from './types';
 
@@ -213,16 +213,16 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
     ? twin.indication(s, 0, d, 0, name.slice(10))
     : T(name));
   /** A step effect may name a scenario flag or a process variable; both are assignments. */
-  const applyPatch = (patch?: DiscretePatch) => {
-    if (!patch?.set) return;
-    for (const [k, v] of Object.entries(patch.set)) {
+  const applyPatch = (patch?: Patch) => {
+    if (!patch) return;
+    for (const [k, v] of Object.entries(patch)) {
       const di = twin.discIndex(k);
       if (di >= 0) { d[di] = v; continue; }
       const vi = twin.varIndex(k);
       if (vi >= 0) s[vi] = v;
     }
   };
-  const setVars = (rec?: Record<string, number>) => applyPatch(rec ? { set: rec } : undefined);
+  const setVars = (rec?: Record<string, number>) => applyPatch(rec);
 
   let elapsed = 0;
   let planned = 0;
@@ -356,8 +356,8 @@ export function simulateShift(cfg: RunConfig, scn: number, opts: SimOptions = {}
             caught[`${e.stepId}/${e.errorId}`] = step.id;
             const src = steps.find((x) => x.id === e.stepId);
             const orig = src?.errors?.find((x) => x.id === e.errorId);
-            if (orig?.patch.set) {
-              for (const kn of Object.keys(orig.patch.set)) {
+            if (orig?.patch) {
+              for (const kn of Object.keys(orig.patch)) {
                 if (!src?.applies || src.applies[kn] === undefined) {
                   const di = twin.discIndex(kn);
                   if (di >= 0) d[di] = 0;

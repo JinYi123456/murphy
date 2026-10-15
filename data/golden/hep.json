@@ -241,6 +241,66 @@
  },
  {
   "step": "d1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.09174311926605505,
+  "nominal": 0.01,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.11965139648437502,
+  "nominal": 0.02,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d1",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -481,6 +541,66 @@
  },
  {
   "step": "d1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.3445960218750001,
+  "nominal": 0.02,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d1",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -703,6 +823,66 @@
   "step": "d1",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.3445960218750001,
+  "nominal": 0.02,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.3445960218750001,
   "nominal": 0.02,
@@ -961,6 +1141,66 @@
  },
  {
   "step": "d1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.28716335156250006,
+  "nominal": 0.02,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d1",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -1183,6 +1423,66 @@
   "step": "d1",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.14358167578125003,
+  "nominal": 0.02,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.019627085377821395,
+  "nominal": 0.001,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.16806722689075632,
+  "nominal": 0.01,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.14358167578125003,
   "nominal": 0.02,
@@ -1440,6 +1740,66 @@
   ]
  },
  {
+  "step": "d1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.3445960218750001,
+  "nominal": 0.02,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
   "step": "d2",
   "persona": "daytime_competent",
   "plant": "tk_asdesigned",
@@ -1663,6 +2023,66 @@
   "step": "d2",
   "persona": "daytime_competent",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.017947709472656254,
+  "nominal": 0.003,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.09174311926605505,
+  "nominal": 0.01,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9090909090909091,
+  "nominal": 0.5,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.017947709472656254,
   "nominal": 0.003,
@@ -1921,6 +2341,66 @@
  },
  {
   "step": "d2",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -2143,6 +2623,66 @@
   "step": "d2",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -2401,6 +2941,66 @@
  },
  {
   "step": "d2",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.043074502734375006,
+  "nominal": 0.003,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -2623,6 +3223,66 @@
   "step": "d2",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.021537251367187503,
+  "nominal": 0.003,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.16806722689075632,
+  "nominal": 0.01,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9523809523809523,
+  "nominal": 0.5,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.021537251367187503,
   "nominal": 0.003,
@@ -2863,6 +3523,66 @@
   "step": "d2",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d2",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -3121,6 +3841,66 @@
  },
  {
   "step": "d3",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04807692307692308,
+  "nominal": 0.01,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.8333333333333334,
+  "nominal": 0.5,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.017947709472656254,
+  "nominal": 0.003,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -3361,6 +4141,66 @@
  },
  {
   "step": "d3",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -3583,6 +4423,66 @@
   "step": "d3",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11210762331838565,
+  "nominal": 0.01,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9259259259259259,
+  "nominal": 0.5,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -3841,6 +4741,66 @@
  },
  {
   "step": "d3",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.043074502734375006,
+  "nominal": 0.003,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -4063,6 +5023,66 @@
   "step": "d3",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.021537251367187503,
+  "nominal": 0.003,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.09174311926605505,
+  "nominal": 0.01,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9090909090909091,
+  "nominal": 0.5,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.021537251367187503,
   "nominal": 0.003,
@@ -4303,6 +5323,66 @@
   "step": "d3",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11210762331838565,
+  "nominal": 0.01,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9259259259259259,
+  "nominal": 0.5,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d3",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -4561,6 +5641,66 @@
  },
  {
   "step": "d4",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0125,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.03333333333333333,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 12.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.008844631228125004,
+  "nominal": 0.0004,
+  "multiplier": 22.111578070312508,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -4801,6 +5941,66 @@
  },
  {
   "step": "d4",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11120996441281138,
+  "nominal": 0.001,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.250501002004008,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -5023,6 +6223,66 @@
   "step": "d4",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.143184421534937,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.02647372612500001,
   "nominal": 0.0004,
@@ -5281,6 +6541,66 @@
  },
  {
   "step": "d4",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20016012810248196,
+  "nominal": 0.001,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.40064102564102566,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.025270374937500003,
+  "nominal": 0.0004,
+  "multiplier": 63.17593734375001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -5503,6 +6823,66 @@
   "step": "d4",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.012635187468750001,
+  "nominal": 0.0004,
+  "multiplier": 31.587968671875004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.11792452830188678,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.012635187468750001,
   "nominal": 0.0004,
@@ -5743,6 +7123,66 @@
   "step": "d4",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.143184421534937,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d4",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.02647372612500001,
   "nominal": 0.0004,
@@ -6001,6 +7441,66 @@
  },
  {
   "step": "d5",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.07896992167968751,
+  "nominal": 0.003,
+  "multiplier": 26.323307226562505,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -6241,6 +7741,66 @@
  },
  {
   "step": "d5",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.5580357142857142,
+  "nominal": 0.01,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -6463,6 +8023,66 @@
   "step": "d5",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.38699690402476783,
+  "nominal": 0.01,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.19855294593750006,
   "nominal": 0.003,
@@ -6721,6 +8341,66 @@
  },
  {
   "step": "d5",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.7163323782234956,
+  "nominal": 0.01,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.18952781203125002,
+  "nominal": 0.003,
+  "multiplier": 63.17593734375001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -6943,6 +8623,66 @@
   "step": "d5",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.09476390601562501,
+  "nominal": 0.003,
+  "multiplier": 31.587968671875004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.09476390601562501,
   "nominal": 0.003,
@@ -7183,6 +8923,66 @@
   "step": "d5",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.38699690402476783,
+  "nominal": 0.01,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d5",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.19855294593750006,
   "nominal": 0.003,
@@ -7441,6 +9241,66 @@
  },
  {
   "step": "d6",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.07896992167968751,
+  "nominal": 0.003,
+  "multiplier": 26.323307226562505,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -7681,6 +9541,66 @@
  },
  {
   "step": "d6",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.5580357142857142,
+  "nominal": 0.01,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -7903,6 +9823,66 @@
   "step": "d6",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.38699690402476783,
+  "nominal": 0.01,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.19855294593750006,
   "nominal": 0.003,
@@ -8161,6 +10141,66 @@
  },
  {
   "step": "d6",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.7163323782234956,
+  "nominal": 0.01,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.18952781203125002,
+  "nominal": 0.003,
+  "multiplier": 63.17593734375001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -8383,6 +10423,66 @@
   "step": "d6",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.09476390601562501,
+  "nominal": 0.003,
+  "multiplier": 31.587968671875004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.09476390601562501,
   "nominal": 0.003,
@@ -8623,6 +10723,66 @@
   "step": "d6",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.19855294593750006,
+  "nominal": 0.003,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.38699690402476783,
+  "nominal": 0.01,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d6",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.19855294593750006,
   "nominal": 0.003,
@@ -8881,6 +11041,66 @@
  },
  {
   "step": "d7",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04807692307692308,
+  "nominal": 0.01,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.8333333333333334,
+  "nominal": 0.5,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.017947709472656254,
+  "nominal": 0.003,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -9121,6 +11341,66 @@
  },
  {
   "step": "d7",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -9343,6 +11623,66 @@
   "step": "d7",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11210762331838565,
+  "nominal": 0.01,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9259259259259259,
+  "nominal": 0.5,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -9601,6 +11941,66 @@
  },
  {
   "step": "d7",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.043074502734375006,
+  "nominal": 0.003,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -9823,6 +12223,66 @@
   "step": "d7",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.021537251367187503,
+  "nominal": 0.003,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.09174311926605505,
+  "nominal": 0.01,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9090909090909091,
+  "nominal": 0.5,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.021537251367187503,
   "nominal": 0.003,
@@ -10063,6 +12523,66 @@
   "step": "d7",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05168940328125002,
+  "nominal": 0.003,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11210762331838565,
+  "nominal": 0.01,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9259259259259259,
+  "nominal": 0.5,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d7",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05168940328125002,
   "nominal": 0.003,
@@ -10303,6 +12823,66 @@
   "step": "d8",
   "persona": "daytime_competent",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 87.58482222656252,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.09099181073703368,
+  "nominal": 0.001,
+  "multiplier": 100,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.16694490818030053,
+  "nominal": 0.002,
+  "multiplier": 100,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.26,
@@ -10561,6 +13141,66 @@
  },
  {
   "step": "d8",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.333555703802535,
+  "nominal": 0.001,
+  "multiplier": 500,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.5005005005005005,
+  "nominal": 0.002,
+  "multiplier": 500,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 192.24967781250007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -10783,6 +13423,66 @@
   "step": "d8",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 192.2496778125001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20016012810248196,
+  "nominal": 0.001,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.33377837116154874,
+  "nominal": 0.002,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.26,
@@ -11041,6 +13741,66 @@
  },
  {
   "step": "d8",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.16680567139282734,
+  "nominal": 0.001,
+  "multiplier": 200,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:incomplete:20",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.28612303290414876,
+  "nominal": 0.002,
+  "multiplier": 200,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:incomplete:20",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 87.58482222656252,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -11263,6 +14023,66 @@
   "step": "d8",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 91.75552804687504,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.16680567139282734,
+  "nominal": 0.001,
+  "multiplier": 200,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.28612303290414876,
+  "nominal": 0.002,
+  "multiplier": 200,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.26,
@@ -11503,6 +14323,66 @@
   "step": "d8",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.26,
+  "multiplier": 192.2496778125001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 20 at APOA 0.75:15.25",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20016012810248196,
+  "nominal": 0.001,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.33377837116154874,
+  "nominal": 0.002,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:incomplete:20",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d8",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.26,
@@ -11761,6 +14641,66 @@
  },
  {
   "step": "d9",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.09174311926605505,
+  "nominal": 0.01,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9090909090909091,
+  "nominal": 0.5,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.021537251367187503,
+  "nominal": 0.003,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -11983,6 +14923,66 @@
   "step": "d9",
   "persona": "night_trainee",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05415080343750002,
+  "nominal": 0.003,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05415080343750002,
   "nominal": 0.003,
@@ -12223,6 +15223,66 @@
   "step": "d9",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05415080343750001,
+  "nominal": 0.003,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05415080343750001,
   "nominal": 0.003,
@@ -12481,6 +15541,66 @@
  },
  {
   "step": "d9",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.33557046979865773,
+  "nominal": 0.01,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.98,
+  "nominal": 0.5,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.045125669531250016,
+  "nominal": 0.003,
+  "multiplier": 15.041889843750004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -12703,6 +15823,66 @@
   "step": "d9",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.022562834765625008,
+  "nominal": 0.003,
+  "multiplier": 7.520944921875002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.16806722689075632,
+  "nominal": 0.01,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9523809523809523,
+  "nominal": 0.5,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.022562834765625008,
   "nominal": 0.003,
@@ -12943,6 +16123,66 @@
   "step": "d9",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.05415080343750001,
+  "nominal": 0.003,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20161290322580647,
+  "nominal": 0.01,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9615384615384616,
+  "nominal": 0.5,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d9",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.05415080343750001,
   "nominal": 0.003,
@@ -13201,6 +16441,66 @@
  },
  {
   "step": "d10",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0025,
+  "nominal": 0.001,
+  "multiplier": 2.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.005,
+  "nominal": 0.002,
+  "multiplier": 2.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.002412172153125001,
+  "nominal": 0.0004,
+  "multiplier": 6.0304303828125025,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -13423,6 +16723,66 @@
   "step": "d10",
   "persona": "night_trainee",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000003,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.04770992366412214,
+  "nominal": 0.002,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000003,
   "nominal": 0.0004,
@@ -13663,6 +17023,66 @@
   "step": "d10",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000002,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.012357884330202669,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.024437927663734118,
+  "nominal": 0.002,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000002,
   "nominal": 0.0004,
@@ -13921,6 +17341,66 @@
  },
  {
   "step": "d10",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.09107468123861566,
+  "nominal": 0.002,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.0068919204375000025,
+  "nominal": 0.0004,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -14143,6 +17623,66 @@
   "step": "d10",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.0034459602187500013,
+  "nominal": 0.0004,
+  "multiplier": 8.614900546875003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.019646365422396856,
+  "nominal": 0.002,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.0034459602187500013,
   "nominal": 0.0004,
@@ -14383,6 +17923,66 @@
   "step": "d10",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000002,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.012357884330202669,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.024437927663734118,
+  "nominal": 0.002,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d10",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000002,
   "nominal": 0.0004,
@@ -14641,6 +18241,66 @@
  },
  {
   "step": "d11",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.23622047244094488,
+  "nominal": 0.03,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.1794770947265625,
+  "nominal": 0.03,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -14881,6 +18541,66 @@
  },
  {
   "step": "d11",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.6072874493927126,
+  "nominal": 0.03,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -15103,6 +18823,66 @@
   "step": "d11",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.436046511627907,
+  "nominal": 0.03,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.5168940328125001,
   "nominal": 0.03,
@@ -15361,6 +19141,66 @@
  },
  {
   "step": "d11",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.6072874493927126,
+  "nominal": 0.03,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.43074502734375003,
+  "nominal": 0.03,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -15583,6 +19423,66 @@
   "step": "d11",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.21537251367187502,
+  "nominal": 0.03,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.019627085377821395,
+  "nominal": 0.001,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.3821656050955414,
+  "nominal": 0.03,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.21537251367187502,
   "nominal": 0.03,
@@ -15823,6 +19723,66 @@
   "step": "d11",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.436046511627907,
+  "nominal": 0.03,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d11",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.5168940328125001,
   "nominal": 0.03,
@@ -16081,6 +20041,66 @@
  },
  {
   "step": "d12",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.7352941176470588,
+  "nominal": 0.1,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -16321,6 +20341,66 @@
  },
  {
   "step": "d12",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11120996441281138,
+  "nominal": 0.001,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.9328358208955224,
+  "nominal": 0.1,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 37.81960875000001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -16561,6 +20641,66 @@
  },
  {
   "step": "d12",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.8741258741258741,
+  "nominal": 0.1,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 37.819608750000015,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
   "persona": "language_shift",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -16801,6 +20941,66 @@
  },
  {
   "step": "d12",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.847457627118644,
+  "nominal": 0.1,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -17023,6 +21223,66 @@
   "step": "d12",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.847457627118644,
+  "nominal": 0.1,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.09,
@@ -17263,6 +21523,66 @@
   "step": "d12",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 37.819608750000015,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.8741258741258741,
+  "nominal": 0.1,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d12",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.09,
@@ -17521,6 +21841,66 @@
  },
  {
   "step": "d14",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0049800796812749,
+  "nominal": 0.001,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.35714285714285715,
+  "nominal": 0.1,
+  "multiplier": 5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.646117541015625,
+  "nominal": 0.09,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d14",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -17761,6 +22141,66 @@
  },
  {
   "step": "d14",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.7352941176470588,
+  "nominal": 0.1,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d14",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -17983,6 +22423,66 @@
   "step": "d14",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.012357884330202669,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.5813953488372092,
+  "nominal": 0.1,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.09,
@@ -18241,6 +22741,66 @@
  },
  {
   "step": "d14",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.847457627118644,
+  "nominal": 0.1,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d14",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -18463,6 +23023,66 @@
   "step": "d14",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.646117541015625,
+  "nominal": 0.09,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.5263157894736842,
+  "nominal": 0.1,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.646117541015625,
   "nominal": 0.09,
@@ -18720,6 +23340,66 @@
   ]
  },
  {
+  "step": "d14",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.012357884330202669,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.5813953488372092,
+  "nominal": 0.1,
+  "multiplier": 12.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d14",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.09,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
   "step": "d15",
   "persona": "daytime_competent",
   "plant": "tk_asdesigned",
@@ -18943,6 +23623,66 @@
   "step": "d15",
   "persona": "daytime_competent",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.008844631228125004,
+  "nominal": 0.0004,
+  "multiplier": 22.111578070312508,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0125,
+  "nominal": 0.001,
+  "multiplier": 12.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.03333333333333333,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 12.5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.008844631228125004,
   "nominal": 0.0004,
@@ -19201,6 +23941,66 @@
  },
  {
   "step": "d15",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.11120996441281138,
+  "nominal": 0.001,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.250501002004008,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 125,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -19423,6 +24223,66 @@
   "step": "d15",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.143184421534937,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.02647372612500001,
   "nominal": 0.0004,
@@ -19681,6 +24541,66 @@
  },
  {
   "step": "d15",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.20016012810248196,
+  "nominal": 0.001,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.40064102564102566,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 250,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.025270374937500003,
+  "nominal": 0.0004,
+  "multiplier": 63.17593734375001,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -19903,6 +24823,66 @@
   "step": "d15",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.012635187468750001,
+  "nominal": 0.0004,
+  "multiplier": 31.587968671875004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.11792452830188678,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.012635187468750001,
   "nominal": 0.0004,
@@ -20143,6 +25123,66 @@
   "step": "d15",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.02647372612500001,
+  "nominal": 0.0004,
+  "multiplier": 66.18431531250002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.50:1.1",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 10 at APOA 0.50:5.5",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.058878944889307575,
+  "nominal": 0.001,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.143184421534937,
+  "nominal": 0.0026666666666666666,
+  "multiplier": 62.5,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:good:0.5",
+   "HCI:poor:10",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d15",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.02647372612500001,
   "nominal": 0.0004,
@@ -20401,6 +25441,66 @@
  },
  {
   "step": "d16",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.005,
+  "nominal": 0.001,
+  "multiplier": 5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.015,
+  "nominal": 0.003,
+  "multiplier": 5,
+  "adjusted": false,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.002412172153125001,
+  "nominal": 0.0004,
+  "multiplier": 6.0304303828125025,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -20623,6 +25723,66 @@
   "step": "d16",
   "persona": "night_trainee",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000003,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.13077593722755013,
+  "nominal": 0.003,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000003,
   "nominal": 0.0004,
@@ -20863,6 +26023,66 @@
   "step": "d16",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000002,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.06996268656716417,
+  "nominal": 0.003,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000002,
   "nominal": 0.0004,
@@ -21121,6 +26341,66 @@
  },
  {
   "step": "d16",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.13077593722755013,
+  "nominal": 0.003,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.0068919204375000025,
+  "nominal": 0.0004,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -21343,6 +26623,66 @@
   "step": "d16",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.0034459602187500013,
+  "nominal": 0.0004,
+  "multiplier": 8.614900546875003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.019627085377821395,
+  "nominal": 0.001,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.05676442762535478,
+  "nominal": 0.003,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.0034459602187500013,
   "nominal": 0.0004,
@@ -21583,6 +26923,66 @@
   "step": "d16",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.007220107125000002,
+  "nominal": 0.0004,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.06996268656716417,
+  "nominal": 0.003,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d16",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.007220107125000002,
   "nominal": 0.0004,
@@ -21841,6 +27241,66 @@
  },
  {
   "step": "d17",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.23622047244094488,
+  "nominal": 0.03,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.1794770947265625,
+  "nominal": 0.03,
+  "multiplier": 5.982569824218751,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.25:1.25",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -22081,6 +27541,66 @@
  },
  {
   "step": "d17",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.6072874493927126,
+  "nominal": 0.03,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
   "persona": "fatigued_relief",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -22303,6 +27823,66 @@
   "step": "d17",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.436046511627907,
+  "nominal": 0.03,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.5168940328125001,
   "nominal": 0.03,
@@ -22561,6 +28141,66 @@
  },
  {
   "step": "d17",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.6072874493927126,
+  "nominal": 0.03,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 0.43074502734375003,
+  "nominal": 0.03,
+  "multiplier": 14.358167578125002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -22783,6 +28423,66 @@
   "step": "d17",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.21537251367187502,
+  "nominal": 0.03,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.019627085377821395,
+  "nominal": 0.001,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.3821656050955414,
+  "nominal": 0.03,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.21537251367187502,
   "nominal": 0.03,
@@ -23023,6 +28723,66 @@
   "step": "d17",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 0.5168940328125001,
+  "nominal": 0.03,
+  "multiplier": 17.229801093750005,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.25:1.05",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.436046511627907,
+  "nominal": 0.03,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "d17",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 0.5168940328125001,
   "nominal": 0.03,
@@ -23281,6 +29041,66 @@
  },
  {
   "step": "e1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.009910802775024779,
+  "nominal": 0.001,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.5263157894736842,
+  "nominal": 0.1,
+  "multiplier": 10,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:adequate:2",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "daytime_competent",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 7.179083789062501,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 2 at APOA 0.50:1.5",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
   "persona": "night_trainee",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -23503,6 +29323,66 @@
   "step": "e1",
   "persona": "night_trainee",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 18.050267812500007,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 5 at APOA 0.50:3",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.847457627118644,
+  "nominal": 0.1,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:below average:5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "night_trainee",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.16,
@@ -23743,6 +29623,66 @@
   "step": "e1",
   "persona": "fatigued_relief",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.7352941176470588,
+  "nominal": 0.1,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "fatigued_relief",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.16,
@@ -24001,6 +29941,66 @@
  },
  {
   "step": "e1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.04766444232602479,
+  "nominal": 0.001,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.847457627118644,
+  "nominal": 0.1,
+  "multiplier": 50,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:low to nominal:1",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:poor:5",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "language_shift",
+  "plant": "tk_buncefield_shape",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 15.041889843750004,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 1.2 at APOA 0.25:1.05",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 5 at APOA 0.50:3",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
   "persona": "rushed_turnaround",
   "plant": "tk_asdesigned",
   "method": "sparh",
@@ -24223,6 +30223,66 @@
   "step": "e1",
   "persona": "rushed_turnaround",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 7.520944921875002,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 2 at APOA 0.25:1.25",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 1.2 at APOA 0.25:1.05",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.019627085377821395,
+  "nominal": 0.001,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.689655172413793,
+  "nominal": 0.1,
+  "multiplier": 20,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:moderate:2",
+   "E-T:above average:1",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:average:1",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "rushed_turnaround",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.16,
@@ -24463,6 +30523,66 @@
   "step": "e1",
   "persona": "post_overhaul_crew",
   "plant": "tk_uprated",
+  "method": "heart",
+  "p": 1,
+  "nominal": 0.16,
+  "multiplier": 18.050267812500003,
+  "adjusted": false,
+  "levels": [
+   "AVL:EPC max 1.2 at APOA 0.25:1.05",
+   "STR:EPC max 2 at APOA 0.50:1.5",
+   "CX:EPC max 1.2 at APOA 0.25:1.05",
+   "E-T:EPC max 1.2 at APOA 0.25:1.05",
+   "PRU:EPC max 1.2 at APOA 0.25:1.05",
+   "HCI:EPC max 1.2 at APOA 0.50:1.1",
+   "FFD:EPC max 5 at APOA 0.50:3",
+   "WMP:EPC max 5 at APOA 0.50:3"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "sparh",
+  "p": 0.0244140625,
+  "nominal": 0.001,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
+  "method": "therp",
+  "p": 0.7352941176470588,
+  "nominal": 0.1,
+  "multiplier": 25,
+  "adjusted": true,
+  "levels": [
+   "AVL:time required or less than nominal:1",
+   "STR:high:2",
+   "CX:easy:1",
+   "E-T:expert:0.5",
+   "PRU:unused where available:1",
+   "HCI:good:1",
+   "FFD:degraded:5",
+   "WMP:inadequate or poor:5"
+  ]
+ },
+ {
+  "step": "e1",
+  "persona": "post_overhaul_crew",
+  "plant": "tk_buncefield_shape",
   "method": "heart",
   "p": 1,
   "nominal": 0.16,

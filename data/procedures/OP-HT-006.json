@@ -263,9 +263,7 @@
           "kind": "omission",
           "weight": 30,
           "text": "The train was already pressurised from the night shift, so he signed the line without pumping it up or timing the decay",
-          "patch": {
-            "GASLEAK": 1
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -273,9 +271,7 @@
           "kind": "misread",
           "weight": 25,
           "text": "The test gauge needle was stuck at zero. A decay from 100 to 40 mbar looked like no movement at all",
-          "patch": {
-            "GASLEAK": 1
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -283,9 +279,7 @@
           "kind": "incomplete",
           "weight": 25,
           "text": "Proved the block valve, which is the one the interlock watches, and not the burner valve that faces the furnace",
-          "patch": {
-            "GASLEAK": 1
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -293,9 +287,7 @@
           "kind": "wrong_target",
           "weight": 20,
           "text": "Ran the test on the furnace 5 train, whose panel tag was moved in the retrofit",
-          "patch": {
-            "GASLEAK": 1
-          },
+          "patch": {},
           "source": "analyst"
         }
       ]
@@ -318,9 +310,7 @@
           "kind": "omission",
           "weight": 45,
           "text": "The scanner has been noisy for months and the panel lamp is dim, so it reads the same as always",
-          "patch": {
-            "BMSFAIL": 1
-          },
+          "patch": {},
           "source": "analyst"
         },
         {

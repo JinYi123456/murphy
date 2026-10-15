@@ -98,7 +98,7 @@ export function ChangeLab({ s }: { s: ConsoleStore }) {
           to be able to say so.
         </p>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="no-print mt-4 flex flex-wrap items-center gap-3">
           <button onClick={() => s.run({ onAmd: false })} disabled={s.running}
             className="border border-rule bg-panel px-3 py-2 text-[11px] uppercase tracking-[0.16em] text-bone enabled:hover:border-amber disabled:opacity-40">
             {s.running ? 'running' : s.dirty ? 're-run this model' : 're-run'}
@@ -183,7 +183,7 @@ export function ChangeLab({ s }: { s: ConsoleStore }) {
       </section>
 
       {/* --------------------------------------------------------------- trials */}
-      <section className="panel p-4">
+      <section className="no-print panel p-4">
         <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
           <h3 className="text-[12px] uppercase tracking-[0.18em] text-bone">Every candidate, including the ones that lost</h3>
           <p className="text-[11px] text-ash">
@@ -206,7 +206,7 @@ export function ChangeLab({ s }: { s: ConsoleStore }) {
       </section>
 
       {/* ------------------------------------------------------------- stacked */}
-      <section className="panel p-4">
+      <section className="no-print panel p-4">
         <h3 className="text-[12px] uppercase tracking-[0.18em] text-bone">The stacked variant</h3>
         {s.repair.stacked ? (
           (() => {

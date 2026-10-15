@@ -1,8 +1,8 @@
-import proc from '../../data/procedures/OP-TRF-014.json';
-import personasRaw from '../../data/personas.json';
-import plantsRaw from '../../data/plants.json';
-import { simulateShift } from '../../src/engine/runner';
-import type { PersonaTraits, PlantConfig, Procedure, RunConfig } from '../../src/engine/types';
+import proc from '../../../data/procedures/OP-TRF-014.json';
+import personasRaw from '../../../data/personas.json';
+import plantsRaw from '../../../data/plants.json';
+import { simulateShift } from '../../../src/engine/runner';
+import type { PersonaTraits, PlantConfig, Procedure, RunConfig } from '../../../src/engine/types';
 
 /** Scratch tool: dump the reference's per-step audit for one scenario so the
  *  tensor kernel can be diffed against it. Not part of the deliverable. */
@@ -27,6 +27,9 @@ const out = {
   elapsedS: r.elapsedS,
   errors: r.errors.map((e) => `${e.stepId}/${e.errorId}@${e.atS.toFixed(1)}`),
   caught: Object.keys(r.caughtBy).sort(),
+  trace: r.trace
+    .filter((e) => e.kind === 'step' || e.kind === 'error' || e.kind === 'alarm' || e.kind === 'hazard' || e.kind === 'recovery')
+    .map((e) => `${e.kind} ${e.stepId ?? ''} @${e.tS.toFixed(3)}`),
   steps: r.audit.map((a) => ({
     id: a.stepId,
     p: a.p,

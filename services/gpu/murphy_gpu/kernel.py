@@ -150,11 +150,12 @@ class _Batch:
 
         self.tick = self.iface.get("tickS") or MAX_TICK_S
         self.target = float(self.params[self.iface["target"]])
+        self.runout = float(self.iface.get("runoutFactor") or 1.6)
         rate = float(self.params[self.iface["rate"]])
         # the run-out is sized by the physics: enough ticks to reach the
-        # completion target plus sixty per cent, whatever the asset
+        # completion target plus the run-out factor, whatever the asset
         self.closing_ticks = int(
-            min(3000, max(60, math.ceil(self.target * 1.6 / max(1e-9, rate * self.tick))))
+            min(3000, max(60, math.ceil(self.target * self.runout / max(1e-9, rate * self.tick))))
         )
 
         self.setup = sample_setup(self.key, self.scn, plant)
@@ -210,14 +211,14 @@ class _Batch:
             return torch.zeros(self.batch, dtype=torch.float64, device=self.device)
         return self.s[:, i]
 
-    def apply_patch(self, set_rec: dict | None, mask: torch.Tensor) -> None:
+    def apply_patch(self, patch: dict | None, mask: torch.Tensor) -> None:
         """Assign scenario flags and process variables, as `applyPatch` does: a
         name that resolves to a flag wins, and a name that resolves to neither is
         silently ignored - which is how the reference treats a patch written in
         interface vocabulary rather than twin vocabulary."""
-        if not set_rec:
+        if not patch:
             return
-        for name, value in set_rec.items():
+        for name, value in patch.items():
             di = tank.disc_index(name)
             if di >= 0:
                 self.d[:, di] = torch.where(mask, float(value), self.d[:, di])
@@ -307,17 +308,17 @@ class _Batch:
         step = self.steps[j]
         slot = self.slots[j]
         dur_s = float(step["durS"])
-        self.planned = torch.where(self.alive, self.planned + dur_s, self.planned)
+        # slip is measured against what was planned *before* this step: the
+        # schedule allowance for the step in hand is not yet overdue
+        denom = torch.where(self.planned > 0, self.planned, torch.ones_like(self.planned))
+        slip = torch.where(self.planned > 0, self.elapsed / denom, torch.ones_like(self.elapsed))
+        t_start = self.elapsed.clone()
 
         process = self.alive
         if step.get("guard"):
             process = process & _cond_holds(step["guard"], self.read(step["guard"]["var"]))
         if not bool(process.any()):
             return
-
-        # slip is only meaningful once something has been planned
-        denom = torch.where(self.planned > 0, self.planned, torch.ones_like(self.planned))
-        slip = self.elapsed / denom
 
         alarm_ringing = (self.s[:, self._alarm_col] == 1) & (self.d[:, self._stop_col] == 0)
         hazard_seen = self.s[:, self._hazard_col] > 0
@@ -344,7 +345,7 @@ class _Batch:
             pick = self.pick_alternative(slot, [float(e["weight"]) for e in surface])
             self.alternative[:, j] = torch.where(thrown, pick, self.alternative[:, j])
             for i, alt in enumerate(surface):
-                self.apply_patch(alt.get("patch", {}).get("set"), thrown & (pick == i))
+                self.apply_patch(alt.get("patch"), thrown & (pick == i))
             still_does = torch.zeros_like(thrown)
             for i, alt in enumerate(surface):
                 still_does = still_does | ((pick == i) & bool(alt.get("alsoApplies")))
@@ -379,6 +380,17 @@ class _Batch:
 
         broke = process & hazard_seen & (self.hazard_seconds > BREAK_HAZARD_S)
         self.alive = self.alive & ~broke
+
+        # schedule drift is the overrun, not the duration: a monitoring step that
+        # takes the time it was given has not made the crew late. Without this a
+        # long cure stamps every following step as operating under extreme time
+        # pressure, which is a modelling error rather than a finding.
+        watch = step.get("watch") or {}
+        allowance = dur_s + float(watch.get("scheduledS") if watch.get("scheduledS") is not None
+                                 else (watch.get("maxWaitS") if watch.get("maxWaitS") is not None else 0))
+        drift = torch.clamp(self.elapsed - t_start, max=allowance)
+        spent = torch.maximum(torch.full_like(drift, dur_s), drift)
+        self.planned = torch.where(process, self.planned + spent, self.planned)
 
     def run_verify(self, j: int, step: dict, slot: int, process: torch.Tensor, hazard_seen: torch.Tensor, slip) -> None:
         spec = step["verify"]
@@ -416,7 +428,7 @@ class _Batch:
                 hit = hit0 & (self.alternative[:, k] == i)
                 if not bool(hit.any()):
                     continue
-                for name in (alt.get("patch", {}).get("set") or {}):
+                for name in (alt.get("patch") or {}):
                     if name in applies:
                         continue
                     di = tank.disc_index(name)
@@ -485,7 +497,7 @@ class _Batch:
             running = (
                 (self.d[:, self._run_col] == 1)
                 & (self.d[:, self._stop_col] == 0)
-                & (self.s[:, self._prog_col] < self.target * 1.6)
+                & (self.s[:, self._prog_col] < self.target * self.runout)
             )
             if not bool(running.any()):
                 break

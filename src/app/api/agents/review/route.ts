@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { reviewFindings, type Finding } from '../../../../lib/llm/agents';
+import { available } from '../../../../lib/llm/client';
 
 export const runtime = 'nodejs';
 
@@ -8,9 +9,9 @@ export const runtime = 'nodejs';
  *
  * The reviewer is given the HEP derivation rows rather than the prose, because a
  * narrative survives any reading of itself: the only thing an independent check can
- * actually disagree with is the arithmetic. Requests are bounded - each finding is
- * a separate pass through a served model on one GPU, and an unbounded array is a
- * way to make the interface look hung.
+ * actually disagree with is the arithmetic. The batch limit is a served-model limit -
+ * one pass per finding on one GPU - so it lifts when the probe says there is no
+ * model to wait for and the rule reviewer answers locally.
  */
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as { findings?: Finding[] } | Finding[] | null;
@@ -18,8 +19,10 @@ export async function POST(req: Request) {
   if (!findings.length) {
     return NextResponse.json({ error: 'findings[] is required', verdicts: [], llm: { used: false, reason: 'no findings in the request' } }, { status: 400 });
   }
-  if (findings.length > 12) {
-    return NextResponse.json({ error: 'send at most 12 findings per call', verdicts: [], llm: { used: false, reason: 'request refused' } }, { status: 413 });
+
+  const limit = (await available()) ? 12 : 60;
+  if (findings.length > limit) {
+    return NextResponse.json({ error: `send at most ${limit} findings per call`, verdicts: [], llm: { used: false, reason: 'request refused' } }, { status: 413 });
   }
 
   const malformed = findings.find((f) => !f?.id || !f?.step || !f?.hep?.rows);

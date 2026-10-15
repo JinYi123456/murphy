@@ -148,7 +148,7 @@ BINDINGS: dict[str, list[tuple[str, list[int]]]] = {
     "confusable_device": [("HCI", [2, 1, 1])],
     "ambiguous_wording": [("PRU", [3, 2, 1])],
     "memory_load": [("HCI", [2, 1, 0])],
-    "poor_procedure": [("PRU", [2, 1, 1])],
+    "poor_procedure": [("PRU", [2, 2, 1])],
     "timing_critical": [("AVL", [2, 1, 1])],
     "time_pressure": [("AVL", [2, 1, 1]), ("STR", [2, 1, 0])],
     "distraction": [("STR", [2, 1, 0])],

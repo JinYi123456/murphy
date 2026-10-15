@@ -75,15 +75,16 @@
       "containment": true,
       "interlock": true,
       "driftRate": 0.2,
-      "shiftsPerYear": 260
+      "shiftsPerYear": 260,
+      "alarmFrequentFalse": true
     },
     "provenRecent": true,
     "preIsolated": [
       "V4"
     ],
     "product": "toluene",
-    "freeboardPct": 0.55,
-    "notes": "Capacity was added by shortening the margin rather than by building a tank: the batch still fits, with 1.7 m3 of room above the high-high trip point. This is where the response budget stops fitting."
+    "freeboardPct": 0.49,
+    "notes": "Capacity was added by shortening the margin rather than by building a tank: the batch now ends 3.5 cm below the high level alarm, the vent line is shut after the roof inspection, and part of the bund capacity has been taken up by the previous shift. Every barrier is thin at the same time."
   },
   {
     "id": "fn_after_lining_repair",
@@ -144,13 +145,14 @@
     },
     "provenRecent": false,
     "preIsolated": [
-      "PIS"
+      "PIS",
+      "LAH"
     ],
     "instrumentDrift": {
-      "level": -0.45
+      "level": -0.9
     },
     "product": "toluene",
-    "freeboardPct": 0.55,
-    "notes": "The shape that produced a real overfill: the protective switch was never in service, the display reads low, the batch is planned into the alarm band, and the crew has been trained by experience to discount the annunciator."
+    "freeboardPct": 0.47,
+    "notes": "The shape that produced a real overfill: the display had flat-lined low, the independent high-high switch was never in service since installation, and the level alarm shared the failed measurement. The crew did every step the procedure asked for, on an instrument that was lying to them."
   }
 ]

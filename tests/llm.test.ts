@@ -136,6 +136,7 @@ function effect(over: Partial<PairedEffect> = {}): PairedEffect {
 function summary(over: Partial<SummaryDto> = {}): SummaryDto {
   return {
     variantId: 'OP-TRF-014/7/baseline', seed: 'murphy-default', n: 4000, failed: 34, failureRate: 0.0085, nearMissRate: 0.021,
+    incidents: 8, incidentRate: 0.002, upsets: 41, upsetRate: 0.0103,
     outcomeCounts: { normal: 3966, minor_release: 26, overfill: 8 }, perStep: {}, meanCostEur: 1200,
     costCi: { mean: 1200, ciLow: 900, ciHigh: 1500 }, p95CostEur: 6000, cvarCostEur: 9000, meanReleaseM3: 0.041,
     meanElapsedS: 2100, meanHazardS: 12.5, shiftsPerYear: 420, annualLossEur: 504000, annualEscalatedEur: 604000,
@@ -311,7 +312,7 @@ describe('parseProcedure', () => {
     expect(result.integrity.ok).toBe(true);
     expect(inspectModel(result.procedure).ok).toBe(true);
     expect(result.procedure.steps[0].applies).toEqual({ V1: 1 });
-    expect(result.procedure.steps[0].errors?.[0].patch).toEqual({ set: { V2: 1 } });
+    expect(result.procedure.steps[0].errors?.[0].patch).toEqual({ V2: 1 });
     expect(result.dropped.join(' ')).toContain('PRESSURE_X');
     expect(result.dropped.join(' ')).toContain('NOT_A_TAG');
     expect(calls.length).toBe(2);
@@ -374,7 +375,7 @@ describe('writeErrorScenario', () => {
     const { result, llm } = await writeErrorScenario(step, persona, plant, 'wrong_target');
     expect(llm.used).toBe(true);
     expect(result.patchKeys).toEqual(['V3', 'level']);
-    expect(result.patch.set).toEqual({ V3: 1 });
+    expect(result.patch).toEqual({ V3: 1 });
     expect(result.unresolved).toEqual(['level']);
     expect(llm.reason).toContain('TK-999');
     const prompt = String(calls[1].payload.messages?.[1].content);
@@ -392,7 +393,7 @@ describe('writeErrorScenario', () => {
     const twin = getTwin(plant.twin ?? 'tank_transfer');
     for (const k of result.patchKeys) expect(twin.discIndex(k) >= 0 || twin.varIndex(k) >= 0).toBe(true);
     expect(result.patchKeys).toContain('V3');
-    expect(result.patch.set?.V3).toBeDefined();
+    expect(result.patch.V3).toBeDefined();
   });
 });
 
@@ -530,8 +531,19 @@ describe('agent routes', () => {
     const noFindings = await reviewRoute(post('/api/agents/review', {}));
     expect(noFindings.status).toBe(400);
 
-    const tooMany = await reviewRoute(post('/api/agents/review', { findings: new Array(13).fill(makeFinding()) }));
+    const tooMany = await reviewRoute(post('/api/agents/review', { findings: new Array(61).fill(makeFinding()) }));
     expect(tooMany.status).toBe(413);
+
+    // with a served model the cap is the GPU's, not the rule reviewer's
+    serve();
+    fakeLlm(() => JSON.stringify({ verdict: 'retain', confidence: 0.5, reason: 'no objection survived' }));
+    const overModelCap = await reviewRoute(post('/api/agents/review', { findings: new Array(13).fill(makeFinding()) }));
+    expect(overModelCap.status).toBe(413);
+
+    const inside = await (await reviewRoute(post('/api/agents/review', { findings: new Array(2).fill(makeFinding()) }))).json();
+    expect(inside.verdicts).toHaveLength(2);
+    expect(inside.llm).toMatchObject({ used: true, calls: 2 });
+    expect(JSON.stringify(inside)).not.toContain(KEY);
 
     const noLoop = await changeOrderRoute(post('/api/agents/change-order', {}));
     expect(noLoop.status).toBe(400);

@@ -18,7 +18,7 @@ Continuous state (index = wire position):
 
 Scenario state:
    0 V1 | 1 V2 | 2 V3 | 3 V4 | 4 PUMP | 5 LAH | 6 PIS | 7 RACK | 8 STOP
-   9 PISFAIL | 10 gaugeBias m | 11 flowScale | 12 V3LEAK | 13 BUND_HEADROOM
+   9 PISFAIL | 10 gaugeBias m | 11 scale | 12 V3LEAK | 13 BUND_HEADROOM
   14 BOND_OK | 15 HAMMER | 16 HOSE_SPILL | 17 AUTO_TRIP
 """
 
@@ -32,7 +32,7 @@ VARS = [
     "roofFailed", "secsSinceAl", "oneShotDone",
 ]
 DISCS = [
-    "V1", "V2", "V3", "V4", "PUMP", "LAH", "PIS", "RACK", "STOP", "PISFAIL", "gaugeBias", "flowScale",
+    "V1", "V2", "V3", "V4", "PUMP", "LAH", "PIS", "RACK", "STOP", "PISFAIL", "gaugeBias", "scale",
     "V3LEAK", "BUND_HEADROOM", "BOND_OK", "HAMMER", "HOSE_SPILL", "AUTO_TRIP",
 ]
 
@@ -79,7 +79,7 @@ IFACE = {
     "hazard": "spill",
     "clock": "t",
     "bias": "gaugeBias",
-    "scale": "flowScale",
+    "scale": "scale",
     "failOnDemand": "PISFAIL",
 }
 
@@ -178,7 +178,7 @@ def init(
     disc[:, D["STOP"]] = 0.0
     disc[:, D["PISFAIL"]] = 0.0
     disc[:, D["gaugeBias"]] = bias
-    disc[:, D["flowScale"]] = 1.0
+    disc[:, D["scale"]] = 1.0
     disc[:, D["V3LEAK"]] = 0.0
     disc[:, D["BUND_HEADROOM"]] = 1.0
     disc[:, D["BOND_OK"]] = 1.0
@@ -222,7 +222,7 @@ def advance(
     v2 = d[:, D["V2"]]
     v3 = d[:, D["V3"]]
     v4 = d[:, D["V4"]]
-    q = pump * (p["qPump"] / 3600.0) * d[:, D["flowScale"]]
+    q = pump * (p["qPump"] / 3600.0) * d[:, D["scale"]]
 
     to_tank = q * v1 * (1.0 - p["crossFrac"] * v3)
     to_cross = q * v1 * p["crossFrac"] * v3

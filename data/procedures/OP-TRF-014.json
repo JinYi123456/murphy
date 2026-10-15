@@ -136,9 +136,7 @@
           "kind": "omission",
           "weight": 40,
           "text": "The register is in the control room and the shift is behind. Assumed the fitter signed it back like he always does",
-          "patch": {
-            "PIS": 0
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -146,9 +144,7 @@
           "kind": "misread",
           "weight": 30,
           "text": "Confirmed the row for LT-101. The isolation that matters is the next row down, LSHH-101",
-          "patch": {
-            "PIS": 0
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -300,9 +296,7 @@
           "kind": "misread",
           "weight": 50,
           "text": "The valve is quarter-turn and the indicator plate was refitted upside down after the packing change",
-          "patch": {
-            "V2": 1
-          },
+          "patch": {},
           "source": "analyst"
         }
       ]
@@ -427,9 +421,7 @@
           "kind": "omission",
           "weight": 45,
           "text": "The vent was shut for the roof inspection. It is up the platform ladder, off the transfer walk, and nobody thought of it",
-          "patch": {
-            "V4": 0
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -437,9 +429,7 @@
           "kind": "wrong_target",
           "weight": 25,
           "text": "Opened the nitrogen blanket valve next to the vent. The tank now pressurises instead of breathing, which looks like a healthy result on the status board",
-          "patch": {
-            "V4": 0
-          },
+          "patch": {},
           "source": "analyst"
         },
         {
@@ -447,9 +437,7 @@
           "kind": "incomplete",
           "weight": 30,
           "text": "Climbed the ladder, found the handle stiff, forced it a quarter turn and assumed it was through",
-          "patch": {
-            "V4": 0
-          },
+          "patch": {},
           "source": "analyst"
         }
       ]

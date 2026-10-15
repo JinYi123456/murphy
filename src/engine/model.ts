@@ -59,7 +59,7 @@ export function inspectModel(raw: unknown): ModelReport {
 
     const keys = [...Object.keys(s.applies ?? {})];
     for (const e of s.errors ?? []) {
-      keys.push(...Object.keys(e.patch?.set ?? {}));
+      keys.push(...Object.keys(e.patch ?? {}));
       if (!(e.weight >= 0)) errors.push(`${s.id}/${e.id}: weight must be >= 0`);
       if (!ERROR_KINDS.includes(e.kind)) errors.push(`${s.id}/${e.id}: unknown error kind "${e.kind}"`);
       if (!e.text?.trim()) errors.push(`${s.id}/${e.id}: an error mode with no description`);

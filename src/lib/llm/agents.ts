@@ -7,7 +7,7 @@ import { interventionById } from '../../engine/repair';
 import type { ConditionId } from '../../engine/conditions';
 import type { ActionKind, HraMethod } from '../../engine/hra';
 import type {
-  DiscretePatch, ErrorAlternative, ErrorKind, PersonaTraits, PlantConfig, Procedure, Step,
+  ErrorAlternative, ErrorKind, Patch, PersonaTraits, PlantConfig, Procedure, Step,
 } from '../../engine/types';
 import type { TwinDef } from '../../engine/twins/twin';
 import type { SummaryDto } from '../dto';
@@ -456,8 +456,12 @@ function compileErrors(raw: unknown, stepId: string, twin: TwinDef, dropped: str
     usedIds.add(id);
     const weight = typeof e.weight === 'number' && Number.isFinite(e.weight) ? Math.max(0, e.weight) : 25;
     const alt: ErrorAlternative = { id, kind: e.kind as ErrorKind, weight, text, patch: {}, source: SOURCES.includes(e.source as ErrorAlternative['source']) ? (e.source as ErrorAlternative['source']) : 'model' };
-    const patch = dropUnknownKeys(twin, (e.patch as Record<string, unknown> | undefined)?.set, `${stepId}/${id} patch`, dropped);
-    if (Object.keys(patch).length) alt.patch = { set: patch } satisfies DiscretePatch;
+    // a model that has seen THERP-style tables writes `{"set":{...}}`; the engine
+    // patch is flat, so both spellings are read and only the flat one is emitted
+    const rawPatch = (e.patch ?? {}) as Record<string, unknown>;
+    const patchSource = rawPatch.set && typeof rawPatch.set === 'object' ? rawPatch.set : e.patch;
+    const patch = dropUnknownKeys(twin, patchSource, `${stepId}/${id} patch`, dropped);
+    if (Object.keys(patch).length) alt.patch = patch;
     if (e.alsoApplies === true) alt.alsoApplies = true;
     const symptom = str(e.symptom);
     if (symptom) alt.symptom = symptom;
@@ -608,7 +612,7 @@ export interface ScenarioResult {
   /** variable names the model claims the mistake touches, filtered against the twin */
   patchKeys: string[];
   /** the executable part: only keys whose adverse state is documented or demanded by the step */
-  patch: DiscretePatch;
+  patch: Patch;
   /** names that survive validation but need an analyst to give them a value */
   unresolved: string[];
   source: 'model' | 'offline';
@@ -689,7 +693,7 @@ export async function writeErrorScenario(step: Step, persona: PersonaTraits, pla
     return {
       result: {
         stepId: step.id, kind: chosen, twin: twin.id, text,
-        symptom: symptom || undefined, patchKeys, patch: Object.keys(set).length ? { set } : {}, unresolved,
+        symptom: symptom || undefined, patchKeys, patch: set, unresolved,
         source: 'model',
       },
       // the invented names are kept in the provenance: rejecting a scenario
@@ -776,7 +780,7 @@ function offlineScenario(step: Step, persona: PersonaTraits, plant: PlantConfig,
     text: narration[kind],
     symptom: kind === 'misread' || kind === 'delayed_response' ? 'nothing until the process itself disagrees' : 'nothing at the device',
     patchKeys: list,
-    patch: Object.keys(set).length ? { set } : {},
+    patch: set,
     unresolved,
     source: 'offline',
   };
@@ -1010,6 +1014,10 @@ export interface ChangeOrderFacts {
   hazardDeltaS: string;
   nearMissBasePct: string;
   nearMissNewPct: string;
+  incidentBasePct: string;
+  incidentNewPct: string;
+  upsetBasePct: string;
+  upsetNewPct: string;
   releaseBaseM3: string;
   releaseNewM3: string;
   addedSeconds: number;
@@ -1073,6 +1081,10 @@ export function changeOrderFacts(loop: RepairLoopResult): ChangeOrderFacts {
     hazardDeltaS: s && base ? (s.meanHazardS - base.meanHazardS).toFixed(1) : '0.0',
     nearMissBasePct: base ? pct(base.nearMissRate) : '0.00',
     nearMissNewPct: s ? pct(s.nearMissRate) : '0.00',
+    incidentBasePct: base ? pct(base.incidentRate) : '0.00',
+    incidentNewPct: s ? pct(s.incidentRate) : '0.00',
+    upsetBasePct: base ? pct(base.upsetRate) : '0.00',
+    upsetNewPct: s ? pct(s.upsetRate) : '0.00',
     releaseBaseM3: base ? base.meanReleaseM3.toFixed(3) : '0',
     releaseNewM3: s ? s.meanReleaseM3.toFixed(3) : '0',
     addedSeconds: controls.reduce((a, b) => a + b.addedSeconds, 0),
@@ -1090,6 +1102,8 @@ function factTokens(f: ChangeOrderFacts): Record<string, string> {
     annual_loss_base_eur: f.annualLossBaseEur, annual_loss_new_eur: f.annualLossNewEur,
     annual_gain_eur: f.annualGainEur, control_cost_eur: f.controlCostEur, net_eur: f.netEur,
     hazard_delta_s: f.hazardDeltaS, near_miss_base_pct: f.nearMissBasePct, near_miss_new_pct: f.nearMissNewPct,
+    incident_base_pct: f.incidentBasePct, incident_new_pct: f.incidentNewPct,
+    upset_base_pct: f.upsetBasePct, upset_new_pct: f.upsetNewPct,
     release_base_m3: f.releaseBaseM3, release_new_m3: f.releaseNewM3, added_seconds: String(f.addedSeconds),
     controls: f.controls.map((c) => c.label).join('; ') || 'none',
     control_tiers: f.controls.map((c) => c.tier).join(', ') || 'none',
@@ -1173,7 +1187,7 @@ function offlineNarrative(f: ChangeOrderFacts): Record<string, string> {
     rationale: f.controls.map((c) => `${c.label}: ${c.describe}`).join(' ') || 'The tested controls did not change the mechanism the finding rests on.',
     tested: `${f.shifts} paired shifts per arm under the ${f.method} derivation, same scenario indices, same crew and configuration, with false discovery correction across the whole candidate set.`,
     rejected: f.rejected.length ? f.rejected.map((r) => `${r.id}: ${r.why}`).join('; ') : 'No candidate was rejected.',
-    residualRisk: `Failure rate moves from ${f.failureBasePct}% to ${f.failureNewPct}% with a paired interval of ${f.ciPts} percentage points and a one-sided risk of ${f.riskPct}%. Mean time with hazard in effect changes by ${f.hazardDeltaS}s per shift and ${f.addedSeconds}s of crew time is added. The mechanism remaining is whatever the adopted controls do not reach; this order does not claim the sequence is safe, only that it is measurably thinner.`,
+    residualRisk: `Failure rate moves from ${f.failureBasePct}% to ${f.failureNewPct}% with a paired interval of ${f.ciPts} percentage points and a one-sided risk of ${f.riskPct}%. Incidents move from ${f.incidentBasePct}% to ${f.incidentNewPct}% and process upsets from ${f.upsetBasePct}% to ${f.upsetNewPct}% of shifts. Mean time with hazard in effect changes by ${f.hazardDeltaS}s per shift and ${f.addedSeconds}s of crew time is added. The mechanism remaining is whatever the adopted controls do not reach; this order does not claim the sequence is safe, only that it is measurably thinner.`,
     verification: 'Issue the revised document under the normal controlled-copy process, brief the crews on shift handover, and confirm the first execution against the new text with the superintendent present.',
   };
 }
@@ -1215,6 +1229,8 @@ Figures in this section are taken directly from the run record; no figure in thi
 |---|---|---|---|
 | Failure rate | ${f.failureBasePct}% | ${f.failureNewPct}% | ${f.deltaPts} pts (95% interval ${f.ciPts} pts) |
 | Near-miss rate | ${f.nearMissBasePct}% | ${f.nearMissNewPct}% | - |
+| Incident rate | ${f.incidentBasePct}% | ${f.incidentNewPct}% | - |
+| Process upset rate | ${f.upsetBasePct}% | ${f.upsetNewPct}% | - |
 | Mean release | ${f.releaseBaseM3} m3/shift | ${f.releaseNewM3} m3/shift | - |
 | Annual expected loss | EUR ${f.annualLossBaseEur} | EUR ${f.annualLossNewEur} | EUR ${f.annualGainEur} |
 | Control cost | - | EUR ${f.controlCostEur} | net EUR ${f.netEur} |

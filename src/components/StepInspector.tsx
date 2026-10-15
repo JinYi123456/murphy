@@ -12,7 +12,7 @@ import { conditionsFor, sampleSetup } from '../engine/runner';
 import { seedToKey } from '../engine/prng';
 import type { StepAudit } from '../engine/runner';
 import type { RunConfig, Step } from '../engine/types';
-import type { DiscretePatch } from '../engine/types';
+import type { Patch } from '../engine/types';
 import type { StepStatDto } from '../lib/dto';
 
 const pct = (v: number, dp = 2) => `${(v * 100).toFixed(dp)}%`;
@@ -76,7 +76,7 @@ function deriveWorksheet(run: RunConfig, step: Step, method: HraMethod, scenario
  * does to the plant and the inspector must not show an empty patch for an error
  * that plainly carries one. The cast is at that data boundary.
  */
-function patchAssignments(patch: DiscretePatch | undefined): Record<string, number> {
+function patchAssignments(patch: Patch | undefined): Record<string, number> {
   const raw = (patch ?? {}) as Record<string, unknown>;
   const nested = raw.set;
   if (nested && typeof nested === 'object') return nested as Record<string, number>;

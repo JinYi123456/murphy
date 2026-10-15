@@ -328,7 +328,9 @@ def check_paired(rep: Report, device: torch.device) -> None:
     personas = {p["id"]: p for p in load(DATA / "personas.json")}
     plants = {p["id"]: p for p in load(DATA / "plants.json") if p.get("twin") == "tank_transfer"}
     costs = load(DATA / "costs.json")
-    plant, persona, method = plants[1], personas[1], "sparh"
+    plant = plants["tk_after_instrument_work"]
+    persona = personas["night_trainee"]
+    method = "sparh"
     seed = "G-paired-crn"
     size = 1000
 

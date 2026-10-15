@@ -33,7 +33,7 @@
   "STOP",
   "PISFAIL",
   "gaugeBias",
-  "flowScale",
+  "scale",
   "V3LEAK",
   "BUND_HEADROOM",
   "BOND_OK",

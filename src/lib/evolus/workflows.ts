@@ -2,7 +2,6 @@ import {
   agentChat, agentChatStream, askFileExtractor, executeWorkflow, evolusConfigured, pollExecution,
   runAiTool, runAiToolFile, runAiToolMedia, EvolusError, type AiToolRun, type EvolusFile, type ExecutionStatus,
 } from './client';
-import { readLedger } from './ledger';
 import { PROCEDURES, CONTROL_CATALOGUE } from '../registry';
 import type { ChangeOrderFacts } from '../llm/agents';
 
@@ -23,7 +22,6 @@ import type { ChangeOrderFacts } from '../llm/agents';
 export interface FlowStage {
   block: string;
   ok: boolean;
-  ms?: number;
   detail?: string;
   /** why this stage did not run, whenever it did not */
   skipped?: string;
@@ -87,7 +85,9 @@ export interface IntakeResult {
  */
 export async function intakeProcedure(documentBytes: Uint8Array, filename: string): Promise<IntakeResult> {
   const stages: FlowStage[] = [];
-  const procedure = PROCEDURES[0];
+  // the model in force for this document, chosen by the number printed on the file:
+  // with two procedures registered, "the first one" would be a wrong answer
+  const procedure = PROCEDURES.find((p) => filename.toUpperCase().includes(p.id.toUpperCase())) ?? PROCEDURES[0];
   const file: EvolusFile = {
     bytes: documentBytes,
     filename,
@@ -531,9 +531,4 @@ function localAnswer(question: string, citations: AskResult['citations']): strin
     return `Nothing in the compiled model speaks to "${question.slice(0, 120)}". Available procedures: ${PROCEDURES.map((p) => `${p.id} rev ${p.revision} (${p.steps.length} steps)`).join('; ')}. Controls in the catalogue: ${CONTROL_CATALOGUE.length}, including ${CONTROL_CATALOGUE.slice(0, 3).map((c) => c.id).join(', ')}.`;
   }
   return `Answered from the compiled model in this process, not from the platform library.\n${citations.map((c, i) => `${i + 1}. ${c.procedureId} step ${c.stepId}: ${c.text}`).join('\n')}`;
-}
-
-/** The last Evolus identifiers, so a UI can show that a platform call really happened. */
-export function recentEvolusIdentifiers(limit = 8) {
-  return readLedger(limit).map((e) => ({ block: e.block, executionId: e.executionId, traceId: e.traceId, auditId: e.auditId, ok: e.ok, at: e.at }));
 }

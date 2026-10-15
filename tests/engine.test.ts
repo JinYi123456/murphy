@@ -216,7 +216,7 @@ describe('model integrity gate', () => {
 
   it('rejects a patch that names a plant variable that does not exist', () => {
     const broken = JSON.parse(JSON.stringify(p));
-    broken.steps[3].errors[0].patch.set = { NOT_A_VALVE: 1 };
+    broken.steps[3].errors[0].patch = { NOT_A_VALVE: 1 };
     const r = inspectModel(broken);
     expect(r.ok).toBe(false);
     expect(r.errors.join(' ')).toMatch(/NOT_A_VALVE/);

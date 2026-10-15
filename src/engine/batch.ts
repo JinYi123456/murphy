@@ -2,6 +2,7 @@ import { costOf } from './economics';
 import { simulateShift } from './runner';
 import type { ExtendedResult } from './runner';
 import type { RunConfig } from './types';
+import { severityOf } from './types';
 import { pairedBootstrap, pairedPValue, cvar, meanCi, quantile } from './stats';
 import type { PairedEffect } from './stats';
 
@@ -31,6 +32,12 @@ export interface BatchSummary {
   n: number;
   failed: number;
   failureRate: number;
+  /** loss of containment or damage to the asset - the safety number */
+  incidents: number;
+  incidentRate: number;
+  /** the batch did not complete, nothing was released - the production number */
+  upsets: number;
+  upsetRate: number;
   nearMissRate: number;
   outcomeCounts: Record<string, number>;
   perStep: Record<string, StepStat>;
@@ -97,6 +104,8 @@ export function runBatch(
   const pSum: Record<string, number> = {};
   const reportEvery = opts.progressEvery ? Math.max(1, Math.floor(n / opts.progressEvery)) : 0;
   let nearMiss = 0;
+  let incidents = 0;
+  let upsets = 0;
 
   for (let scn = 0; scn < n; scn++) {
     const r = simulateShift(cfg, scn);
@@ -107,6 +116,9 @@ export function runBatch(
     elapsedArr[scn] = r.elapsedS;
     hazardArr[scn] = r.hazardSeconds;
     failures[scn] = r.failed ? 1 : 0;
+    const severity = severityOf(r.outcome);
+    if (severity === 'incident') incidents++;
+    else if (severity === 'upset') upsets++;
     if (r.nearMiss) nearMiss++;
     outcomeCounts[r.outcome] = (outcomeCounts[r.outcome] ?? 0) + 1;
 
@@ -160,6 +172,10 @@ export function runBatch(
       n,
       failed,
       failureRate: failed / n,
+      incidents,
+      incidentRate: incidents / n,
+      upsets,
+      upsetRate: upsets / n,
       nearMissRate: nearMiss / n,
       outcomeCounts,
       perStep,

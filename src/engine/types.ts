@@ -30,10 +30,8 @@ export interface Cond {
   value: number;
 }
 
-export interface DiscretePatch {
-  /** scenario or process variables to force when this error is realised */
-  set?: Record<string, number>;
-}
+/** Plant variables an error forces, by name. Names are checked against the twin. */
+export type Patch = Record<string, number>;
 
 export interface ErrorAlternative {
   id: string;
@@ -43,7 +41,7 @@ export interface ErrorAlternative {
   /** situational narrative: how a real person gets this wrong in this plant */
   text: string;
   /** executable consequence on the plant model */
-  patch: DiscretePatch;
+  patch: Patch;
   /** does the operator still perform the intended action as well? default false */
   alsoApplies?: boolean;
   /** what the operator would notice, if anything */
@@ -208,6 +206,36 @@ export type OutcomeClass =
   | 'scrap_batch'
   | 'scrap_batch'
   | 'hot_start';
+
+/**
+ * A shift that ended in an aborted batch is not a shift that ended in a release,
+ * and a plant reports them on different sheets to different people. Blending the
+ * two into one failure percentage is how a tool like this gets dismissed by the
+ * operations manager, because it would call a routine goodnight an incident.
+ */
+export const SEVERITY: Record<string, 'normal' | 'upset' | 'incident'> = {
+  normal: 'normal',
+  intercepted: 'normal',
+  no_flow: 'upset',
+  short_batch: 'upset',
+  trip_stop: 'upset',
+  no_light_off: 'upset',
+  minor_release: 'incident',
+  overfill: 'incident',
+  containment_escape: 'incident',
+  line_failure: 'incident',
+  tank_breach: 'incident',
+  misrouting: 'incident',
+  deflagration: 'incident',
+  refractory_damage: 'incident',
+  shell_hotspot: 'incident',
+  hot_start: 'incident',
+  scrap_batch: 'upset',
+};
+
+export function severityOf(outcome: string): 'normal' | 'upset' | 'incident' {
+  return SEVERITY[outcome] ?? 'incident';
+}
 
 export interface TraceEvent {
   /** seconds from shift start */
