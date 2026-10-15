@@ -359,7 +359,7 @@ class _Batch:
         self.error_at[:, j] = self.elapsed
 
         if step.get("verify"):
-            self.run_verify(j, step, slot, process, hazard_seen, slip)
+            self.run_verify(j, step, slot, process, slip)
 
         if step.get("watch"):
             self.run_watch(j, step, slot, process)
@@ -395,7 +395,7 @@ class _Batch:
         spent = torch.maximum(torch.full_like(drift, dur_s), drift)
         self.planned = torch.where(process, self.planned + spent, self.planned)
 
-    def run_verify(self, j: int, step: dict, slot: int, process: torch.Tensor, hazard_seen: torch.Tensor, slip) -> None:
+    def run_verify(self, j: int, step: dict, slot: int, process: torch.Tensor, slip) -> None:
         spec = step["verify"]
         sources = [k for k, s in enumerate(self.steps) if s["id"] in spec["of"]]
         open_any = torch.zeros_like(process)
@@ -407,7 +407,9 @@ class _Batch:
         # the checking action is scored with the alarm deliberately ignored: the
         # question is whether the check finds the deviation, and the distraction
         # that the alarm causes is already on the worksheet for the step itself
-        conds = self.conditions(step, slip, False, hazard_seen, with_warnings=False)
+        conds = self.conditions(
+            step, slip, False, self.s[:, self._hazard_col] > 0, with_warnings=False
+        )
         level, severity, _ = hra.assess(step, self.persona, self.plant, conds, self.batch, self.device)
         pdet = hra.detection_probability(
             level,

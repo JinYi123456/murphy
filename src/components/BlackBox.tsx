@@ -31,6 +31,13 @@ export function BlackBox({ s }: { s: ConsoleStore }) {
   const total = shift?.elapsedS ?? 0;
 
   useEffect(() => {
+    if (!shift && s.traced.length) {
+      s.setActiveShift(s.traced[0]);
+      setTS(0);
+    }
+  }, [shift, s]);
+
+  useEffect(() => {
     if (!playing || !shift) return;
     last.current = performance.now();
     const tick = (now: number) => {

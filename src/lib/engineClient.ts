@@ -139,12 +139,26 @@ export async function repairStream(
   n: number,
   onEvent: (e: { phase: string; message: string; done?: number; total?: number; trial?: unknown }) => void,
 ): Promise<unknown> {
-  const res = await fetch('/api/repair', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ cfg, n }),
-  });
-  if (!res.ok || !res.body) throw new Error(`repair failed: HTTP ${res.status}`);
+  let res: Response;
+  try {
+    res = await fetch('/api/repair', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ cfg, n }),
+    });
+  } catch {
+    res = null as unknown as Response;
+  }
+  if (!res || !res.ok || !res.body) {
+    // No server: the loop is the same pure function, run here. The engine is
+    // deliberately free of any Node-only import so the browser is a complete
+    // implementation and not a demo shell around a backend.
+    onEvent({ phase: 'start', message: `no server reachable - running the repair loop in this browser on ${n} shifts per candidate` });
+    const { runRepairLoop } = await import('./fuzz');
+    const result = await runRepairLoop(cfg as never, n, onEvent);
+    onEvent({ phase: 'done', message: 'repair loop finished locally' });
+    return result;
+  }
   const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buffer = '';
