@@ -1,5 +1,5 @@
 /**
- * Client for the batched engine that runs on AMD Instinct.
+ * Client for the batched tensor engine, which is built to run on an AMD host.
  *
  * The service is optional by design: the product has to be demonstrable on a
  * laptop. But when it is present it is not decorative - it is doing the same

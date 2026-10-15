@@ -5,8 +5,10 @@
  *
  * The same algorithm is re-implemented in the PyTorch engine with int64
  * tensor ops. Because both sides use only exact integer operations and an
- * exact u32/2^32 conversion, the random stream is bit-identical between the
- * browser, a CPU and an AMD Instinct GPU. No framework RNG is ever used.
+ * exact u32/2^32 conversion, the stream is bit-identical across the browser,
+ * the Node engine and the tensor engine - on a CPU today, and on an Instinct
+ * device the same arithmetic is what executes. No framework RNG is ever used,
+ * and the golden fixtures exist so this is checked rather than asserted.
  */
 
 const M0 = 0xd2511f53;

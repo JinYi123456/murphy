@@ -1,6 +1,6 @@
 /**
- * Client for open-weight models served on AMD Instinct behind an
- * OpenAI-compatible endpoint (vLLM, LMDeploy, TGI's OpenAI shim).
+ * Client for open-weight models served behind an OpenAI-compatible endpoint
+ * on an AMD host (vLLM, LMDeploy, TGI's OpenAI shim), when one is configured.
  *
  * Two rules shape this file.
  *

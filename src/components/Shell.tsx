@@ -243,8 +243,10 @@ function Intro({ onRun }: { onRun: () => void }) {
         </a>
       </div>
       <p className="mt-8 text-[11px] text-ash">
-        17 steps, 4 plant states, 6 crews, 12 candidate controls. Runs in your browser; the same kernel
-        runs batched on AMD Instinct.
+        {PROCEDURES.length} controlled procedures, {PROCEDURES.reduce((a, p) => a + p.steps.length, 0)} steps, {' '}
+        {PLANTS.length} plant states, {PERSONAS.length} crews, {CONTROL_CATALOGUE.length} candidate controls.
+        It runs in this browser; the same kernel is written to run batched on an AMD Instinct device, and the
+        chip above says which machine answered - it has never shown a device it does not have.
       </p>
     </section>
   );
