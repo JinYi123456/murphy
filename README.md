@@ -115,6 +115,9 @@ the browser; the health route reports whether each is set, not what it is.
 
 ![MURPHY line map: the procedure on its own time axis, error terrain above it](docs/assets/line-map.png)
 
+*Placeholder. Run `npm run dev`, open the line map, and save a capture to
+`docs/assets/line-map.png`.*
+
 ## Read further
 
 - `docs/METHOD.md` — where every probability comes from, and what the backtest does not prove.
