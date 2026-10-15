@@ -1,5 +1,7 @@
 import type { WorkerReply, WorkerRequest } from './engine.worker';
 import type { RunConfig } from '../engine/types';
+import type { ConsoleConfig } from './registry';
+import type { DiagnosisCase } from './diagnosis';
 import type { SummaryDto, ShiftDto } from './dto';
 
 /**
@@ -119,6 +121,37 @@ export function sweep(run: RunConfig, n: number, seeds: string[]): Promise<{ see
       },
     });
     w.postMessage({ kind: 'sweep', id, run, n, seeds } as WorkerRequest);
+  });
+}
+
+/**
+ * Rank the procedure's own error modes against one recorded instrument window.
+ *
+ * This is the heaviest thing the interface does - candidates x replicas shifts -
+ * so it runs in the worker and keeps the screen alive. The server route is the
+ * same function; nothing about the diagnosis depends on which machine answered.
+ */
+export function diagnoseCase(
+  cfg: ConsoleConfig,
+  scn: number,
+  errorIndex: number,
+  opts: { windowS?: number; replicas?: number } = {},
+): Promise<DiagnosisCase> {
+  const w = getWorker();
+  if (!w) return import('./diagnosis').then((m) => m.analyseShift(cfg, scn, errorIndex, opts));
+  const id = ++seq;
+  return new Promise<DiagnosisCase>((resolve, reject) => {
+    waiting.set(id, {
+      resolve: (r) => {
+        if (r.kind === 'error') reject(new Error(r.message));
+        else if (r.kind === 'diagnose') resolve(r.case);
+        else reject(new Error(`unexpected worker reply ${r.kind}`));
+      },
+    });
+    w.postMessage({
+      kind: 'diagnose', id, cfg, scn, errorIndex,
+      windowS: opts.windowS ?? 2400, replicas: opts.replicas ?? 6,
+    } as WorkerRequest);
   });
 }
 

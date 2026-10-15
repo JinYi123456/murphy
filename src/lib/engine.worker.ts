@@ -8,18 +8,23 @@
  */
 import { runBatch } from '../engine/batch';
 import { simulateShift } from '../engine/runner';
+import { analyseShift } from './diagnosis';
 import { toShiftDto, toSummaryDto } from './dto';
+import type { ConsoleConfig } from './registry';
+import type { DiagnosisCase } from './diagnosis';
 import type { RunConfig } from '../engine/types';
 
 export type WorkerRequest =
   | { kind: 'batch'; id: number; run: RunConfig; n: number; variantId: string; collectWorst: number }
   | { kind: 'replay'; id: number; run: RunConfig; scn: number }
+  | { kind: 'diagnose'; id: number; cfg: ConsoleConfig; scn: number; errorIndex: number; windowS: number; replicas: number }
   | { kind: 'sweep'; id: number; run: RunConfig; n: number; seeds: string[] };
 
 export type WorkerReply =
   | { kind: 'progress'; id: number; done: number; total: number }
   | { kind: 'batch'; id: number; summary: ReturnType<typeof toSummaryDto>; traced: ReturnType<typeof toShiftDto>[]; ms: number }
   | { kind: 'replay'; id: number; shift: ReturnType<typeof toShiftDto> }
+  | { kind: 'diagnose'; id: number; case: DiagnosisCase }
   | { kind: 'sweep'; id: number; rows: { seed: string; failureRate: number; meanCostEur: number }[] }
   | { kind: 'error'; id: number; message: string };
 
@@ -52,6 +57,13 @@ ctx.addEventListener('message', (ev: MessageEvent<WorkerRequest>) => {
     if (req.kind === 'replay') {
       const shift = simulateShift(req.run as unknown as RunConfig, req.scn, { trace: true, sampleEveryS: 8 });
       post({ kind: 'replay', id: req.id, shift: toShiftDto(shift) });
+      return;
+    }
+    if (req.kind === 'diagnose') {
+      post({
+        kind: 'diagnose', id: req.id,
+        case: analyseShift(req.cfg, req.scn, req.errorIndex, { windowS: req.windowS, replicas: req.replicas }),
+      });
       return;
     }
     const rows = req.seeds.map((seed) => {

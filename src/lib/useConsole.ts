@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_CONFIG, buildRunConfig, variantLabel } from './registry';
 import type { ConsoleConfig } from './registry';
-import { batch, batchOnServer, replay, repairStream } from './engineClient';
+import { batch, batchOnServer, diagnoseCase, replay, repairStream } from './engineClient';
+import type { DiagnosisCase } from './diagnosis';
 import type { CandidateTrial } from './fuzz';
 import type { ShiftDto, SummaryDto } from './dto';
 
-export type ViewId = 'line' | 'pressure' | 'blackbox' | 'lab' | 'evidence';
+export type ViewId = 'line' | 'pressure' | 'blackbox' | 'cause' | 'lab' | 'evidence';
 
 export interface HealthInfo {
   backends: {
@@ -54,6 +55,8 @@ export function useConsole() {
   const [activeShift, setActiveShift] = useState<ShiftDto | null>(null);
   const [health, setHealth] = useState<HealthInfo | null>(null);
   const [repair, setRepair] = useState<RepairState>({ running: false, log: [], trials: [] });
+  const [diagnosis, setDiagnosis] = useState<DiagnosisCase | null>(null);
+  const [diag, setDiag] = useState<{ running: boolean; error: string | null }>({ running: false, error: null });
   const token = useRef(0);
 
   const run = buildRunConfig(cfg);
@@ -125,6 +128,25 @@ export function useConsole() {
     return sh;
   }, [cfg]);
 
+  /**
+   * Ask what the instruments say. Deliberately run on the recorded shift the
+   * black box is already showing, so the tape and the diagnosis are the same
+   * twelve minutes of plant.
+   */
+  const runDiagnosis = useCallback(async (scn: number, errorIndex: number, opts: { windowS?: number; replicas?: number } = {}) => {
+    setDiag({ running: true, error: null });
+    try {
+      const result = await diagnoseCase(cfg, scn, errorIndex, opts);
+      setDiagnosis(result);
+      setDiag({ running: false, error: null });
+      setView('cause');
+      return result;
+    } catch (e) {
+      setDiag({ running: false, error: (e as Error).message });
+      return null;
+    }
+  }, [cfg]);
+
   const runRepair = useCallback(async () => {
     setRepair({ running: true, log: [], trials: [] });
     try {
@@ -145,10 +167,10 @@ export function useConsole() {
   const dirty = summary?.variantId !== label;
 
   return {
-    cfg, setCfg, toggleControl, run: runFuzz, runRepair, loadReplay,
+    cfg, setCfg, toggleControl, run: runFuzz, runRepair, loadReplay, runDiagnosis,
     summary, traced, running, progress, where, device, error, elapsedMs,
     view, setView, selectedStep, setSelectedStep, activeShift, setActiveShift,
-    health, repair, dirty, label, run_config: run,
+    health, repair, dirty, label, run_config: run, diagnosis, diag,
   };
 }
 

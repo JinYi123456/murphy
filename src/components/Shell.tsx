@@ -6,6 +6,7 @@ import type { ConsoleStore } from '../lib/useConsole';
 import type { ViewId } from '../lib/useConsole';
 import { LineMap } from './LineMap';
 import { BlackBox } from './BlackBox';
+import { CauseFinder } from './CauseFinder';
 import { PressureTest } from './PressureTest';
 import { ChangeLab } from './ChangeLab';
 import { Evidence } from './Evidence';
@@ -15,6 +16,7 @@ const VIEWS: { id: ViewId; label: string; hint: string }[] = [
   { id: 'line', label: 'Line map', hint: 'where the procedure breaks' },
   { id: 'pressure', label: 'Pressure test', hint: 'thousands of crews, one seed each' },
   { id: 'blackbox', label: 'Black box', hint: 'replay a shift that failed' },
+  { id: 'cause', label: 'Cause finder', hint: 'run the procedure backwards from the instruments' },
   { id: 'lab', label: 'Change lab', hint: 'prove an edit before you make it' },
   { id: 'evidence', label: 'Evidence', hint: 'what ran, where, and what it cost' },
 ];
@@ -171,6 +173,7 @@ export function Shell({ s }: { s: ConsoleStore }) {
         {s.summary && s.view === 'line' && <LineMap s={s} />}
         {s.summary && s.view === 'pressure' && <PressureTest s={s} />}
         {s.summary && s.view === 'blackbox' && <BlackBox s={s} />}
+        {s.summary && s.view === 'cause' && <CauseFinder s={s} />}
         {s.summary && s.view === 'lab' && <ChangeLab s={s} />}
         {s.view === 'evidence' && <Evidence s={s} />}
         {s.selectedStep && s.summary && <StepInspector s={s} />}
