@@ -49,6 +49,13 @@ Outcomes are classed normal, upset or incident on purpose. An aborted batch and 
 loss of containment are not the same event, and a plant reports them on different
 sheets to different people.
 
+On this procedure the three reliability methods do **not** agree. The same batch
+reads 43.00% under SPAR-H, 83.70% under THERP and 97.60% under HEART, and only one
+of the top three stations is common to all three. The Pressure test view says that
+in those words rather than quoting whichever number flatters the argument, which is
+the reason the ranking is offered as a hypothesis to reconcile against site data and
+not as a result.
+
 Against published investigation findings (`data/bench/backtest.md`): 13 causes
 across 3 cases, about 60 candidate mechanisms ranked per case. 7 landed inside
 the model's top 10 (54%), 11 inside its top 20 (85%), 0 were never raised. A
