@@ -378,7 +378,10 @@ class _Batch:
                     torch.clamp((step["until"]["atLeast"] - lim) / rate, max=3600.0), need
                 )
 
-        broke = process & hazard_seen & (self.hazard_seconds > BREAK_HAZARD_S)
+        # the reference re-reads the hazard *after* the step has run, so this has
+        # to use the fresh value: a release caused by this very step can be what
+        # ends the shift
+        broke = process & (self.s[:, self._hazard_col] > 0) & (self.hazard_seconds > BREAK_HAZARD_S)
         self.alive = self.alive & ~broke
 
         # schedule drift is the overrun, not the duration: a monitoring step that

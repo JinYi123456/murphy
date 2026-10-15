@@ -153,7 +153,7 @@ function verdict(over: Partial<VariantVerdict> = {}): VariantVerdict {
 
 function trialOf(id: string, accepted: boolean): CandidateTrial {
   return {
-    control: { id, label: id, tier: 'engineering', describe: `the ${id} control`, annualCostEur: id === 'forced_control' ? 26000 : 6500, addedSeconds: 15 },
+    control: { id, label: id, tier: 'engineering', describe: `the ${id} control`, scope: 'step', annualCostEur: id === 'forced_control' ? 26000 : 6500, addedSeconds: 15 },
     targets: ['d4'],
     summary: summary({ variantId: `OP-TRF-014/7/${id}`, failureRate: accepted ? 0.0054 : 0.0081 }),
     verdict: verdict({ accepted, reasons: accepted ? [] : ['net annual gain EUR 400 is below the EUR 1000 threshold'] }),

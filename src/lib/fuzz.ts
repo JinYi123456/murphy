@@ -2,8 +2,8 @@ import { runBatch, evaluateVariant } from '../engine/batch';
 import type { BatchSummary, VariantVerdict } from '../engine/batch';
 import { simulateShift } from '../engine/runner';
 import { costOf } from '../engine/economics';
-import { INTERVENTIONS } from '../engine/repair';
-import { targetSteps } from '../engine/repair';
+import { INTERVENTIONS, admits } from '../engine/repair';
+import type { DraftProcedure } from '../engine/repair';
 import { benjaminiHochberg } from '../engine/stats';
 import { buildRunConfig, variantLabel } from './registry';
 import type { ConsoleConfig } from './registry';
@@ -48,7 +48,7 @@ export function replayLocal(cfg: ConsoleConfig, scn: number): ShiftDto {
 }
 
 export interface CandidateTrial {
-  control: { id: string; label: string; tier: string; describe: string; annualCostEur: number; addedSeconds: number };
+  control: { id: string; label: string; tier: string; describe: string; scope: string; annualCostEur: number; addedSeconds: number };
   targets: string[];
   summary?: SummaryDto;
   verdict?: VariantVerdict;
@@ -76,20 +76,23 @@ export async function runRepairLoop(
 
   const trials: CandidateTrial[] = [];
   const procedure = baseRun.procedure;
+  const baseDraft: DraftProcedure = {
+    procedure: baseRun.procedure, persona: baseRun.persona, plant: baseRun.plant,
+    addedSeconds: 0, annualCostEur: 0, applied: [],
+  };
   let i = 0;
   for (const int of INTERVENTIONS) {
     i++;
-    const targets = targetSteps(int, procedure).map((s) => s.id);
-    const appliesToSomething = targets.length > 0 || int.effect.plant !== undefined || int.effect.startLevelFrac !== undefined;
+    const targets = admits(int, baseDraft);
     const trial: CandidateTrial = {
       control: {
-        id: int.id, label: int.label, tier: int.tier, describe: int.describe,
+        id: int.id, label: int.label, tier: int.tier, describe: int.describe, scope: int.scope,
         annualCostEur: int.effect.annualCostEur ?? 0, addedSeconds: int.effect.addedSeconds ?? 0,
       },
       targets,
     };
-    if (!appliesToSomething) {
-      trial.error = 'no step in this procedure admits it';
+    if (targets.length === 0) {
+      trial.error = 'nothing here admits it: this crew, plant and procedure do not have that weakness';
       trials.push(trial);
       onEvent?.({ phase: 'skip', message: `${int.id}: ${trial.error}`, trial, done: i, total: INTERVENTIONS.length });
       continue;

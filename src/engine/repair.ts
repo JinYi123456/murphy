@@ -19,6 +19,8 @@ export type ControlTier = 'substitution' | 'engineering' | 'administrative' | 't
 export interface InterventionEffect {
   /** conditions the intervention removes or weakens, as a multiplier on severity */
   conditions?: Partial<Record<ConditionId, number>>;
+  /** crew-level changes: qualification, language, supervision pressure */
+  persona?: Partial<PersonaTraits>;
   /** replace a label-and-handle action with a keyed or interlocked one: the device cannot be wrong */
   forcedControl?: boolean;
   /** insert an independent verification of the targeted step, performed by a second person */
@@ -43,6 +45,16 @@ export interface Intervention {
   id: string;
   label: string;
   tier: ControlTier;
+  /**
+   * What the control actually acts on. A step control rewrites a station; a crew
+   * control changes who is standing there; a plant control changes the equipment.
+   * Without this distinction four perfectly real interventions - train the crew,
+   * issue the procedure in their language, take the deadline off them, require a
+   * read-back - get refused because no *step* admits them, and the loop then
+   * silently omits the comparison every safety professional cares about: how much
+   * a person-side control can buy against a hardware-side one.
+   */
+  scope: 'step' | 'crew' | 'plant';
   /** one sentence a plant manager would recognise */
   describe: string;
   /** which step characteristics this intervention can act on */
@@ -71,6 +83,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'rewrite_clarity',
     label: 'Rewrite the step into one unambiguous action with a checkable artefact',
     tier: 'administrative',
+    scope: 'step',
     describe: 'The step currently allows more than one reading. Rewrite it so the operator can prove, in the document, that it was done.',
     selector: { conditions: ['ambiguous_wording', 'poor_procedure', 'memory_load'], maxSteps: 4 },
     effect: {
@@ -85,6 +98,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'physical_tag',
     label: 'Attach a photographic line-up tag to the device',
     tier: 'administrative',
+    scope: 'step',
     describe: 'A tag at the valve showing the valve number and the correct position for this transfer.',
     selector: { conditions: ['confusable_device', 'absent_cue'], cues: ['label', 'physical'], maxSteps: 6 },
     effect: {
@@ -98,6 +112,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'independent_verification',
     label: 'Independent second-person verification of the line-up',
     tier: 'administrative',
+    scope: 'step',
     describe: 'A second competent person confirms the configuration and signs it, before energy is introduced.',
     selector: { conditions: ['confusable_device', 'post_maintenance_state', 'low_experience'], kinds: ['actuate'], maxSteps: 3 },
     effect: {
@@ -112,9 +127,11 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'readback',
     label: 'Read-back on the instruction',
     tier: 'organisational',
+    scope: 'crew',
     describe: 'The person receiving the instruction repeats it back before acting. Standard practice in aviation, rail and medicine.',
     selector: { conditions: ['teamwork', 'language_barrier'], cues: ['verbal'], maxSteps: 4 },
     effect: {
+      persona: { teamReadiness: 1 },
       conditions: { teamwork: 0.25, language_barrier: 0.4 },
       annualCostEur: 2200,
       addedSeconds: 45,
@@ -125,6 +142,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'forced_control',
     label: 'Key the device so only the correct one can be moved',
     tier: 'engineering',
+    scope: 'step',
     describe: 'A mechanical key interlock or a coded valve that physically cannot be operated in the wrong sequence.',
     selector: { conditions: ['confusable_device', 'timing_critical'], kinds: ['actuate'], maxSteps: 4 },
     effect: {
@@ -139,6 +157,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'automate_stop',
     label: 'Independent automatic stop, no human action required',
     tier: 'engineering',
+    scope: 'plant',
     describe: 'A hard-wired high-high switch that stops the pump on its own, on a measurement that is independent of the control system.',
     selector: { conditions: ['timing_critical', 'fatigue', 'mistrust'], kinds: ['monitor', 'actuate'], maxSteps: 2 },
     effect: {
@@ -155,6 +174,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'freeboard_policy',
     label: 'Cap the starting level: hold the critical zone empty',
     tier: 'engineering',
+    scope: 'plant',
     describe: 'A dispatch rule that will not release a transfer unless enough freeboard exists for the whole batch plus the pump-down volume.',
     selector: { kinds: ['monitor', 'authorise'], maxSteps: 1 },
     effect: {
@@ -168,6 +188,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'proven_instrument',
     label: 'Bring the protective instrument inside its proof-test interval',
     tier: 'engineering',
+    scope: 'plant',
     describe: 'The high-high switch is stroke-tested to the documented interval, and the certificate is checked at permit issue.',
     selector: { conditions: ['incomplete_function_test', 'mistrust'], maxSteps: 2 },
     effect: {
@@ -182,6 +203,7 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'isolation_reconcile',
     label: 'Pre-job walkdown that reconciles isolations against permits',
     tier: 'administrative',
+    scope: 'step',
     describe: 'Before energy is introduced, somebody confirms on the plant that every instrument the permits touched is back in service.',
     selector: { conditions: ['post_maintenance_state'], kinds: ['verify', 'authorise'], maxSteps: 2 },
     effect: {
@@ -197,9 +219,11 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'schedule_buffer',
     label: 'Remove the deadline from the task',
     tier: 'organisational',
+    scope: 'crew',
     describe: 'The transfer is not scheduled against a truck turnaround target, so falling behind is not a reason to skip a check.',
     selector: { conditions: ['time_pressure'], maxSteps: 8 },
     effect: {
+      persona: { deadlinePressure: 0 },
       conditions: { time_pressure: 0.15 },
       annualCostEur: 12000,
       addedSeconds: 0,
@@ -210,9 +234,11 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'qualification_gate',
     label: 'Gate the task on documented repetition',
     tier: 'training',
+    scope: 'crew',
     describe: 'Nobody performs the transfer alone before a defined number of supervised executions.',
     selector: { conditions: ['low_experience', 'novel_task'], maxSteps: 6 },
     effect: {
+      persona: { experienceY: 5, runsBefore: 40, qualificationCurrent: true },
       conditions: { low_experience: 0.2, novel_task: 0 },
       annualCostEur: 8000,
       addedSeconds: 0,
@@ -223,9 +249,11 @@ export const INTERVENTIONS: Intervention[] = [
     id: 'working_language',
     label: 'Issue the procedure in the crew working language',
     tier: 'administrative',
+    scope: 'crew',
     describe: 'The controlled copy exists in the language the field operator actually reads under time pressure.',
     selector: { conditions: ['language_barrier'], maxSteps: 8 },
     effect: {
+      persona: { languageFriction: 0 },
       conditions: { language_barrier: 0 },
       annualCostEur: 4300,
       addedSeconds: 0,
@@ -269,12 +297,62 @@ export function targetSteps(int: Intervention, procedure: Procedure): Step[] {
   return sel.maxSteps ? out.slice(0, sel.maxSteps) : out;
 }
 
-export function kindOf(s: Step): 'actuate' | 'verify' | 'communicate' | 'authorise' | 'monitor' {
-  if (s.verify) return 'verify';
-  if (s.watch) return 'monitor';
-  if (s.cue === 'verbal') return 'communicate';
-  if (s.applies && Object.keys(s.applies).length) return 'actuate';
-  return 'authorise';
+const LOWER_IS_BETTER = ['languageFriction', 'deadlinePressure', 'concurrency', 'hoursIntoShift'];
+const HIGHER_IS_BETTER = ['experienceY', 'runsBefore', 'teamReadiness'];
+
+/** Does this crew control actually have something to give them? */
+function crewGap(effect: InterventionEffect, p: PersonaTraits): string[] {
+  const want = effect.persona ?? {};
+  const out: string[] = [];
+  for (const [key, value] of Object.entries(want)) {
+    const current = (p as unknown as Record<string, number | boolean>)[key];
+    if (typeof value === 'boolean') { if (current !== value) out.push(key); continue; }
+    if (typeof value !== 'number' || typeof current !== 'number') continue;
+    if (LOWER_IS_BETTER.includes(key) && current > value) out.push(key);
+    if (HIGHER_IS_BETTER.includes(key) && current < value) out.push(key);
+  }
+  return out;
+}
+
+/** A crew control never makes the simulated person worse. */
+function raisePersona(p: PersonaTraits, want: Partial<PersonaTraits>): PersonaTraits {
+  const next = { ...p };
+  for (const [key, value] of Object.entries(want)) {
+    const cur = (next as unknown as Record<string, number | boolean>)[key];
+    if (typeof value === 'boolean') { (next as unknown as Record<string, boolean>)[key] = Boolean(value) || Boolean(cur); continue; }
+    if (typeof value !== 'number' || typeof cur !== 'number') continue;
+    (next as unknown as Record<string, number>)[key] = LOWER_IS_BETTER.includes(key)
+      ? Math.min(cur, value)
+      : HIGHER_IS_BETTER.includes(key) ? Math.max(cur, value) : value;
+  }
+  return next;
+}
+
+function plantGap(int: Intervention, plant: PlantConfig): string[] {
+  const g: string[] = [];
+  if (int.id === 'freeboard_policy' && (plant.freeboardPct ?? 1) > (int.effect.startLevelFrac ?? 1)) g.push('freeboard');
+  if (int.id === 'proven_instrument' && !plant.provenRecent) g.push('proof test interval');
+  if (int.id === 'automate_stop' && ((plant.preIsolated ?? []).includes('PIS') || plant.protection['pis'] === false || !plant.provenRecent)) g.push('independent trip');
+  return g;
+}
+
+/**
+ * Whether a control has anything to do here. A step control needs a station that
+ * admits it, a crew control needs a crew that is short of something, and a plant
+ * control needs an equipment state that is genuinely thin. Refusing a control
+ * that would change nothing is not conservatism: it is the difference between a
+ * ranked list of real options and twelve rows of noise.
+ */
+export function admits(int: Intervention, draft: DraftProcedure): string[] {
+  if (int.scope === 'crew') {
+    const gap = crewGap(int.effect, draft.persona);
+    return gap.length ? [`crew: ${gap.join(', ')}`] : [];
+  }
+  if (int.scope === 'plant') {
+    const gap = plantGap(int, draft.plant);
+    return gap.length ? [`plant: ${gap.join(', ')}`] : [];
+  }
+  return targetSteps(int, draft.procedure).map((s) => s.id);
 }
 
 /**
@@ -282,13 +360,14 @@ export function kindOf(s: Step): 'actuate' | 'verify' | 'communicate' | 'authori
  * Returns null when the intervention has nothing to act on.
  */
 export function applyIntervention(base: DraftProcedure, int: Intervention): DraftProcedure | null {
-  const targets = targetSteps(int, base.procedure);
-  if (targets.length === 0 && !int.effect.plant && int.effect.startLevelFrac === undefined) return null;
+  const admitted = admits(int, base);
+  if (admitted.length === 0) return null;
+  const targetIds = new Set(int.scope === 'step' ? admitted : []);
 
   const procedure: Procedure = {
     ...base.procedure,
     revision: `${base.procedure.revision}+${int.id}`,
-    steps: base.procedure.steps.map((s) => applyToStep(s, int, targets.some((t) => t.id === s.id))),
+    steps: base.procedure.steps.map((s) => applyToStep(s, int, targetIds.has(s.id))),
   };
 
   const plant: PlantConfig = { ...base.plant, ...(int.effect.plant ?? {}), protection: { ...base.plant.protection, ...(int.effect.plant?.protection ?? {}) } };
@@ -299,15 +378,14 @@ export function applyIntervention(base: DraftProcedure, int: Intervention): Draf
     plant.preIsolated = (plant.preIsolated ?? []).filter((x) => !clear.includes(x));
   }
 
-  const persona: PersonaTraits = int.effect.insertVerification
-    ? { ...base.persona, concurrency: base.persona.concurrency, teamReadiness: Math.min(1, base.persona.teamReadiness + 0.35) }
-    : base.persona;
+  let persona = raisePersona(base.persona, int.effect.persona ?? {});
+  if (int.effect.insertVerification) persona = { ...persona, teamReadiness: Math.min(1, persona.teamReadiness + 0.35) };
 
   return {
     procedure,
     plant,
     persona,
-    addedSeconds: base.addedSeconds + (int.effect.addedSeconds ?? 0) * Math.max(1, targets.length),
+    addedSeconds: base.addedSeconds + (int.effect.addedSeconds ?? 0) * Math.max(1, targetIds.size),
     annualCostEur: base.annualCostEur + (int.effect.annualCostEur ?? 0),
     applied: [...base.applied, int.id],
   };
