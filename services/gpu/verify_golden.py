@@ -251,7 +251,7 @@ def first_divergent_step(out: kernel.ShiftOutcome, i: int, expected: dict, proce
     return "outcome class only"
 
 
-def check_shifts(rep: Report, device: torch.device, quick: bool) -> None:
+def check_shifts(rep: Report, device: torch.device, quick: bool, limit_groups: int | None = None) -> None:
     fx = load(GOLDEN / "shifts.json")
     procedure = load(DATA / "procedures" / "OP-TRF-014.json")
     personas = {p["id"]: p for p in load(DATA / "personas.json")}
@@ -267,8 +267,8 @@ def check_shifts(rep: Report, device: torch.device, quick: bool) -> None:
     peak_bad = 0
     t0 = time.time()
     keys = sorted(groups)
-    if quick:
-        keys = keys[:4]
+    cap = limit_groups if limit_groups is not None else (4 if quick else len(keys))
+    keys = keys[:cap]
     for plant_id, persona_id, method, seed in keys:
         rows = sorted(groups[(plant_id, persona_id, method, seed)], key=lambda r: r["scn"])
         n = len(rows)

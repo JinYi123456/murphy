@@ -56,6 +56,7 @@ class ShiftOutcome:
     """Per-scenario record of one shift. Every field is a tensor of length B."""
 
     cost: torch.Tensor
+    escalation: torch.Tensor
     failed: torch.Tensor
     outcome: torch.Tensor
     first_causal_step: torch.Tensor
@@ -552,6 +553,7 @@ class _Batch:
         )
         return ShiftOutcome(
             cost=money["totalEur"],
+            escalation=money["escalationEur"],
             failed=failed,
             outcome=codes,
             first_causal_step=first_causal,

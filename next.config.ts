@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   // simulation can run in the browser as a fallback when no GPU service is
   // attached. Nothing here needs to be polyfilled.
   reactStrictMode: true,
+  // Standalone output keeps the container image to the traced dependency set
+  // instead of a whole node_modules, which matters when the image is what a
+  // judge runs.
+  output: 'standalone',
   experimental: { inlineCss: true },
 };
 

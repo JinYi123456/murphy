@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.git
+services/gpu/.venv
+services/gpu/**/__pycache__
+data/golden
+media
+Dockerfile
+.dockerignore
+*.tsbuildinfo
+.env
