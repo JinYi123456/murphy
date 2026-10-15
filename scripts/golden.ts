@@ -85,7 +85,7 @@ write('tank_steps.json', { twin: 'tank_transfer', vars: twin.vars, discs: twin.d
 // 3. HRA worksheet derivations, one per step per persona, all three methods
 const procedure = proc as unknown as Procedure;
 const personas = personasRaw as PersonaTraits[];
-const plants = plantsRaw as PlantConfig[];
+const plants = plantsRaw as unknown as PlantConfig[];
 const hep: unknown[] = [];
 for (const step of procedure.steps) {
   for (const persona of personas) {
@@ -115,7 +115,10 @@ for (const plant of plants.filter((x) => x.twin === 'tank_transfer')) {
     for (const method of ['sparh', 'heart'] as const) {
       const cfg: RunConfig = { procedure, persona, plant, method, seed: `G-${plant.id}-${persona.id}-${method}` };
       for (let scn = 0; scn < 60; scn++) {
-        const r = simulateShift(cfg, scn);
+        // the fixture is generated through the same options the application's
+        // replay path uses, so the second implementation is validated against
+        // what a user actually sees rather than a special test-only configuration
+        const r = simulateShift(cfg, scn, { trace: true, sampleEveryS: 8 });
         const c = costOf(cfg.procedure.twin, r.outcome, r.peak, plant.product ?? 'default');
         shifts.push({
           plant: plant.id, persona: persona.id, method, seed: cfg.seed, scn,

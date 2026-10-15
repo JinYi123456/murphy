@@ -14,6 +14,7 @@ import type { StepAudit } from '../engine/runner';
 import type { RunConfig, Step } from '../engine/types';
 import type { Patch } from '../engine/types';
 import type { StepStatDto } from '../lib/dto';
+import bench from '../../data/bench/diagnosis.json';
 
 const pct = (v: number, dp = 2) => `${(v * 100).toFixed(dp)}%`;
 const sci = (v: number) => v.toExponential(1);
@@ -281,6 +282,15 @@ export function StepInspector({ s }: { s: ConsoleStore }) {
                           <div className="relative mt-2 h-[6px] bg-void">
                             <div className="absolute inset-y-0 left-0 bg-vermillion/70" style={{ width: `${share * 100}%` }} />
                           </div>
+                          <Observability
+                            id={`${step.id}/${e.id}`}
+                            applies={bench.procedure === s.run_config.procedure.id && bench.plant === s.run_config.plant.id}
+                            onFind={replayable.length ? () => {
+                            const hit = s.traced
+                              .map((t, i) => ({ t, i, at: t.errors.findIndex((x) => `${x.stepId}/${x.errorId}` === `${step.id}/${e.id}`) }))
+                              .find((x) => x.at >= 0);
+                            if (hit) void s.runDiagnosis(hit.t.scn, hit.at, { windowS: 2400, replicas: 6 });
+                          } : undefined} />
                         </li>
                       );
                     })}
@@ -530,6 +540,41 @@ function Meta({ label, value, big, tone = 'neutral' }: {
       <span className="label">{label}</span>
       <span className={`readout ${big ? 'text-[20px]' : 'text-[12px]'} ${colour}`}>{value}</span>
     </span>
+  );
+}
+
+/**
+ * Whether this failure mode would reach a sensor at all.
+ *
+ * Measured, not asserted: the mode is run against the same crew on the same day
+ * with nothing missed, and the mean instrument movement is reported in sigmas.
+ * Most modes on this procedure move nothing, which is the single most useful
+ * fact on the screen - a mistake nobody can see cannot be caught from a panel,
+ * so it has to be caught by the procedure or by hardware.
+ */
+function Observability({ id, applies, onFind }: { id: string; applies: boolean; onFind?: () => void }) {
+  if (!applies) return null;
+  const row = bench.divergence.find((d) => d.id === id);
+  if (!row) return null;
+  const seen = row.divergence > bench.threshold;
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <span
+        title={`mean instrument movement against the same crew with nothing missed, over ${bench.replicas} replicas of a ${Math.round(bench.windowS / 60)} min window`}
+        className={`border px-1.5 py-0.5 text-[9px] uppercase tracking-[0.14em] ${seen ? 'border-amber/60 text-amber' : 'border-rule text-ash'}`}
+      >
+        {seen ? `${row.divergence.toFixed(2)} sigma - the panel would see it` : 'invisible to the instruments'}
+      </span>
+      {onFind && seen && (
+        <button
+          onClick={onFind}
+          title="take a recording in which this happened and ask the cause finder to work it out from the instruments alone"
+          className="border border-rule px-2 py-0.5 text-[9px] uppercase tracking-[0.14em] text-ash hover:border-amber hover:text-amber"
+        >
+          find it from the tape
+        </button>
+      )}
+    </div>
   );
 }
 

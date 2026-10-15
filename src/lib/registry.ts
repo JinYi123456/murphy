@@ -1,5 +1,6 @@
 import opTrf from '../../data/procedures/OP-TRF-014.json';
 import opHt from '../../data/procedures/OP-HT-006.json';
+import opHt021 from '../../data/procedures/OP-HT-021.json';
 import personasRaw from '../../data/personas.json';
 import plantsRaw from '../../data/plants.json';
 import { loadProcedure } from '../engine/model';
@@ -8,9 +9,9 @@ import type { Intervention, DraftProcedure } from '../engine/repair';
 import type { HraMethod } from '../engine/hra';
 import type { PersonaTraits, PlantConfig, Procedure, RunConfig } from '../engine/types';
 
-export const PROCEDURES: Procedure[] = [loadProcedure(opTrf), loadProcedure(opHt)];
+export const PROCEDURES: Procedure[] = [loadProcedure(opTrf), loadProcedure(opHt), loadProcedure(opHt021)];
 export const PERSONAS = personasRaw as PersonaTraits[];
-export const PLANTS = plantsRaw as PlantConfig[];
+export const PLANTS = plantsRaw as unknown as PlantConfig[];
 
 export function procedureById(id: string): Procedure {
   const p = PROCEDURES.find((x) => x.id === id);
