@@ -25,6 +25,29 @@ DATA = REPO / "data"
 
 METHODS = ("sparh", "therp", "heart")
 
+# severityOf() in src/engine/types.ts: a shift that ended in an aborted batch is
+# not a shift that ended in a release, and the two are reported on different
+# sheets to different people, so the summary keeps them apart.
+SEVERITY = {
+    "normal": "normal",
+    "intercepted": "normal",
+    "no_flow": "upset",
+    "short_batch": "upset",
+    "trip_stop": "upset",
+    "no_light_off": "upset",
+    "scrap_batch": "upset",
+    "minor_release": "incident",
+    "overfill": "incident",
+    "containment_escape": "incident",
+    "line_failure": "incident",
+    "tank_breach": "incident",
+    "misrouting": "incident",
+    "deflagration": "incident",
+    "refractory_damage": "incident",
+    "shell_hotspot": "incident",
+    "hot_start": "incident",
+}
+
 
 class ConfigError(ValueError):
     """A configuration the registry cannot serve."""
@@ -85,6 +108,29 @@ class Registry:
 
     def costs(self) -> dict:
         return self._load("costs.json")
+
+
+def resolve_document(registry: Registry, kind: str, value: Any) -> dict:
+    """Accept either an id or the document itself.
+
+    The web app sends the compiled procedure inline, because a procedure variant
+    that only exists in that session still has to be fuzzed on the accelerator
+    rather than silently downgraded to whatever the server has on disk. Ids are
+    kept working for direct calls and for the smoke tests.
+    """
+    if isinstance(value, dict):
+        if kind == "procedure" and not value.get("steps"):
+            raise ConfigError("inline procedure has no steps")
+        if kind != "procedure" and not value.get("id"):
+            raise ConfigError(f"inline {kind} has no id")
+        return value
+    if not isinstance(value, str):
+        raise ConfigError(f"{kind} must be an id or an object")
+    return {
+        "procedure": registry.procedure,
+        "persona": registry.persona,
+        "plant": registry.plant,
+    }[kind](value)
 
 
 def resolve_device(name: str | None) -> torch.device:
@@ -164,22 +210,26 @@ def _cvar(values: torch.Tensor, alpha: float = 0.95) -> float:
     return float(tail.mean()) if tail.numel() else 0.0
 
 
-def _mean_ci(values: torch.Tensor, iterations: int = 200, cap: int = 20000) -> dict:
-    """Percentile bootstrap of the mean, deterministic through the same counter
-    RNG the simulation uses.
+def _mean_ci(values: torch.Tensor, iterations: int = 200, cap: int = 20000, seed: int = 0) -> dict:
+    """Percentile bootstrap of the mean, on its own seeded stream.
 
     The reference resamples every scenario on every iteration, which is O(n *
     iterations); at a million scenarios that is not a reasonable price for a
     confidence interval, so the resample pool is capped and the cap is reported.
+    The seed comes from the run seed, so asking for the same batch twice returns
+    the same interval instead of a different one every call.
     """
     n = values.numel()
     if n == 0:
         return {"mean": 0.0, "ciLow": 0.0, "ciHigh": 0.0, "pool": 0, "iterations": 0}
-    pool = values if n <= cap else values[torch.randint(0, n, (cap,), device=values.device)]
+    gen = torch.Generator(device="cpu").manual_seed(int(seed))
+    pool = values if n <= cap else values[
+        torch.randint(0, n, (cap,), generator=gen, dtype=torch.int64).to(values.device)
+    ]
     m = pool.numel()
     means = torch.empty(iterations, dtype=torch.float64, device=values.device)
     for b in range(iterations):
-        idx = torch.randint(0, m, (m,), device=values.device, dtype=torch.int64)
+        idx = torch.randint(0, m, (m,), generator=gen, dtype=torch.int64).to(values.device)
         means[b] = pool[idx].mean()
     ordered = torch.sort(means).values
     lo = ordered[int(0.025 * iterations)]
@@ -196,13 +246,12 @@ def _mean_ci(values: torch.Tensor, iterations: int = 200, cap: int = 20000) -> d
 def summary(
     out: kernel.ShiftOutcome,
     procedure: dict,
-    persona: dict,
     plant: dict,
-    method: str,
     seed: str,
     wall_ms: float,
     device: torch.device,
     variant_id: str | None = None,
+    collect_worst: int = 0,
 ) -> dict:
     """The BatchSummary field names from batch.ts, computed on the device."""
     steps = procedure["steps"]
@@ -211,6 +260,9 @@ def summary(
     outcome_counts = {
         name: int(counts_t[i]) for i, name in enumerate(tank.OUTCOME_CLASSES) if int(counts_t[i]) > 0
     }
+    severity = [SEVERITY.get(name, "incident") for name in tank.OUTCOME_CLASSES]
+    incidents = int(sum(int(counts_t[i]) for i, s in enumerate(severity) if s == "incident"))
+    upsets = int(sum(int(counts_t[i]) for i, s in enumerate(severity) if s == "upset"))
 
     escaped = out.escaped.sum(dim=0)
     caught = out.caught.sum(dim=0)
@@ -245,17 +297,24 @@ def summary(
             "escapeShare": esc_j / escaped_total if escaped_total else 0.0,
         }
 
+    order = torch.argsort(out.cost, descending=True, stable=True)
+    worst = [int(i) for i in order[: max(0, collect_worst)] if float(out.cost[int(i)]) > 0]
+
     return {
         "variantId": variant_id or f"{procedure['id']}@{procedure.get('revision', '0')}",
         "seed": seed,
         "n": n,
         "failed": failed,
         "failureRate": failed / n if n else 0.0,
+        "incidents": incidents,
+        "incidentRate": incidents / n if n else 0.0,
+        "upsets": upsets,
+        "upsetRate": upsets / n if n else 0.0,
         "nearMissRate": int(out.near_miss.sum()) / n if n else 0.0,
         "outcomeCounts": outcome_counts,
         "perStep": per_step,
         "meanCostEur": mean_cost,
-        "costCi": _mean_ci(out.cost),
+        "costCi": _mean_ci(out.cost, seed=_stream_seed(seed)),
         "p95CostEur": _quantile(out.cost, 0.95),
         "cvarCostEur": _cvar(out.cost, 0.95),
         "meanReleaseM3": float(out.magnitudes["releaseM3"].mean()) if n else 0.0,
@@ -266,32 +325,140 @@ def summary(
         "annualEscalatedEur": mean_cost * spy + (float(out.escalation.sum()) / n if n else 0.0) * spy,
         "wallMs": wall_ms,
         "shiftsPerSecond": (n / wall_ms) * 1000.0 if wall_ms > 0 else 0.0,
-        "device": str(device),
-        "persona": persona["id"],
-        "plant": plant["id"],
-        "method": method,
-        "hraMethodsTried": list(METHODS),
+        "worst": worst,
     }
+
+
+def _stream_seed(text: str) -> int:
+    """A stable integer for the bootstrap's own stream, taken from the run seed,
+    so that asking for the same batch twice returns the same interval."""
+    import zlib
+
+    return zlib.crc32(text.encode("utf-8")) & 0x7FFFFFFF
+
+
+def device_label(dev: torch.device) -> str:
+    """What machine actually answered, in the words the UI shows.
+
+    Never a guess: a CPU-only process must not report an AMD device, because the
+    whole point of the readout is that the user can tell which engine ran the
+    batch.
+    """
+    if dev.type == "cuda":
+        try:
+            return torch.cuda.get_device_name(dev)
+        except Exception:  # pragma: no cover - driver dependent
+            return str(dev)
+    return f"cpu ({torch.get_num_threads()} threads)"
+
+
+def traced_shifts(
+    out: kernel.ShiftOutcome,
+    procedure: dict,
+    persona: dict,
+    plant: dict,
+    method: str,
+    rows: list[int],
+) -> list[dict]:
+    """ShiftDto-shaped replay records for the scenarios the batch kept.
+
+    The event tape is rebuilt from the tensors that are already there - when each
+    step was picked up, when each deviation was thrown, which check closed it -
+    so no scenario is re-simulated to answer a click. What is *not* here is the
+    per-tick process series and the PSF worksheet of a step: the batched kernel
+    keeps the state it needs to decide, not the history a chart wants, so the
+    replay from the accelerator is event-level and the local engine remains the
+    one that draws the curve.
+    """
+    steps = procedure["steps"]
+    shifts = []
+    for i in rows:
+        errors: list[dict] = []
+        caught_by: dict[str, str] = {}
+        trace: list[dict] = [{
+            "tS": 0.0, "kind": "clock", "label": "Shift start",
+            "detail": f"{persona.get('label', persona['id'])} - {plant.get('label', plant['id'])}",
+        }]
+        for j, step in enumerate(steps):
+            if not bool(out.reached[i, j]):
+                continue
+            surface = step.get("errors") or []
+            trace.append({
+                "tS": float(out.started_at_s[i, j]), "kind": "step", "stepId": step["id"],
+                "label": step["title"], "detail": step.get("text", ""),
+                "vars": {"p": float(out.p[i, j])},
+            })
+            if not (surface and bool(out.thrown[i, j])):
+                continue
+            alt = surface[int(out.alternative[i, j])]
+            at = float(out.error_at_s[i, j])
+            trace.append({
+                "tS": at, "kind": "error", "stepId": step["id"], "label": alt["kind"],
+                "detail": alt.get("text", ""), "vars": {"p": float(out.p[i, j])},
+            })
+            if bool(out.caught[i, j]):
+                k = int(out.caught_by[i, j])
+                if 0 <= k < len(steps):
+                    catcher = steps[k]
+                    caught_by[f"{step['id']}/{alt['id']}"] = catcher["id"]
+                    trace.append({
+                        "tS": float(out.started_at_s[i, k]), "kind": "recovery",
+                        "stepId": catcher["id"], "label": "Deviation caught",
+                        "detail": f"{catcher['title']} caught {alt.get('text', step['id'])}",
+                    })
+            else:
+                errors.append({
+                    "stepId": step["id"], "errorId": alt["id"], "kind": alt["kind"],
+                    "atS": at, "p": float(out.p[i, j]),
+                })
+
+        name = tank.OUTCOME_CLASSES[int(out.outcome[i])]
+        note = tank.hazard_note(out.state, i)
+        trace.append({
+            "tS": float(out.elapsed[i]), "kind": "outcome", "label": name, "detail": note,
+            "vars": {k: float(v[i]) for k, v in out.magnitudes.items()},
+        })
+        trace.sort(key=lambda e: e["tS"])
+        shifts.append({
+            "scn": int(i),
+            "outcome": name,
+            "failed": bool(out.failed[i]),
+            "nearMiss": bool(out.near_miss[i]),
+            "note": note,
+            "method": method,
+            "errors": errors,
+            "caughtBy": caught_by,
+            "peak": {k: float(v[i]) for k, v in out.magnitudes.items()},
+            "elapsedS": float(out.elapsed[i]),
+            "hazardSeconds": float(out.hazard_seconds[i]),
+            "scheduleSlip": float(out.schedule_slip[i]),
+            "trace": trace,
+            "series": [],
+            "audit": [],
+        })
+    return shifts
 
 
 def run_batch(
     registry: Registry,
-    procedure_id: str,
-    persona_id: str,
-    plant_id: str,
+    procedure: Any,
+    persona: Any,
+    plant: Any,
     method: str,
     seed: str,
     n: int,
     device: str | torch.device = "cpu",
     overrides: dict[str, Any] | None = None,
+    variant_id: str | None = None,
+    collect_worst: int = 0,
 ) -> dict:
-    """Run `n` shifts and return the BatchSummary-shaped payload."""
+    """Run `n` shifts and return the `{summary, traced, device}` envelope."""
     if method not in METHODS:
         raise ConfigError(f"method must be one of {', '.join(METHODS)}")
     dev = device if isinstance(device, torch.device) else resolve_device(device)
-    procedure = apply_overrides(registry.procedure(procedure_id), _scoped(overrides, "procedure"))
-    persona = apply_overrides(registry.persona(persona_id), _scoped(overrides, "persona"))
-    plant = apply_overrides(registry.plant(plant_id), _scoped(overrides, "plant"))
+    procedure = apply_overrides(resolve_document(registry, "procedure", procedure), _scoped(overrides, "procedure"))
+    persona = apply_overrides(resolve_document(registry, "persona", persona), _scoped(overrides, "persona"))
+    plant = apply_overrides(resolve_document(registry, "plant", plant), _scoped(overrides, "plant"))
     if procedure.get("twin") != "tank_transfer":
         raise ConfigError(
             f"the batched engine implements the tank twin; '{procedure.get('twin')}' is not ported"
@@ -303,7 +470,12 @@ def run_batch(
         # the queue is asynchronous; the wall time has to include the device work
         torch.cuda.synchronize(dev)
     wall_ms = (time.perf_counter() - t0) * 1000.0
-    return summary(out, procedure, persona, plant, method, seed, wall_ms, dev)
+    head = summary(out, procedure, plant, seed, wall_ms, dev, variant_id, collect_worst)
+    return {
+        "summary": head,
+        "traced": traced_shifts(out, procedure, persona, plant, method, head["worst"]),
+        "device": device_label(dev),
+    }
 
 
 def _scoped(overrides: dict[str, Any] | None, prefix: str) -> dict[str, Any]:

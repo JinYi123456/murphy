@@ -217,6 +217,17 @@ def advance(
     if not isinstance(dt, torch.Tensor):
         dt = torch.full((state.shape[0],), float(dt), dtype=torch.float64, device=state.device)
 
+    # A scalar branch has to be materialised in the state's own precision.
+    # torch.where() given two python scalars answers in torch's default dtype,
+    # which is float32, and a 0.3 m3 release that has passed through float32 is
+    # not the double the reference carries: the error lands in the tail of the
+    # containment arithmetic and shows up as a 1.2e-8 m3 difference.
+    def full(value: float) -> torch.Tensor:
+        return torch.full_like(dt, float(value))
+
+    def on(mask: torch.Tensor, value: float) -> torch.Tensor:
+        return torch.where(mask, full(value), full(0.0))
+
     pump = d[:, D["PUMP"]] * (1.0 - d[:, D["STOP"]])
     v1 = d[:, D["V1"]]
     v2 = d[:, D["V2"]]
@@ -227,7 +238,7 @@ def advance(
     to_tank = q * v1 * (1.0 - p["crossFrac"] * v3)
     to_cross = q * v1 * p["crossFrac"] * v3
     # the draw-off only flows while there is something to draw
-    out_of = v2 * (p["qOut"] / 3600.0) * torch.where(s[:, I["level"]] > 0.05, 1.0, 0.0)
+    out_of = v2 * (p["qOut"] / 3600.0) * on(s[:, I["level"]] > 0.05, 1.0)
     deadhead = pump * (1.0 - v1)
 
     # an unseated cross-connect keeps feeding the tank from the header even
@@ -240,7 +251,7 @@ def advance(
     s[:, I["diverted"]] = s[:, I["diverted"]] + (to_cross + out_of) * dt
 
     target = torch.where(
-        pump == 0, 0.0, torch.where(deadhead == 1, float(p["pDead"]), float(p["pRun"]))
+        pump == 0, full(0.0), torch.where(deadhead == 1, full(p["pDead"]), full(p["pRun"]))
     )
     # torch.clamp rather than python min/max so `dt` may be a per-scenario tensor
     s[:, I["lineP"]] = s[:, I["lineP"]] + (target - s[:, I["lineP"]]) * torch.clamp(
@@ -248,29 +259,29 @@ def advance(
     )
     s[:, I["peakLineP"]] = torch.maximum(s[:, I["peakLineP"]], s[:, I["lineP"]])
 
-    s[:, I["stress"]] = s[:, I["stress"]] + torch.where(s[:, I["lineP"]] > p["pRating"], dt, 0.0)
+    s[:, I["stress"]] = s[:, I["stress"]] + torch.where(s[:, I["lineP"]] > p["pRating"], dt, full(0.0))
 
     burst = (s[:, I["stress"]] > p["stressFail"]) & (s[:, I["lineFailed"]] == 0)
     s[:, I["lineFailed"]] = torch.where(burst, 1.0, s[:, I["lineFailed"]])
-    s[:, I["spill"]] = s[:, I["spill"]] + torch.where(burst, float(p["burstM3"]), 0.0)
+    s[:, I["spill"]] = s[:, I["spill"]] + on(burst, p["burstM3"])
     s[:, I["lineP"]] = torch.where(burst, 4.0, s[:, I["lineP"]])
 
     leak = s[:, I["lineFailed"]] * pump * (p["leakQ"] / 3600.0) * dt
 
     space = torch.clamp((p["hOverflow"] - lvl) * p["area"], min=0.5, max=1e6)
     compress = torch.where(
-        (v4 == 0) & (to_tank > 0), (to_tank / space) * p["pRoof"] * dt, 0.0
+        (v4 == 0) & (to_tank > 0), (to_tank / space) * p["pRoof"] * dt, full(0.0)
     )
     vent_relief = (0.0 - s[:, I["tankP"]]) * torch.clamp(dt / p["tauVent"], 0.0, 1.0)
     s[:, I["tankP"]] = s[:, I["tankP"]] + torch.where(v4 == 0, compress, vent_relief)
 
     roof = (s[:, I["tankP"]] > p["pRoof"]) & (s[:, I["roofFailed"]] == 0)
     s[:, I["roofFailed"]] = torch.where(roof, 1.0, s[:, I["roofFailed"]])
-    s[:, I["spill"]] = s[:, I["spill"]] + torch.where(roof, float(p["roofBurstM3"]), 0.0)
+    s[:, I["spill"]] = s[:, I["spill"]] + on(roof, p["roofBurstM3"])
     s[:, I["tankP"]] = torch.where(roof, 0.0, s[:, I["tankP"]])
     roof_leak = s[:, I["roofFailed"]] * to_tank * dt
 
-    above = torch.where(s[:, I["level"]] > p["hOverflow"], 1.0, 0.0)
+    above = on(s[:, I["level"]] > p["hOverflow"], 1.0)
     s[:, I["overflowed"]] = torch.where(above == 1, 1.0, s[:, I["overflowed"]])
     over_spill = above * to_tank * dt
 
@@ -284,11 +295,9 @@ def advance(
         & ((d[:, D["HAMMER"]] + d[:, D["HOSE_SPILL"]]) > 0)
         & ticking
     )
-    one_shot = torch.where(
-        armed,
-        torch.where(d[:, D["HAMMER"]] == 1, float(p["hammerM3"]), 0.0)
-        + torch.where(d[:, D["HOSE_SPILL"]] == 1, float(p["hoseM3"]), 0.0),
-        0.0,
+    one_shot = (
+        on(armed & (d[:, D["HAMMER"]] == 1), p["hammerM3"])
+        + on(armed & (d[:, D["HOSE_SPILL"]] == 1), p["hoseM3"])
     )
     s[:, I["oneShotDone"]] = torch.where(one_shot > 0, 1.0, s[:, I["oneShotDone"]])
 
@@ -392,6 +401,38 @@ def classify_codes(state: torch.Tensor, disc: torch.Tensor, params: dict[str, fl
 
 def outcome_name(code: int) -> str:
     return OUTCOME_CLASSES[int(code)]
+
+
+def hazard_note(state: torch.Tensor, row: int, params: dict[str, float] | None = None) -> str:
+    """The one-line description of what actually went wrong, for the replay view.
+
+    A port of `hazardNote` in tank.ts, which is the only place the reference
+    turns state into prose. Per row rather than per batch: it is only ever
+    needed for the handful of shifts a user opens.
+    """
+    p = params or PARAMS
+    s = state[row]
+    roof = s[I["roofFailed"]] == 1
+    line = s[I["lineFailed"]] == 1
+    over = s[I["overflowed"]] == 1
+    esc = float(s[I["escaped"]])
+    div = float(s[I["diverted"]])
+    spill = float(s[I["spill"]])
+    if roof:
+        return f"Roof seam failed at {p['pRoof']:.0f} mbar - the tank lost containment"
+    if line:
+        return (f"Hose or gasket blew at {float(s[I['peakLineP']]):.0f} bar discharge - "
+                f"{spill:.1f} m3 on the rack deck")
+    if over:
+        return (f"Overflow over the TK-101 roof above {p['hOverflow']:.1f} m - "
+                f"{spill:.1f} m3 released")
+    if esc > 0.05:
+        return f"{esc:.1f} m3 left the bund to the surface drainage"
+    if div > 1:
+        return f"{div:.1f} m3 went to TK-102 or the manifold instead of TK-101"
+    if spill > 0.05:
+        return f"{spill:.2f} m3 released and held by the bund"
+    return ""
 
 
 def outcome_names(codes: torch.Tensor) -> list[str]:

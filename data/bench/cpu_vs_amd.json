@@ -1,0 +1,80 @@
+{
+ "generatedAt": "2026-10-15T14:37:57",
+ "host": {
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.14.7",
+  "processor": "Intel64 Family 6 Model 186 Stepping 3, GenuineIntel"
+ },
+ "config": {
+  "procedure": "OP-TRF-014",
+  "persona": "night_trainee",
+  "plant": "tk_after_instrument_work",
+  "method": "sparh"
+ },
+ "batches": [
+  1000,
+  10000,
+  100000,
+  1000000
+ ],
+ "runs": [
+  {
+   "requested": "cpu",
+   "used": "cpu",
+   "deviceLabel": "cpu (10 threads)",
+   "gpuVisible": false,
+   "note": null,
+   "torchVersion": "2.14.1+cpu",
+   "hip": null,
+   "threads": 10,
+   "budgetGiB": 0.6,
+   "rows": [
+    {
+     "batch": 1000,
+     "skipped": false,
+     "device": "cpu",
+     "wallS": 2.330509499879554,
+     "scenariosPerSecond": 429.09072031316856,
+     "failed": 447,
+     "meanCostEur": 173826.27541134125,
+     "peakHostMiB": 213.5,
+     "peakDeviceMiB": 0.0,
+     "grewMiB": 6.6
+    },
+    {
+     "batch": 10000,
+     "skipped": false,
+     "device": "cpu",
+     "wallS": 9.033790200017393,
+     "scenariosPerSecond": 1106.9550851403155,
+     "failed": 4359,
+     "meanCostEur": 169101.61492138525,
+     "peakHostMiB": 236.7,
+     "peakDeviceMiB": 0.0,
+     "grewMiB": 23.1
+    },
+    {
+     "batch": 100000,
+     "skipped": false,
+     "device": "cpu",
+     "wallS": 56.25516030006111,
+     "scenariosPerSecond": 1777.614701773259,
+     "failed": 43675,
+     "meanCostEur": 170126.1087015471,
+     "peakHostMiB": 415.1,
+     "peakDeviceMiB": 0.0,
+     "grewMiB": 178.4
+    },
+    {
+     "batch": 1000000,
+     "skipped": true,
+     "device": "cpu",
+     "reason": "needs about 3.2 GiB, over the 0.6 GiB headroom allowed on cpu"
+    }
+   ]
+  }
+ ],
+ "speedup": [],
+ "gpuPresent": false,
+ "gpuAbsentReason": "No AMD Instinct device was visible: torch.cuda.is_available() is false and torch is not built with ROCm. ONLY THE CPU COLUMN WAS MEASURED - there is no accelerator number in this run and no speedup claim. The same code runs unmodified on the ROCm wheel: install a ROCm torch build, ask for --device both, and these kernels dispatch to the GPU without any change."
+}

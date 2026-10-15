@@ -1,0 +1,20 @@
+# Runtime dependencies for the batched engine and its HTTP service.
+#
+# CPU / development install:
+#     pip install -r requirements.txt
+#
+# AMD Instinct (ROCm) install: the plain `torch` wheel from PyPI has no HIP
+# backend, so on the accelerator replace it with the ROCm build. Either use the
+# rocm/pytorch container (see Dockerfile), which already carries it, or:
+#     pip install --index-url https://stable.repo.amd.com/rocm/whl-multi-arch/ "torch==2.14.0+rocm10.1.0"
+# (index and tag as documented at
+#  https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html)
+#
+# The kernel asks torch for float64 throughout; a ROCm build that lacks fp64 on
+# the part in use would silently change which scenario lands on which side of a
+# set point, so the golden gate is the thing to run first after installing.
+
+numpy>=1.26
+torch>=2.4
+fastapi>=0.110
+uvicorn>=0.29

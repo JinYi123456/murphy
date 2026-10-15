@@ -1,0 +1,5 @@
+device,batch,wallS,scenariosPerSecond,failed,meanCostEur,peakHostMiB,peakDeviceMiB,speedupVsCpu,note
+cpu (10 threads),1000,2.3305,429.1,447,173826.28,213.5,0.0,,""
+cpu (10 threads),10000,9.0338,1107.0,4359,169101.61,236.7,0.0,,""
+cpu (10 threads),100000,56.2552,1777.6,43675,170126.11,415.1,0.0,,""
+cpu (10 threads),1000000,,,,,,,,"needs about 3.2 GiB, over the 0.6 GiB headroom allowed on cpu"

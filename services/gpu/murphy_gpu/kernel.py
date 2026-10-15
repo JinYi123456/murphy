@@ -63,12 +63,21 @@ class ShiftOutcome:
     elapsed: torch.Tensor
     near_miss: torch.Tensor
     hazard_seconds: torch.Tensor
+    schedule_slip: torch.Tensor
+    state: torch.Tensor
+    emergency_rolled: torch.Tensor
+    emergency_acted: torch.Tensor
+    emergency_at_s: torch.Tensor
+    emergency_late_s: torch.Tensor
+    emergency_p: torch.Tensor
     magnitudes: dict[str, torch.Tensor]
     thrown: torch.Tensor
     escaped: torch.Tensor
     caught: torch.Tensor
+    caught_by: torch.Tensor
     alternative: torch.Tensor
     error_at_s: torch.Tensor
+    started_at_s: torch.Tensor
     p: torch.Tensor
     reached: torch.Tensor
 
@@ -187,6 +196,18 @@ class _Batch:
         self.error_at = torch.zeros(batch, n, **f64)
         self.p_rec = torch.zeros(batch, n, **f64)
         self.reached = torch.zeros(batch, n, dtype=torch.bool, device=device)
+        # the tape the replay view needs: when each step was picked up, and which
+        # check closed each deviation. Neither changes the trajectory, so the
+        # physics stays exactly as the reference has it
+        self.started_at = torch.zeros(batch, n, **f64)
+        self.caught_by = torch.full((batch, n), -1, dtype=torch.int64, device=device)
+        # what the run-out did. The emergency response is one roll per shift, and
+        # the replay view has to be able to say whether it landed or not
+        self.emergency_rolled = torch.zeros(batch, dtype=torch.bool, device=device)
+        self.emergency_acted = torch.zeros(batch, dtype=torch.bool, device=device)
+        self.emergency_at = torch.zeros(batch, **f64)
+        self.emergency_late = torch.zeros(batch, **f64)
+        self.emergency_p = torch.zeros(batch, **f64)
 
         self._alarm_col = tank.var_index(self.iface["alarm"])
         self._hazard_col = tank.var_index(self.iface["hazard"])
@@ -314,6 +335,7 @@ class _Batch:
         denom = torch.where(self.planned > 0, self.planned, torch.ones_like(self.planned))
         slip = torch.where(self.planned > 0, self.elapsed / denom, torch.ones_like(self.elapsed))
         t_start = self.elapsed.clone()
+        self.started_at[:, j] = t_start
 
         process = self.alive
         if step.get("guard"):
@@ -429,6 +451,9 @@ class _Batch:
             if not bool(hit0.any()):
                 continue
             self.caught[:, k] = self.caught[:, k] | hit0
+            self.caught_by[:, k] = torch.where(
+                hit0, torch.full_like(self.caught_by[:, k], j), self.caught_by[:, k]
+            )
             applies = src.get("applies") or {}
             for i, alt in enumerate(src.get("errors") or []):
                 hit = hit0 & (self.alternative[:, k] == i)
@@ -533,8 +558,17 @@ class _Batch:
                     late_s = float(spec["maxResponseS"]) * self.draw(slot, 6)
                     self.integrate_for(late_s, acted, cap=40)
                     self.apply_patch(spec.get("onHit"), acted)
+                    # recorded after the integration, which is where the reference
+                    # puts its own timestamp: an action that lands late is logged
+                    # at the moment it lands
+                    self.emergency_acted = self.emergency_acted | acted
+                    self.emergency_at = torch.where(roll, self.elapsed, self.emergency_at)
+                    self.emergency_late = torch.where(roll, late_s, self.emergency_late)
+                    self.emergency_p = torch.where(roll, hep["p"], self.emergency_p)
 
             self._advance_while(running)
+
+        self.emergency_rolled = rolled
 
     def finish(self) -> ShiftOutcome:
         codes = tank.classify_codes(self.s, self.d, self.params)
@@ -551,6 +585,10 @@ class _Batch:
             escaped.to(torch.int64).argmax(dim=1),
             torch.full_like(codes, -1),
         )
+        slip = torch.where(
+            self.planned > 0, self.elapsed / torch.clamp(self.planned, min=1e-12),
+            torch.ones_like(self.elapsed),
+        )
         return ShiftOutcome(
             cost=money["totalEur"],
             escalation=money["escalationEur"],
@@ -560,12 +598,21 @@ class _Batch:
             elapsed=self.elapsed,
             near_miss=~failed & (self.s[:, self._alarm_col] == 1),
             hazard_seconds=self.hazard_seconds,
+            schedule_slip=slip,
+            state=self.s,
+            emergency_rolled=self.emergency_rolled,
+            emergency_acted=self.emergency_acted,
+            emergency_at_s=self.emergency_at,
+            emergency_late_s=self.emergency_late,
+            emergency_p=self.emergency_p,
             magnitudes=mag,
             thrown=self.thrown,
             escaped=escaped,
             caught=self.caught,
+            caught_by=self.caught_by,
             alternative=self.alternative,
             error_at_s=self.error_at,
+            started_at_s=self.started_at,
             p=self.p_rec,
             reached=self.reached,
         )

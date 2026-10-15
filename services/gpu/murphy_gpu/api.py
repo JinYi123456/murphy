@@ -53,13 +53,22 @@ MAX_SHIFTS = 2_000_000
 
 
 class RunRequest(BaseModel):
-    procedure: str = "OP-TRF-014"
-    persona: str = "daytime_competent"
-    plant: str = "tk_asdesigned"
+    """The body the web app posts.
+
+    `procedure`, `persona` and `plant` are sent as documents by the console - a
+    compiled variant that only exists in that session still has to be fuzzed on
+    the accelerator - and as ids by direct calls and the smoke tests.
+    """
+
+    procedure: dict | str = "OP-TRF-014"
+    persona: dict | str = "daytime_competent"
+    plant: dict | str = "tk_asdesigned"
     method: str = "sparh"
     seed: str = "murphy-gpu"
     n: int = Field(1000, ge=1, le=MAX_SHIFTS)
     device: str = "cpu"
+    variant_id: str | None = None
+    collect_worst: int = Field(12, ge=0, le=100)
     overrides: dict[str, Any] | None = None
 
 
@@ -94,12 +103,17 @@ def health() -> dict:
     cuda = torch.cuda.is_available()
     info: dict[str, Any] = {
         "status": "ok",
+        # `device`, `torch` and `hip` are the keys the console reads; `device` is
+        # always the machine that actually answered, so a CPU-only process says
+        # cpu rather than letting the caller fall back to a flattering default
+        "device": engine.device_label(torch.device("cuda" if cuda else "cpu")),
+        "torch": torch.__version__,
+        "hip": getattr(torch.version, "hip", None),
         "deviceName": None,
         "torchVersion": torch.__version__,
         "hipAvailable": cuda,
         "cudaAvailable": cuda,
         "builtWithRocm": getattr(torch.version, "hip", None) is not None,
-        "torchVersionHip": getattr(torch.version, "hip", None),
         "cpuThreads": torch.get_num_threads(),
         "python": platform.python_version(),
         "platform": platform.platform(),
@@ -133,7 +147,7 @@ def run(req: RunRequest) -> dict:
     try:
         return engine.run_batch(
             REGISTRY, req.procedure, req.persona, req.plant, req.method,
-            req.seed, req.n, req.device, req.overrides,
+            req.seed, req.n, req.device, req.overrides, req.variant_id, req.collect_worst,
         )
     except engine.ConfigError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
