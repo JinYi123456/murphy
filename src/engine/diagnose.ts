@@ -75,9 +75,30 @@ export const FURNACE_CHANNELS: Channel[] = [
   { name: 'moisture', sigma: 0.5 },
 ];
 
+/**
+ * What the panel of a working reheat furnace actually holds.
+ *
+ * The light-off twin is a different piece of equipment with a different
+ * instrument list, and naming a channel that does not exist on it is not a
+ * harmless typo: an absent variable reads as zero, zero differs from zero
+ * perfectly, and every hypothesis then scores the same on that channel, quietly
+ * flattening the ranking. These are the four readings a roller has, with the
+ * scatter each instrument class carries.
+ */
+export const FURNACE_OPS_CHANNELS: Channel[] = [
+  /** the discharge pyrometer the mill grades the slab on */
+  { name: 'exitT', sigma: 12, indicated: true },
+  /** soak-1 thermocouple, the setpoint the crew is actually moving */
+  { name: 'soak1T', sigma: 18, indicated: true },
+  /** roof pressure transmitter, the reading that precedes a flame lift-off */
+  { name: 'press', sigma: 3.5 },
+  /** flue gas oxygen analyser, which is what a lean burn looks like */
+  { name: 'o2', sigma: 0.6 },
+];
+
 export function channelsFor(twin: string): Channel[] {
   if (twin === 'furnace_lightoff') return FURNACE_CHANNELS;
-  if (twin === 'furnace_operating') return FURNACE_CHANNELS;
+  if (twin === 'furnace_operating') return FURNACE_OPS_CHANNELS;
   return TANK_CHANNELS;
 }
 
@@ -213,6 +234,14 @@ export function diagnose(
     obsDelta[c.name] = series.map((v) => v - base);
   }
   const twin = getTwin(cfg.procedure.twin);
+  // A channel the twin does not have reads as zero, and zero differs from zero
+  // perfectly, so every candidate would score the same on it and the ranking
+  // would quietly flatten. That is a bug, not a missing sensor.
+  for (const c of channels) {
+    if (twin.varIndex(c.name) < 0) {
+      throw new Error(`diagnostic channel "${c.name}" is not a variable on the ${twin.id} twin`);
+    }
+  }
   const base: Hypothesis[] = [];
 
   for (const cand of cands) {

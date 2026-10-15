@@ -1,3 +1,4 @@
+import benchStore from '../../data/bench/diagnosis.json';
 import { buildRunConfig } from './registry';
 import type { ConsoleConfig } from './registry';
 import { simulateShift } from '../engine/runner';
@@ -139,4 +140,42 @@ export function analyseShift(
     rank,
     ms: Date.now() - t0,
   };
+}
+
+/** One measured procedure/plant pair from the diagnosis benchmark. */
+export interface BenchCase {
+  key: string;
+  procedure: string;
+  plant: string;
+  twin: string;
+  persona: string;
+  method: string;
+  channels: string[];
+  windowS: number;
+  stepS: number;
+  replicas: number;
+  threshold: number;
+  errorModes: number;
+  observable: number;
+  observableShare: number;
+  unobservable: string[];
+  trials: number;
+  top1: number;
+  top3: number
+  chanceTop1: number;
+  lift: number;
+  divergence: { id: string; label: string; kind: string; divergence: number }[];
+  rows: { truth: string; rank: number; posterior: number; top: string }[];
+}
+
+/**
+ * The measured figures for exactly this procedure in exactly this plant state.
+ *
+ * Null when that pair has not been benchmarked. The interface shows nothing in
+ * that case rather than borrowing a number from a different process, which is how
+ * a furnace's observability would end up printed under a tank transfer.
+ */
+export function benchCase(procedureId: string, plantId: string): BenchCase | null {
+  const store = benchStore as { cases?: Record<string, BenchCase> };
+  return store.cases?.[`${procedureId}/${plantId}`] ?? null;
 }

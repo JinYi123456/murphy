@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { ConsoleStore } from '../lib/useConsole';
-import { RESOLUTION } from '../lib/diagnosis';
-import bench from '../../data/bench/diagnosis.json';
+import { RESOLUTION, benchCase } from '../lib/diagnosis';
 
 const WINDOWS = [
   { v: 900, label: '15 min' },
@@ -79,6 +78,8 @@ export function CauseFinder({ s }: { s: ConsoleStore }) {
   }, [scn, errIdx, windowS]);
 
   const c = s.diagnosis;
+  // measured figures for this procedure in this plant state, or nothing at all
+  const bench = benchCase(s.cfg.procedureId, s.cfg.plantId);
   const clean = c?.diagnosis.hypotheses.find((h) => h.errorId === 'clean');
   const pWrong = clean ? Math.max(0, 1 - clean.posterior) : 0;
   const ranked = (c?.diagnosis.hypotheses ?? []).filter((h) => h.errorId !== 'clean');
@@ -171,7 +172,7 @@ export function CauseFinder({ s }: { s: ConsoleStore }) {
                     ? 'This failure would move the instruments on its own, but in this recording nothing in the window actually departs from a clean shift far enough to overturn the prior. The margin column shows how thin that disagreement is.'
                     : pWrong > 0.5
                       ? `The selected deviation moves the averaged traces by less than the scatter the historian has, yet the window still contradicts a clean shift: something else in this recording is visible, and the ranking below is the ranker's answer to what. That distinction - the tape says a mistake happened, not which mistake - is the whole reason stage one exists.`
-                      : `Nothing in this window departs far enough from a shift performed as written to be diagnosable. ${pct(bench.observableShare)} of this procedure's ${bench.errorModes} error modes reach an instrument at all; this is not a weakness of the ranking arithmetic but of the instruments. A mistake of this class has to be caught by the procedure or by the interlock, because no panel will show it.`}
+                      : `Nothing in this window departs far enough from a shift performed as written to be diagnosable. ${bench ? `${pct(bench.observableShare)} of this procedure's ${bench.errorModes} error modes reach an instrument at all` : 'most error modes on a procedure of this kind reach an instrument at all'}; this is not a weakness of the ranking arithmetic but of the instruments. A mistake of this class has to be caught by the procedure or by the interlock, because no panel will show it.`}
               </p>
             </>
           )}
@@ -243,6 +244,7 @@ export function CauseFinder({ s }: { s: ConsoleStore }) {
           </p>
         </section>
 
+        {bench ? (
         <section className="panel p-4">
           <h3 className="label">how often this ranking is right</h3>
           <p className="mt-2 text-[11px] text-ash">
@@ -268,6 +270,18 @@ export function CauseFinder({ s }: { s: ConsoleStore }) {
             guess about the invisible half.
           </p>
         </section>
+        ) : (
+        <section className="panel p-4">
+          <h3 className="label">how often this ranking is right</h3>
+          <p className="mt-2 text-[11px] leading-relaxed text-ash">
+            Not measured for {s.cfg.procedureId} in this plant state. The figures on this screen would otherwise be a
+            number borrowed from a different process, so the panel stays empty until
+            <span className="text-bone"> npx tsx scripts/diagnose-bench.ts {s.cfg.procedureId} {s.cfg.plantId}</span>
+            has been run, which uses every error mode of this procedure as a truth in turn and reports how often the
+            ranking finds it.
+          </p>
+        </section>
+        )}
 
         <section className="panel p-4">
           <h3 className="label">what this cannot tell you</h3>
@@ -276,7 +290,7 @@ export function CauseFinder({ s }: { s: ConsoleStore }) {
             <li>The window is scored against a model that is, by construction, the same model that produced the observation. The benchmark is a check of the ranking arithmetic, not of the physics.</li>
             <li>Samples in a trajectory are autocorrelated. The score divides the effective sample count by a stated decorrelation time instead of pretending 160 readings are 160 independent ones.</li>
             <li>A posterior here is a degree of belief given this model and this prior, not a frequency you can bet on.</li>
-            <li>The margin in nats is how much the model prefers one candidate. It is not a calibration: the calibrated figure is the {pct(bench.top1)} top-1 rate measured over all visible modes, and a single case showing {`>`}99.9% is the model being sure of itself, which is exactly why this panel puts the two numbers on the same screen.</li>
+            <li>The margin in nats is how much the model prefers one candidate. It is not a calibration: the calibrated figure is the {bench ? pct(bench.top1) : 'measured'} top-1 rate over all visible modes, and a single case showing {`>`}99.9% is the model being sure of itself, which is exactly why this panel puts the two numbers on the same screen.</li>
           </ul>
         </section>
       </aside>

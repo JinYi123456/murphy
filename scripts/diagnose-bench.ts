@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildRunConfig } from '../src/lib/registry';
 import { hypothesesFor, synthesizeObservation, diagnose, channelsFor } from '../src/engine/diagnose';
@@ -107,10 +107,12 @@ const top1 = rows.filter((r) => r.rank === 0).length;
 const top3 = rows.filter((r) => r.rank >= 0 && r.rank < 3).length;
 const chance = 1 / Math.max(1, visible.length);
 const summary = {
+  key: `${run.procedure.id}/${run.plant.id}`,
   procedure: run.procedure.id,
   plant: run.plant.id,
   persona: run.persona.id,
   method: run.method,
+  twin: run.procedure.twin,
   channels: channels.map((c) => c.name),
   windowS,
   stepS,
@@ -128,7 +130,21 @@ const summary = {
   divergence: scored,
   rows,
 };
-writeFileSync(join(process.cwd(), 'data', 'bench', 'diagnosis.json'), JSON.stringify(summary, null, 2));
+
+// One file, every measured procedure and plant state. The interface looks its own
+// case up by key and shows nothing when a combination has not been measured, so a
+// figure from the furnace can never be read as a figure about the tank.
+const PATH = join(process.cwd(), 'data', 'bench', 'diagnosis.json');
+let store: { generatedAt?: string; cases: Record<string, unknown> } = { cases: {} };
+try {
+  const existing = JSON.parse(readFileSync(PATH, 'utf8')) as { cases?: Record<string, unknown> };
+  if (existing && typeof existing === 'object') store = { cases: existing.cases ?? {} };
+} catch {
+  /* first measurement */
+}
+store.generatedAt = new Date().toISOString().slice(0, 16).replace('T', ' ');
+store.cases[summary.key] = summary;
+writeFileSync(PATH, JSON.stringify(store, null, 2));
 console.log(`\nidentifiability over the ${visible.length} visible modes: top-1 ${(summary.top1 * 100).toFixed(0)}% (chance ${(chance * 100).toFixed(0)}%), top-3 ${(summary.top3 * 100).toFixed(0)}%, lift ${summary.lift.toFixed(1)}x`);
 console.log(`observability: ${(summary.observableShare * 100).toFixed(0)}% of procedure failures move the instruments at all`);
 console.log('wrote data/bench/diagnosis.json');

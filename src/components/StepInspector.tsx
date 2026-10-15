@@ -14,7 +14,8 @@ import type { StepAudit } from '../engine/runner';
 import type { RunConfig, Step } from '../engine/types';
 import type { Patch } from '../engine/types';
 import type { StepStatDto } from '../lib/dto';
-import bench from '../../data/bench/diagnosis.json';
+import type { BenchCase } from '../lib/diagnosis';
+import { benchCase } from '../lib/diagnosis';
 
 const pct = (v: number, dp = 2) => `${(v * 100).toFixed(dp)}%`;
 const sci = (v: number) => v.toExponential(1);
@@ -284,7 +285,7 @@ export function StepInspector({ s }: { s: ConsoleStore }) {
                           </div>
                           <Observability
                             id={`${step.id}/${e.id}`}
-                            applies={bench.procedure === s.run_config.procedure.id && bench.plant === s.run_config.plant.id}
+                            bench={benchCase(s.run_config.procedure.id, s.run_config.plant.id)}
                             onFind={replayable.length ? () => {
                             const hit = s.traced
                               .map((t, i) => ({ t, i, at: t.errors.findIndex((x) => `${x.stepId}/${x.errorId}` === `${step.id}/${e.id}`) }))
@@ -552,8 +553,8 @@ function Meta({ label, value, big, tone = 'neutral' }: {
  * fact on the screen - a mistake nobody can see cannot be caught from a panel,
  * so it has to be caught by the procedure or by hardware.
  */
-function Observability({ id, applies, onFind }: { id: string; applies: boolean; onFind?: () => void }) {
-  if (!applies) return null;
+function Observability({ id, bench, onFind }: { id: string; bench: BenchCase | null; onFind?: () => void }) {
+  if (!bench) return null;
   const row = bench.divergence.find((d) => d.id === id);
   if (!row) return null;
   const seen = row.divergence > bench.threshold;
