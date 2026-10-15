@@ -24,8 +24,10 @@ present, and nothing is allowed to claim one that is not attached.
 | `twins/twin.ts` | The `TwinDef` contract: one scalar step function over a flat `Float64Array`. |
 | `twins/tank.ts` | Tanker-to-TK-101 transfer: mass balance, dead-heading, vapour space, bund. |
 | `twins/furnace.ts` | Reheat furnace light-off: purge, unburnt gas, drive-out, spalling, shell temperature. |
+| `twins/furnaceOps.ts` | Reheat furnace on production: six commanded levers, the procedure's rate limits as physics, controller wind-up into the slab, chamber pressure against flame lift-off. |
 | `twins/index.ts` | Twin registry — `getTwin(id)` throws on an unknown id. |
 | `runner.ts` | `simulateShift`: one shift, step by step, with `slotFor` and `conditionsFor`. |
+| `diagnose.ts` | Diagnosis by forward simulation: each error mode run as a single-cause counterfactual, scored against the observed increments, normalised with the priors. |
 | `batch.ts` | `runBatch` over n shifts into typed arrays; `evaluateVariant`, the gate a candidate edit must pass. |
 | `repair.ts` | The 12-control catalogue, hierarchy-of-controls tiers, and the typed mutations they apply. |
 | `model.ts` | `inspectModel`: the integrity gate between a parsed document and a runnable model. |
@@ -42,6 +44,7 @@ same file run in three places (`next.config.ts` says so explicitly).
 | File | One line |
 | --- | --- |
 | `registry.ts` | Loads the shipped procedures, crews and plant states; `buildDraft` applies controls and splices verifications; `buildRunConfig`. |
+| `diagnosis.ts` | Turns one recorded shift into a diagnosis case, and looks up the measured benchmark for a procedure and plant state. |
 | `dto.ts` | Plain-JSON projections of engine objects, because typed arrays do not cross a wire. |
 | `engine.worker.ts` | The worker: receives a request, runs the engine, posts a JSON-safe reply. |
 | `engineClient.ts` | Promise wrapper over one shared worker, with an inline fallback when there is no `Worker`. |
@@ -75,10 +78,11 @@ same file run in three places (`next.config.ts` says so explicitly).
 
 | File | One line |
 | --- | --- |
-| `Shell.tsx` | Instrument face: the configuration under test, backend chips, the five views, the standing limitations note. |
+| `Shell.tsx` | Instrument face: the configuration under test, backend chips, the six views, the standing limitations note. |
 | `LineMap.tsx` | The procedure on its own time axis, error terrain above it, catch and escape rings, response-budget bars. |
 | `PressureTest.tsx` | Batch and seed-sweep runs, progress, incident versus upset split. |
 | `BlackBox.tsx` | Replay of one recorded shift: plant on the left, paperwork on the right, one shared clock. |
+| `CauseFinder.tsx` | An instrument window in, a ranked set of causes out, with the visibility question answered first and the recording's answer revealed underneath. |
 | `ChangeLab.tsx` | Stack candidate controls, stream the loop, produce the change order. |
 | `Evidence.tsx` | Provenance panel: which machine answered, which agent wrote what, what the platform charged. |
 | `StepInspector.tsx` | The full derivation worksheet for one step, including suppressed factors. |

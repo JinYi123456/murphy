@@ -28,9 +28,14 @@ atmospheric storage tank — different plant state and different crew.
 
 | Plant state | Competent day crew | Night trainee |
 | --- | --- | --- |
-| `tk_asdesigned` | 0.45% of shifts lost | 5.55% of shifts lost, EUR 0.67M/yr |
-| `tk_after_instrument_work` | 10.9% of shifts lost, EUR 1.64M/yr | 43.3% of shifts lost, EUR 6.0M/yr |
-| `tk_uprated` | 9.7% of shifts breach the tank roof | — |
+| `tk_asdesigned` | 0.53% of shifts lost | 5.58% of shifts lost, EUR 0.62M/yr |
+| `tk_after_instrument_work` | 10.9% of shifts lost, EUR 1.63M/yr | 44.7% of shifts lost, EUR 6.0M/yr |
+| `tk_uprated` | 9.2% of shifts breach the tank roof, EUR 12.1M/yr | 33.0% breach the roof, EUR 43.8M/yr |
+
+Reproduce with `npx tsx scripts/smoke.ts 4000`, which prints every procedure,
+plant state and crew in the repository. These figures moved by a few tenths of a
+percent when the reliability layer was corrected twice after this table was first
+written, which is the reason the command is part of the README and not a footnote.
 
 The post-maintenance state is dominated by two stations: `d8`, confirm the tank
 vent is open, at a modelled 9–33% per performance depending on the crew, and
@@ -65,13 +70,17 @@ batched PyTorch service.
 ## Attach the AMD batched service (optional)
 
 The service in `services/gpu` is an accelerator, not a requirement. **The browser
-engine is the reference implementation.** `services/gpu/README.md` is not present
-in this repository, so there are no container commands to quote here. The service
-is a FastAPI app (`murphy_gpu/api.py`, serving `/health`, `/run`, `/bench` and
-`/equivalence`) that you start with uvicorn from a ROCm Python environment of
-your own. `python services/gpu/verify_golden.py` holds it to the fixtures the
-TypeScript engine writes; `python services/gpu/bench.py` measures the throughput
-difference.
+engine is the reference implementation.** It is a FastAPI app (`murphy_gpu/api.py`,
+serving `/health`, `/run`, `/bench`, `/equivalence` and `/configurations`), and
+`services/gpu/README.md` explains what was ported, what was not, and how it is
+held to the same fixtures. To build and run it on an AMD host:
+
+```bash
+docker build -f services/gpu/Dockerfile -t murphy-gpu .
+docker run -d --device /dev/kfd --device /dev/dri -p 8080:8000 murphy-gpu
+python services/gpu/verify_golden.py     # reproduce the equivalence table
+python services/gpu/bench.py --batches 1000,10000,100000 --device both
+```
 
 To point the app at a service that is already running:
 
@@ -105,18 +114,30 @@ the browser; the health route reports whether each is set, not what it is.
 
 | Part | Count | Lives in |
 | --- | --- | --- |
-| Process twins | 2 | `src/engine/twins/` |
-| Controlled procedures compiled to models | 2 (17 steps, 15 steps) | `data/procedures/` |
+| Process twins | 3 - tank transfer, furnace light-off, furnace on production | `src/engine/twins/` |
+| Controlled procedures compiled to models | 3 (17, 15 and 18 steps) | `data/procedures/` |
 | Crews | 6 | `data/personas.json` |
-| Plant states | 7 | `data/plants.json` |
+| Plant states | 11 | `data/plants.json` |
+| Diagnosis benchmarks measured | 3 (procedure x plant state) | `data/bench/diagnosis.json` |
 | Human reliability methods | 3 | `src/engine/hra.ts` |
 | Candidate controls | 12 | `src/engine/repair.ts` |
 | Site conditions | 19 | `src/engine/conditions.ts` |
 
 ![MURPHY line map: the procedure on its own time axis, error terrain above it](docs/assets/line-map.png)
 
-*Placeholder. Run `npm run dev`, open the line map, and save a capture to
-`docs/assets/line-map.png`.*
+*Generated from a live run by `python scripts/poster.py`, which also writes
+`public/cover.png` - so the picture cannot disagree with what the app produces.*
+
+## What is on screen
+
+| View | Question it answers |
+| --- | --- |
+| Line map | where on the procedure's own time axis the line breaks, and whether a later step caught it |
+| Pressure test | how the ranking moves when the crew, the plant state or the reliability method changes |
+| Black box | one failed shift, replayed from its seed, plant and tape on the same clock |
+| Cause finder | given an instrument window and nothing else, which error mode produced it - and whether the window says anything at all |
+| Change lab | whether a proposed edit measurably reduces failure, paired against the same crews and seeds, before anyone signs it |
+| Evidence | which machine answered, how long it took, and what the whole model does not prove |
 
 ## Read further
 
